@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only class="my-style-for-modal" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <span>
+      <ion-title style="margin-top: 12px;">
+        {{ header_name }}
+      </ion-title>
+    </span>
+  
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  
+  <div>
+    <ion-card text-center padding class="card_btn" style="display: block;border-radius: 10px;" (click)="openModal('R')">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img class="icon-btn" src="assets/imgs/result.png" />
+        </ion-thumbnail>
+        <h6>R - Result</h6>        
+      </ion-item>
+    </ion-card>
+
+    <ion-card text-center padding class="card_btn" style="display: block;border-radius: 10px;" (click)="openModal('O')">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img class="icon-btn" src="assets/imgs/objective.png" />
+        </ion-thumbnail>
+        <h6>O - Objective</h6>        
+      </ion-item>
+    </ion-card>
+
+    <ion-card text-center padding class="card_btn" style="display: block;border-radius: 10px;" (click)="openModal('I')">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img class="icon-btn" src="assets/imgs/ideas.png" />
+        </ion-thumbnail>
+        <h6>I - Ideas</h6>        
+      </ion-item>
+    </ion-card>
+  </div>
+
+</ion-content>

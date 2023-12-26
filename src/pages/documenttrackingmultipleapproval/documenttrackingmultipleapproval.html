@@ -1,0 +1,154 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title> Payment Request Details </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+
+</ion-header>
+<ion-content>
+    <div class="col-md-12">
+        <div class="accordion" id="paymentrequest">
+            <div class="card" *ngFor="let item of searchdocumenttrackingdetails; index as i;" data-parent="#accordionExample">
+
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{1 + i}}. {{item.BUILD_CODE}}</h2>
+
+                                    <p style="float: left;">
+                                        Property Name: {{item.PROPERTY_NAME }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Unit: {{item.UNIT }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Lease No: {{item.LEASE_ID }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Status: {{item.STATUS_NAME}}
+                                    </p><br>                                    
+                                </ion-label>
+                                <ion-checkbox color="dark"
+                                    (ionChange)="CheckboxClicked(item.STATUS,item.LEASE_ID, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" (click)=showUndoBtn(i)>
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    (click)=showUndoBtn(i)>
+                                    <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i) name="arrow-dropdown">
+                                    </ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>               
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Build Code</th>
+                                    <th role="columnheader">Property</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">Lease#</th>
+                                    <th role="columnheader">Customer</th>
+                                    <th role="columnheader">NO OF RMS</th>
+                                    <th role="columnheader">Start Date</th>
+                                    <th role="columnheader">End Date</th>
+                                    <th role="columnheader">Status </th>
+                                    <th role="columnheader">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.PROPERTY_NAME }}</td>
+                                    <td role="cell">{{item.UNIT}}</td>
+                                    <td role="cell">{{item.LEASE_ID }}</td>
+                                    <td role="cell">{{item.CUSTOMER_NAME}}</td>
+                                    <td role="cell">{{item.NOOFRMS}}</td>
+                                    <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.LEASE_TERMINATION_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">
+                                        <p style="color: royalblue;">
+                                        <span (click)="lnkstatus_click(item.LEASE_ID,item)">{{item.STATUS_NAME}}</span>
+                                        <span (click)="lnkstatus1_click(item.LEASE_ID,item)">{{item.STATUS_NAME_1}}</span>
+                                        <span (click)="lnkstatus2_click(item.LEASE_ID,item)">{{item.STATUS_NAME_2}}</span>
+                                        <span (click)="lnkstatus3_click(item.LEASE_ID,item)">{{item.STATUS_NAME_3}}</span>
+                                        <span (click)="lnkstatushold_click(item.LEASE_ID,item)">{{item.STATUS_NAME_HOLD}}</span>
+                                        </p>
+                                    </td>
+                                    <td role="cell">
+                                        <p>{{item.LATEST_COMMENT ||'NA'}}
+                                            <span *ngIf="item.LATEST_COMMENT != '' && item.LATEST_COMMENT != null" class="danger-clr">on {{item.LATEST_COMMENT_ON |date:'dd-MMM-yyyy,HH:mm a'}} by {{item.LATEST_COMMENT_BY}}</span>
+                                        </p>
+                                    </td>                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-12 style="border: solid 0px #7f8eb5 !important; text-align: center;">
+                        <button ion-button color="secondary" (click)="multiplePaymentApprovebtn(7)"                        
+                        >Confirm</button>
+                    </ion-col>                    
+                </ion-row>
+            </ion-grid>
+           
+            <div class="backdrop" [ngStyle]="{'display':multiple_approval_comment_modal}"></div>
+
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_approval_comment_modal}">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4>Document Tracking Status Update</h4>
+                                <button type="button" class="close" aria-label="Close"
+                                    (click)="onClosecomment_modal()"><span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label>Comments:</label>
+                                <ion-textarea name="COMMENTS" [(ngModel)]="COMMENTS"
+                                    [ngModelOptions]="{standalone: true}"></ion-textarea>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    style="background-color: #373737;color: #fcfcfc;"
+                                    (click)="onClosecomment_modal()">Cancel</button>
+                                    <span
+                                    *ngIf="this.resourcedetails.TYPE_USER == 'CEO' || this.resourcedetails.TYPE_USER == 'COO' ">
+                                <button type="button" type="button" (click)="updatepaymentstatus('Approve')"
+                                    class="btn btn-primary" color="primary">{{btnTxtApprove}}</button></span>
+                                <span
+                                    *ngIf="this.resourcedetails.TYPE_USER == 'CEO' || this.resourcedetails.TYPE_USER == 'COO' ">
+
+                                    <button type="button" (click)="updatepaymentstatus('Reject')"
+                                        color="danger" class="btn btn-danger"> {{btnTxtReject}} </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="show_profile_image === 0">{{today | date: 'dd-MM-yyyy'}} + File Uploads </ion-title>
+    <ion-buttons end *ngIf="show_profile_image === 0">
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+
+    <div *ngIf="show_profile_image_crop === 0">
+      <ion-toolbar>
+        <ion-title>Task Attachment</ion-title>
+        <ion-buttons start>
+          <button ion-button color="danger" (click)="reset()">
+            Reset
+          </button>
+        </ion-buttons>
+        <ion-buttons end>          
+          <button ion-button icon-only color="secondary" (click)="save()">
+            <ion-icon name="checkmark"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+    </div>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="show_profile_image === 0">
+    <div class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="taskUploadsForm" (submit)="insertTaskFileUpload()">
+          <div class="modal-body">
+            <h3 style="padding-left: 26PX; padding-top: 10px;padding-bottom: 10px;    font-size: 15px;
+            font-weight: 500;">{{taskdata[0].task_data_val[0].SEQ_TEXT}} - {{taskdata[0].task_data_val[0].TITLE}}</h3>
+            <ion-item>
+              <ion-label id="profile_image" color="primary" stacked>Select</ion-label>
+              <ion-input type="file" (change)="onSelectFile($event)"></ion-input>
+            </ion-item>
+          </div>
+          <div class="modal-footer">
+            <button type="button" ion-fab mini (click)="openBrowser()">
+              <ion-icon name="camera"></ion-icon>
+            </button>
+            <button type="submit" color="secondary" style="float: right;" class="btn btn-primary">Upload</button>
+          </div>
+          <ion-input [(ngModel)]="TASK_ID" *ngFor="let task of taskdata;" type="hidden" value="{{task.TASK_ID}}"
+            [formControl]="taskUploadsForm.controls['TASK_ID']">
+          </ion-input>
+        </form>
+      </div>
+    </div>
+    <div class="agile-login">
+      <ion-item>
+        <ion-col col-6 *ngFor="let photo of photos; let id = index">
+          <div class="block">
+            <img [src]="photo" *ngIf="photo" />
+          </div>
+          <button ion-button color="secondary" type="button" (click)="deletePhoto(id)">
+            <ion-icon name="trash" class="deleteIcon"></ion-icon>
+          </button>
+          <button ion-button color="secondary" type="button" (click)="Uploadmyprofile(id)">
+            <ion-icon name="done-all"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-item>
+    </div>
+    <div class="agile-login" style="margin-top: inherit;">
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <div class="card" *ngFor="let item of taskuploadsdetails; index as i;" data-parent="#accordionExample">
+              <div class="card-header" id="headingComment" style="background-color:white;">
+                <a (click)=showUndoBtn(i) role="button">
+                  {{1 + i}}. {{item.FILE_NAME}} ({{bytesToSize(item.FILE_SIZE)}})
+                </a>
+                <span style="float: right; padding-left: 20px;">
+                  <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                    md="md-download" (click)="getfile(item.ROW_NO,item)">
+                  </ion-icon>
+                </span>
+              </div>
+              <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                <div class="card-body card-bodynew">
+                  <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                    Created User: {{item.CREATED_BY_NAME}}
+                  </p>
+                  <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                    Created Date: {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+                  </p>
+                </div>
+              </div>
+            </div><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show_profile_image_crop === 0">
+
+    <angular-cropper #angularCropper [cropperOptions]="cropperOptions" [imageUrl]="myImage" *ngIf="myImage">
+    </angular-cropper>
+
+    <ion-row *ngIf="myImage">
+      <ion-col col-4>
+        <button ion-button outline icon-left color="primary" (click)="zoom(true)">
+          <ion-icon name="add"></ion-icon> Zoom
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button outline icon-left color="primary" (click)="zoom(false)">
+          <ion-icon name="remove"></ion-icon> Zoom
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button outline icon-left (click)="rotate()">
+          <ion-icon name="refresh"></ion-icon> 90 deg
+        </button>
+      </ion-col>
+
+      <ion-col col-2>
+        <button ion-button clear (click)="scaleX()">
+          Flip X
+        </button>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button clear (click)="scaleY()">
+          Flip Y
+        </button>
+      </ion-col>
+
+      <ion-col col-2>
+        <button ion-button clear icon-only (click)="move(0, -10)">
+          <ion-icon name="arrow-round-up"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button clear icon-only (click)="move(0, 10)">
+          <ion-icon name="arrow-round-down"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button clear icon-only (click)="move(-10, 0)">
+          <ion-icon name="arrow-round-back"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button clear icon-only (click)="move(10, 0)">
+          <ion-icon name="arrow-round-forward"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <!-- <ion-card *ngIf="croppedImage">
+      <ion-card-header>My Result</ion-card-header>
+      <ion-card-content>
+        <img [src]="croppedImage">
+      </ion-card-content>
+    </ion-card> -->
+
+  </div>
+</ion-content>

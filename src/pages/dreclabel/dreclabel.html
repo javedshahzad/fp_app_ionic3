@@ -1,0 +1,208 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="navbar_title"> Drec </ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="search_value" (ionInput)="SearchpaymentDetail()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Drec Chq Not Collected From Client<ion-badge item-end class="card_p_badge">{{ drecDetailsall.lnkchqnotcollectedlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqnotcollectedlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Contract Sent For Mgmt Signature<ion-badge item-end class="card_p_badge">{{ drecDetailsall.lnkchqsentformgrlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqsentformgrlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Contract Signed Received From Management<ion-badge item-end class="card_p_badge">{{ drecDetailsall.lnkchqrcvdfrommgrlist?.length  || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqrcvdfrommgrlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Drec Chq Collected But Not Sent For Management Sign<ion-badge item-end class="card_p_badge">{{drecDetailsall.lnkchqcollectedpmgrlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqcollectedpmgrlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Drec Chq Rcvd Not Handed Over To Pro<ion-badge item-end class="card_p_badge">{{drecDetailsall.lnkchqreceivednotHolist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqreceivednotHolist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Drec Chq Handed Over To Pro But Not Acknowledged<ion-badge item-end class="card_p_badge">{{drecDetailsall.lnkhonotacknowledgedlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkhonotacknowledgedlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Drec Chq Received By Pro Not Yet Submitted To Drec Dept<ion-badge item-end class="card_p_badge">{{drecDetailsall.lnkchqreceivednotsubmittedlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqreceivednotsubmittedlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Drec Chq Submitted To Department And Obtain Ejari<ion-badge item-end class="card_p_badge">{{drecDetailsall.lnkchqsubmitedtodeplist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkchqsubmitedtodeplist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Ejari Renewed<ion-badge item-end class="card_p_badge">{{ drecDetailsall.lnkbtnejariDetailsGetlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'lnkbtnejariDetailsGetlist')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p style="white-space: normal;">Escalation To Ceo<ion-badge item-end class="card_p_badge">{{ drecDetailsall.lnkbtnEscalationCeoGetlist?.length || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'Escalation to CEO/COO')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+
+
+  <!-- <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Multiple COO/CEO Approval<ion-badge item-end class="card_p_badge">{{SEC_DEPOSIT_CEO_APPROVAL_COUNT || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card> -->
+
+</ion-content>

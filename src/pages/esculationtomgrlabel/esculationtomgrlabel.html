@@ -1,0 +1,202 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Escalation to MGR </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>  
+
+    <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>TMS - Task Management System<ion-badge item-end class="card_p_badge">{{'0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openDetailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+    
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>CMS - Case Management System<ion-badge item-end class="card_p_badge">{{ caseListCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openDetailModal(type = 'Escalation to CEO/COO')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+    
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>CS - Cheque System<ion-badge item-end class="card_p_badge">{{ chequeListCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>CPR - Case Payment Request<ion-badge item-end class="card_p_badge">{{ casePaymentCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>RCS - Return Cheque System <ion-badge item-end class="card_p_badge">{{ returnChequeCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>CM - Call Management <ion-badge item-end class="card_p_badge">{{ callCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>CNT - Contract <ion-badge item-end class="card_p_badge">{{'0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>AMS - Asset Management System<ion-badge item-end class="card_p_badge">{{'0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>AMS - Asset Management System<ion-badge item-end class="card_p_badge">{{'0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>Drec<ion-badge item-end class="card_p_badge">{{drecCount || '0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+
+      <ion-card [ngStyle]="{'display':payment_list}">
+        <ion-item>
+          <ion-icon name="paper" item-start large></ion-icon>
+          <p>SD - Security Deposit (0)<ion-badge item-end class="card_p_badge">{{'0'}}
+            </ion-badge>
+          </p>
+        </ion-item>
+    
+        <ion-item>
+          <button ion-button icon-start clear item-end class="dash_image" text-center
+            (click)="openMultipleApprovalDatailModal(type = 'Pending COO/CEO Approval')">
+            <ion-icon name="navigate"></ion-icon>
+            View
+          </button>
+        </ion-item>
+      </ion-card>
+
+
+</ion-content>

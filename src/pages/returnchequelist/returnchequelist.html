@@ -1,0 +1,344 @@
+<ion-header>
+  <ion-navbar style="background-color:#525b6d">
+    <ion-buttons left>
+      <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title style="text-transform: capitalize;text-align: center">Return Cheque List </ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="search_value"
+        (ionInput)="SearchCase()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!--FOLLOW UP-->
+  <div class="col-md-12" [ngStyle]="{'display':return_chq_label}">
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>Follow Up<ion-badge item-end class="card_p_badge">{{ returnchequeSearch.followupdata || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.followupamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'FOLLOW UP')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--WAITING FOR RETURN CHEQUE MEMO-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p class="card_p">Waiting For Return Cheque Memo<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.waitingmemodata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.waitingmemoamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING FOR RETURN CHEQUE MEMO')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--WAITING FOR LETTER FROM POLICE TO BANK-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p class="card_p">Waiting For Letter From Police To Bank<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.policetobankdata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.policetobankamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING FOR LETTER FROM POLICE TO BANK')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+
+    <!--WAITING FOR BANK RESPONSE TO POLICE-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p class="card_p">Waiting For Bank Response To Police<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.banktopolicedata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.banktopoliceamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING FOR BANK RESPONSE TO POLICE')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--WAITING FOR POLICE CASE FIELD-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p class="card_p">Waiting For Police Case Field<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.policecasefielddata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.policecasefieldamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING FOR BANK RESPONSE TO POLICE')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--WAITING FOR POLICE RESPONSE-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>Waiting For Police Response<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.policeresponsedata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.policeresponseamount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING FOR POLICE RESPONSE')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--WAITING JUDGEMENT FROM PUBLIC PROSECUTION-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p class="card_p">Waiting Judgement From Public Prosecution<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.judgement_pp_data || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ returnchequeSearch.judgement_pp_amount|currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'WAITING JUDGEMENT FROM PUBLIC PROSECUTION')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--ESCLATION TO MGR-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p style="color : #ff2d2d">Esclation to MGR<ion-badge item-end class="card_p_badge"
+            style="background-color:#ff2d2d">
+            {{ returnchequeSearch.esculationtomgrdata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ESCLATION TO MGR')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--ESCLATION TO CEO-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p style="color : #ff2d2d">Escaltion to CEO<ion-badge item-end class="card_p_badge"
+            style="background-color:#ff2d2d">
+            {{ returnchequeSearch.esculationtoceodata|| '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ESCLATION TO CEO')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <!--ESCLATION TO CEO-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p style="color : #ff2d2d">Escaltion to CEO PPR<ion-badge item-end class="card_p_badge"
+            style="background-color:#ff2d2d">
+            {{ returnchequeSearch.esculationtoceopprdata|| '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ESCLATION TO CEO PPR')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <!--POLICE CASE HOLD-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>Police case hold<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.policecaseholddata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'POLICE CASE HOLD')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--FULL AMOUNT RECOVERED-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>Full amount recovered<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.fullamountrcvddata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'FULL AMOUNT RECOVERED')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--FOLLOW UP DATE EXTEND REQUEST-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>Follow up date extend request<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.dateextendrequestdata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge></ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'FOLLOW UP DATE EXTEND REQUEST')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--ALL RETURN CHEQUE LIST-->
+
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>All return Cheque list<ion-badge item-end class="card_p_badge">
+            {{ returnchequeSearch.alldata || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{returnchequeSearch.alldataamount | currency:"AED "}}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ALL RETURN CHEQUE LIST')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+  </div>
+
+</ion-content>

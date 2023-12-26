@@ -1,0 +1,120 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{title_page}}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">{{title_btn}}</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchManagement()"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div>
+        <ion-item>
+            <span>{{From_Date}}</span><br><br>
+            <span>
+                <span (click)="opencalendarheldon()">{{heldOn}}</span>
+                <span>
+                    <ion-icon name="clipboard" (click)="opencalendarheldon()"
+                        style="float: right;font-size: 31px;margin-right: 10px;">
+                    </ion-icon>
+                </span>
+            </span><br>
+            <span *ngIf="calendarshowheldon === 1">
+                <ion-calendar name="date_of_meeting" (onChange)="heldOnChange($event)" [type]="string"
+                    [options]="options" [format]="'YYYY-MM-DD'">
+                </ion-calendar>
+            </span>
+        </ion-item>
+
+        <ion-item *ngIf="show_to_date == 1">
+            <span>To Date</span><br><br>
+            <span>
+                <span (click)="opencalendarnextmeetingshow()">{{nextmeeting}}</span>
+                <span>
+                    <ion-icon name="clipboard" (click)="opencalendarnextmeetingshow()"
+                        style="float: right;font-size: 31px;margin-right: 10px;">
+                    </ion-icon>
+                </span>
+            </span><br>
+            <span *ngIf="calendarshownextmeeting === 1">
+                <ion-calendar name="next_of_meeting" (onChange)="nextmeetingonChange($event)" [options]="options"
+                    [type]="string" [format]="'YYYY-MM-DD'">
+                </ion-calendar>
+            </span>
+        </ion-item>
+
+        <ion-item>
+            <span>
+                <button ion-button color="secondary" style="height: 35px; float: right;" (click)="openAttendanceReport()">PDF</button>
+            </span>
+            <span><button ion-button color="secondary" style="height: 35px; float: right;" 
+                    (click)="generateReport()">Submit</button></span>
+        </ion-item>
+
+    </div>
+
+    <div class="col-md-12">
+        <div class="accordion" id="accordionExample">
+            <div class="" *ngFor="let item of attendanceDetailsAll; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.ATTEND_DATE | date:'dd-MMM-yyyy'}} </h2>
+                                <p style="white-space: break-spaces;">{{item.CHECKIN_LOCATION}}</p>
+                                <p>Check In: {{item.CHECKIN}}</p>
+                                <p>Check Out: {{item.CHECKOUT}}</p>
+
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">User Name</th>
+                                    <th role="columnheader">Date</th>
+                                    <th role="columnheader">Check In</th>
+                                    <th role="columnheader">Check Out</th>
+                                    <th role="columnheader">Check In Location</th>
+                                    <th role="columnheader">Check Out Location</th>
+                                    <th role="columnheader">Check In Latitude</th>
+                                    <th role="columnheader">Check In Longitude</th>
+                                    <th role="columnheader">Check Out Latitude</th>
+                                    <th role="columnheader">Check Out Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.USER_NAME}}</td>
+                                    <td role="cell">{{item.ATTEND_DATE | date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.CHECKIN || ''}}</td>
+                                    <td role="cell">{{item.CHECKOUT}}</td>
+                                    <td role="cell">{{item.CHECKIN_LOCATION}}</td>
+                                    <td role="cell">{{item.CHECKOUT_LOCATION}}</td>
+                                    <td role="cell">{{item.CHECKIN_LATITUDE}}</td>
+                                    <td role="cell">{{item.CHECKIN_LONGITUDE}}</td>
+                                    <td role="cell">{{item.CHECKOUT_LATITUDE}}</td>
+                                    <td role="cell">{{item.CHECKOUT_LONGITUDE}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ion-content>

@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="navbar_title"> Rental Balance </ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchpaymentDetail()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Within 60 days<ion-badge item-end class="card_p_badge">{{within_60days || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'Within 60 days')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Above 60 to 180 days<ion-badge item-end class="card_p_badge">{{above_60_180days || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'Above 60 to 180 days')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Above 180 days<ion-badge item-end class="card_p_badge">{{above_180days || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'Above 180 days')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card [ngStyle]="{'display':payment_list}">
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <p>Under Legal Case<ion-badge item-end class="card_p_badge">{{caseCount || '0'}}
+        </ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'Legal Case')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+</ion-content>

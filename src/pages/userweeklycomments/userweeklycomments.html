@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{today | date: 'dd-MM-yyyy'}} Weekly Update List</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+ 
+<ion-content padding>
+  <div *ngIf="show_comment_list === 0">
+    <div class="card" *ngFor="let item of date; index as i;" data-parent="#accordionExample">
+      <ion-card class="dash_image" text-center style="border-radius: 11px !important;">
+        <ion-card-content>
+
+          <ion-item style="padding-left: 0px !important;">
+            <ion-avatar item-start item-left class="list-time purple-border"
+              (click)="showComment(i,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK,item.LABEL_TYPE)">
+              <img src="assets/imgs/chat.png">
+            </ion-avatar>
+            <span>
+              <h2 style="font-size: 13px; font-weight: 500;"
+                (click)="showComment(i,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK,item.LABEL_TYPE)">
+                {{item.START_OF_THE_WEEK |date:'dd-MMM-yyyy'}} - {{item.END_OF_THE_WEEK |date:'dd-MMM-yyyy'}}
+              </h2>
+              <p>{{item.USER_SURNAME}}
+                <span *ngIf="item.ROI_POINT_ID == 0">
+                  <ion-badge>
+                    <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                      <span>{{item.POINT_NO ||'0'}}</span>
+                    </ion-icon>
+                  </ion-badge>
+                </span>
+                <span *ngIf="item.ROI_POINT_ID > 0">
+                  <ion-badge style="background-color: #f55d23;">
+                    <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                      <span>{{item.POINT_NO ||'0'}}</span>
+                    </ion-icon>
+                  </ion-badge>
+                </span>
+                <span *ngIf="item.TOTAL_ROI_COUNT == 0">
+                  <ion-badge style="background-color: #158019; margin-left: 25px;">
+                    <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                      <span>{{item.TOTAL_ROI_COUNT ||'0'}}</span>
+                    </ion-icon>
+                  </ion-badge>
+                </span>
+                <span *ngIf="item.TOTAL_ROI_COUNT > 0">
+                  <ion-badge style="background-color: #158019; margin-left: 25px;">
+                    <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                      <span>{{item.TOTAL_ROI_COUNT ||'0'}}</span>
+                    </ion-icon>
+                  </ion-badge>
+                </span>
+                <span>
+                  <ion-icon ios="ios-eye" md="md-eye" *ngIf="item.ROI_POINT_COMMENTS_COUNT > 0" style="
+                    top: 0.5rem;
+                    right: 11px;
+                    position: absolute;
+                    font-size: 27px;" (click)="presentToastForPointComment(item.ROI_POINT_COMMENTS)">
+                  </ion-icon>
+                </span>
+              </p>
+
+            </span>
+            <ion-icon right item-end item-right ios="ios-arrow-forward" md="md-arrow-forward"
+              *ngIf="item.ROI_POINT_ID == 0 && item.LABEL_VALUE == 0 && item.LABEL_TYPE != 'Next'"
+              (click)="openUserPointsPage(item.USER_INFO_ID,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK)">
+            </ion-icon>
+
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+      <div [attr.id]="'undoCmtBtn'+i" *ngIf="showCmtBtn===i" style="padding: 10px;">
+        <div class="card">
+          <div class="card-body card-bodynew">
+            <div class="card" (click)="openModal('R')">
+              <h6 class="mr-tl-h6">R - Result</h6>
+              <ion-badge class="badge_task badge-cnt" style="right: 45px !important;">
+                {{weekly_R || '0'}}</ion-badge>
+            </div><br>
+            <div class="card">
+              <span>
+                <h6 class="mr-tl-h6" (click)="openModal('O')">O - Objective</h6>
+                <ion-icon ios="ios-create" *ngIf="label_type==='Current' || label_type==='Next'" md="md-create"
+                  (click)="createNewObjective()" style="
+                  top: 0.5rem;
+                  right: 11px;
+                  position: absolute;
+                  font-size: 27px;">
+                </ion-icon>
+              </span>
+              <ion-badge class="badge_task badge-cnt" style="right: 45px !important;">
+                {{weekly_O || '0'}}
+              </ion-badge>
+
+            </div><br>
+            <div class="card" (click)="openModal('I')">
+              <h6 class="mr-tl-h6">I - Ideas</h6>
+              <ion-badge class="badge_task badge-cnt" style="right: 45px !important;">
+                {{weekly_I || '0'}}</ion-badge>
+            </div>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show_comment_list === 1" style="padding: 10px;">
+
+    <div class="" data-parent="#accordionExample">
+      <div style="padding: 10px;">
+        <div class="card">
+          <div class="card-body card-bodynew">
+            <ion-grid>
+              <ion-row class="row-border-h" *ngIf="editcomment.length > 0">
+                <ion-col col-2 class="col-border row-header">
+                  S.No &<br>
+                  Task Count
+                </ion-col>
+                <ion-col col-8 class=" row-header">
+                  Comments
+                </ion-col>
+                <ion-col col-2 class="col-border row-header">
+                  Task
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngFor="let cmt of editcomment; index as i;"
+                style="border: solid 1px grey;border-bottom-style: none;">
+                <ion-col col-2 class="col-border" *ngIf="cmt.COMMENTS !=null">
+                  {{i+1}} - <ion-badge class="badge_task" (click)="tasklist(cmt.TASK_ID)"
+                    style="background-color: #10dc60;">{{gettaskcount(cmt.TASK_ID)}}</ion-badge>
+                  <span float-right ion-button icon-left clear *ngIf="cmt.TYPE == 'O' && cmt.PREVIUOS_WEEK_OBJECT > 0"
+                    class="font-size-12" style="width: 50px;">
+                    <img src="assets/imgs/fast-forward.png" class="icon-btn" style="max-width: 65% !important" />
+                  </span>
+                  <span float-right ion-button icon-left clear *ngIf="cmt.TYPE == 'R' && cmt.CMT_TYPE =='R'"
+                    class="font-size-12" style="width: 50px;">
+                    <ion-icon style="font-size: 2em !important" ios="ios-rewind" md="md-rewind"></ion-icon>
+                  </span>
+                </ion-col>
+                <ion-col col-8 *ngIf="cmt.COMMENTS !=null" class="">
+                  {{cmt.COMMENTS}}
+                  <p type="text" style="color:red; margin-bottom: 0rem !important;" *ngIf="cmt.MANAGER_ID != 0"> created
+                    by {{cmt.MANAGER_NAME}}</p>
+                  <p type="text" style="color:red; margin-bottom: 0rem !important;"> Last modified on
+                    {{cmt.MODIFIED_ON |date:'dd-MMM-yyyy hh:mm a'}}</p>
+                </ion-col>
+                <ion-col col-2 *ngIf="cmt.COMMENTS !=null" class="col-border">
+                  <ion-row>
+                    <ion-col col-6 style="padding:0px !important;margin-left:16px !important;">
+                      <button item-start ion-fab mini (click)="createtask(cmt.COMMENTS_CHILD_ID,cmt.COMMENTS)"
+                        style="width: 28px !important;height: 28px !important;font-size: 16px !important;">
+                        <ion-icon name="add"></ion-icon>
+                      </button></ion-col>
+                    <ion-col col-6 style="padding:0px !important;margin-left:16px !important;">
+                      <button item-end ion-fab mini
+                        (click)="taskgroupchat(cmt.COMMENTS_CHILD_ID,cmt.COMMENTS,reporting_user_id)"
+                        *ngIf="manager_user_count > 0 && cmt.CHAT_COUNT == 0"
+                        style="width: 28px !important;height: 28px !important;font-size: 12px !important;background-color: #3aec3a;">
+                        <ion-icon name="chatbubbles"></ion-icon>
+                      </button>
+                      <button item-end ion-fab mini
+                        (click)="taskgroupchat(cmt.COMMENTS_CHILD_ID,cmt.COMMENTS,reporting_user_id)"
+                        *ngIf="manager_user_count > 0 && cmt.CHAT_COUNT > 0"
+                        style="width: 28px !important;height: 28px !important;font-size: 12px !important;background-color: #ffa500;">
+                        <ion-icon name="chatbubbles"></ion-icon>
+                      </button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="editcomment.length == 0">
+                <ion-col>
+                  -
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

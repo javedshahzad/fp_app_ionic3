@@ -1,0 +1,313 @@
+page-chatgroupmember {
+
+    .innerMessage{
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        color: #051937;
+        border-radius: 13px;
+      }
+
+      .userName {
+        font-weight: bold;
+        font-size: 80%;
+      }
+
+      .message {
+        font-size: 120%;
+      }
+
+      .message:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+
+      .messageLeft {
+        float: left;        
+        background-color: #eee;
+      }
+    
+      .messageRight {
+        float: right;        
+        background-color: #21f7a3;
+      }
+
+      .toolbar-title-md {
+        padding: 0px 0px !important;
+      }
+      .toolbar-title-ios {
+        padding: 0px 0px !important;
+      }
+
+      .user_status{
+        margin-top: 0.4rem !important;
+      }
+
+      ion-fab[bottom][edge] {
+        bottom: 0px !important;
+    }
+    .status_mini{
+      position: absolute;margin: 35px;width: 18px !important;height: 18px !important;
+    }
+    
+    @media only screen and (max-width: 760px), (min-device-width: 768px) 
+        and (max-device-width: 1024px)  {      
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            /* Hide table headers (but not display: none;, for accessibility) */
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }      
+            tr {
+                margin: unset !important;
+            }
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }         
+            td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: 0;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                height: 100%;
+                background-color: #add8e6 !important;
+            }
+            .blc{
+
+                font-size: 1.25rem !important;
+                position: relative !important;    
+                bottom: 0px !important;
+                padding: 0px !important;
+            }  
+            /*
+            Label the data
+            You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+            */
+            td:nth-of-type(1):before { content: "User Name"; }
+            td:nth-of-type(2):before { content: "Action"; }
+      
+        }
+
+        @media only screen and (max-width: 760px), (max-device-width: 1024px) and (min-device-width: 268px){
+          td:before{
+              background-color: #add8e6 !important;
+              padding-left: 1%;
+              margin-left: -6px;
+          }
+        }
+
+        
+        @media only screen and (max-width: 760px){
+     
+          td {
+          //    border: 1px solid #e2e0e0 !important;
+             position: relative !important;
+             padding-left: 50% !important;
+             height: max-content!important;
+             min-height: 6vh !important;
+             line-height: 16px !important;
+             display: flex !important;
+             align-items: center !important;
+             font-size: 1.2rem !important;
+             overflow-x: scroll !important;
+         }
+     
+        td::before{
+             white-space: normal !important;
+             display: flex !important;
+             align-items: center !important;
+             background-color: #add8e6 !important;
+         }
+    
+         
+     }
+
+     td:nth-of-type(1):before { content: "User Name"; }
+     td:nth-of-type(2):before { content: "Action"; }
+
+    //  ion-footer {    
+    //   display: contents !important;
+    //  }
+
+  $userBackgroundColor: #C1F384;
+  $toUserBackgroundColor: #e5e5e5;
+
+  ion-content .scroll-content {
+    background-color: #f5f5f5;
+  }
+
+  ion-footer {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.11);
+    background-color: #fff;
+    height: 255px;
+  }
+
+  .line-breaker {
+    white-space: pre-line;
+  }
+
+  .input-wrap {
+    padding: 5px;
+    display: flex;
+    textarea {
+      flex: 1;
+      border: 0;
+      border-bottom: 1px $userBackgroundColor;
+      border-style: solid;
+    }
+  }
+
+  .message-wrap {
+    padding: 0 10px;
+    .message {
+      position: relative;
+      padding: 0px 0;
+      .user-img {
+        position: absolute;
+        border-radius: 45px;
+        width: 45px;
+        height: 45px;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.36);
+      }
+
+      .msg-detail {
+        width: 100%;
+        display: inline-block;
+        p {
+          margin: 0;
+        }
+       
+
+        .msg-content {
+          position: relative;
+          margin-top: 5px;
+          border-radius: 5px;
+          padding: 8px;
+          border: 1px solid #ddd;
+          color: #000000;
+          width: auto;
+          max-width: 80%;
+          span.triangle {
+            background-color: #fff;
+            border-radius: 2px;
+            height: 8px;
+            width: 8px;
+            top: 12px;
+            display: block;
+            border-style: solid;
+            border-color: #ddd;
+            border-width: 1px;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            position: absolute;
+          }
+          .msg-info {
+            p {
+              font-size: .8em;
+              color: #888;
+            }
+          }
+        }
+
+      }
+    }
+
+    .message.left {
+      .msg-content {
+        background-color: $toUserBackgroundColor;
+        float: left;
+      }
+      
+      .user-img {
+        left: 0;
+      }
+      .msg-content {
+        color: #343434;
+        span.triangle {
+          background-color: $toUserBackgroundColor;
+          border-top-width: 0;
+          border-right-width: 0;
+          left: -5px;
+        }
+      }
+
+    }
+
+    .message.right {
+      .msg-detail {
+        // padding-right: 60px;
+        .msg-info {
+          text-align: right;
+        }
+      }
+      .user-img {
+        right: 0;
+      }
+      ion-spinner {
+        position: absolute;
+        right: 10px;
+        top: 50px;
+      }
+      .msg-content {
+        background-color: $userBackgroundColor;
+        float: right;
+        span.triangle {
+          background-color: $userBackgroundColor;
+          border-bottom-width: 0;
+          border-left-width: 0;
+          right: -5px;
+        }
+      }
+
+    }
+
+  }
+  .image {
+    height: 15vw; 
+    width: 15vw; 
+  //  border: 2px solid #fff;
+   border-radius: 50%;
+   box-shadow: 0 0 5px gray;
+   display: inline-block;
+   margin-left: auto;
+   margin-right: auto;
+}
+.header_img{
+  float: left;
+    margin-right: 5px;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    transform: translateZ(0);
+    margin-top: 5px;
+}
+ion-fab[bottom] {
+  bottom: 100px !important;
+}
+
+.fab {
+    width: 40px !important;
+    height: 40px !important;
+
+}
+.wrapper{
+  display: -webkit-box !important; 
+  overflow: auto; 
+  position: relative; 
+}
+}

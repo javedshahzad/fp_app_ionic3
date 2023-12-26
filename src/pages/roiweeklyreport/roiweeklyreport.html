@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only class="my-style-for-modal" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <span>
+      <ion-title style="margin-top: 12px;">
+        {{ header_name }}
+      </ion-title>
+    </span>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+    <ion-searchbar   (ionChange)="getItems($event)"></ion-searchbar>
+  </div>
+  <ion-card *ngFor="let item of roiReportData;index as i;">
+    <ion-card-header>
+      {{item.USER_SURNAME}} <ion-icon style="font-size: 2.0em !important; float: right; color: #2be81a;" name="chatbubbles" (click)="openUserChat(item.USER_INFO_ID,item.USER_SURNAME)"></ion-icon>
+    </ion-card-header>
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-start clear small style="text-transform: none; padding-top: 4px;height: 75%;">
+          <!-- <ion-icon name="thumbs-up"></ion-icon> -->
+          <div *ngIf="item.CURRENT_WEEK_ROI =='Updated'" (click)="openTaskdailycmd(item.USER_INFO_ID,item.USER_SURNAME)" >Current Week: <p style="color:green">{{item.CURRENT_WEEK_ROI}}</p></div>
+          <div *ngIf="item.CURRENT_WEEK_ROI =='Not Updated'">Current Week: <p style="color:red">{{item.CURRENT_WEEK_ROI}}</p></div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-start clear small style="text-transform: none; padding-top: 4px;height: 75%; margin-left: 45px;">
+          <!-- <ion-icon name="text"></ion-icon> -->
+          <div *ngIf="item.NEXT_WEEK_ROI =='Updated'" (click)="openTaskdailycmd(item.USER_INFO_ID,item.USER_SURNAME)" >Next Week: <p style="color:green">{{item.NEXT_WEEK_ROI}}</p></div>
+          <div *ngIf="item.NEXT_WEEK_ROI =='Not Updated'">Next Week: <p style="color:red">{{item.NEXT_WEEK_ROI}}</p></div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+</ion-content>

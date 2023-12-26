@@ -1,0 +1,77 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Call Work Assignment Details </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchcallManagement()"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="col-md-12" *ngIf="Callmanament">
+        <div class="accordion" id="accordionExample">
+            <div class="" *ngFor="let item of Callmanament; index as i;">
+                <div class="card-header" id="headingOne" style="background-color:white;">
+                    <button class="btn btn-link blc collapsed" type="button" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        {{1 + i}}. {{item.CALL_NO}} - {{item.STATUS_NAME}} </button>
+                </div>
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchcallmgnt" style="background-color: white">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader"> Call No </th>
+                                    <th role="columnheader">CallLog Id.</th>
+                                    <th role="columnheader"> Name</th>
+                                    <th role="columnheader">CallLog Location </th>
+                                    <th role="columnheader">CallLog Building.</th>
+                                    <th role="columnheader"> Calllog Unit</th>
+                                    <th role="columnheader"> MobileNo </th>
+                                    <th role="columnheader"> Unit Code </th>
+                                    <th role="columnheader">CallLog Status </th>
+                                    <th role="columnheader"> CallLog Assigned To </th>
+                                    <th role="columnheader"> Call Complaint Description </th>
+                                    <th role="columnheader">Previous Comments</th>
+                                    <th role="columnheader">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.CALL_NO}}</td>
+                                    <td role="cell">{{item.CALL_LOG_ID}}</td>
+                                    <td role="cell">{{item.REQUESTOR_NAME}}</td>
+                                    <td role="cell">{{item.LOCATIONCODE}}</td>
+                                    <td role="cell">{{item.BUILDING_NAME}}</td>
+                                    <td role="cell">{{item.UNIT}}</td>
+                                    <td role="cell">{{item.MOBILE_NO}}</td>
+                                    <td role="cell">{{item.UNIT_ID}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">{{item.ASSIGNEDTO}}</td>
+                                    <td role="cell">{{item.DESCRIPTION}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell"><button ion-button
+                                            (click)="openModal(item.CALL_LOG_ID,item.REQUESTOR_NAME)"
+                                            color="secondary">Comments</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ion-content>
+<style>
+    .row {
+        margin-left: 0px !important;
+        margin-right: -2px !important;
+    }
+</style>

@@ -1,0 +1,213 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Status Update </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="agile-login" *ngIf="showApprove == 1">
+    <div class="wrapper">
+      <ion-input [(ngModel)]="LEASE_ID" *ngFor="let payment of payment_req_data;" type="hidden"
+        value="{{payment.LEASE_ID}}">
+      </ion-input>
+
+      <div class="w3ls-form">
+        <ion-item *ngIf="showSignedDate==1">
+          <span>{{nameOfSignedDate}}</span><br><br>
+          <span><span (click)="opencalendar()">{{localDate}}</span><span>
+              <ion-icon name="clipboard" (click)="opencalendar()"
+                style="float: right;font-size: 31px;margin-right: 10px;"></ion-icon>
+            </span></span><br>
+          <span *ngIf="calendarshow === 1">
+            <ion-calendar name="signed_date" (onChange)="onChange($event)" [options]="options" [type]="string"
+              [format]="'YYYY-MM-DD'">
+            </ion-calendar>
+          </span>
+        </ion-item>
+
+        <ion-list>
+          <ion-item *ngIf="showModeOfDelivery == 1">
+            <ion-label>Mode of Delivery</ion-label>
+            <ion-select [(ngModel)]="modeOfDelivery">
+              <ion-option value="0">----Select---</ion-option>
+              <ion-option value="In Hand">In Hand</ion-option>
+              <ion-option value="Driver">Driver</ion-option>
+              <ion-option value="Courier">Courier</ion-option>
+              <ion-option value="Building">Building</ion-option>
+              <ion-option value="Office">Office</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <h3 style="padding-left: 26PX; padding-top: 10px; padding-bottom: 10px;">Description</h3>
+        <ion-item>
+          <ion-textarea [(ngModel)]="COMMENTS" name="COMMENTS" placeholder="Enter any Comments here...">
+          </ion-textarea>
+        </ion-item>
+        <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+          (click)="uploadAudioNewComment()">
+          <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+        </span>
+      </div>
+
+      <div class="modal-footer">
+
+        <span *ngIf="lbkConf == 1">
+          <button type="button" (click)="ApprovePaymentStatusUpdate()" style="font-size: 1.25rem !important;"
+            class="btn btn-primary" color="primary"> {{btnTxtYes}} </button>
+        </span>
+
+        <span *ngIf="lnkreqejari == 1">
+          <button type="button" (click)="lnkreqejari_Click()" style="font-size: 1.25rem !important;"
+            class="btn btn-primary" color="primary"> {{btnTxtApproveandForward}}
+          </button>
+        </span>
+
+        <span>
+          <button type="button" class="btn btn-danger" style="font-size: 1.25rem !important;"
+            style="background-color: #373737;color: #fcfcfc; height: 28px;" (click)="closeModal()">Cancel</button>
+        </span>
+
+      </div>
+    </div>
+  </ion-card>
+
+  <ion-card *ngIf="ejariattach == 1">
+    <div class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="paymentattachmentForm" enctype="multipart/form-data" (submit)="insertAttachments()">
+          <div>
+            <div class="w3ls-form">
+
+              <ion-item>
+                <ion-label stacked>Ejari No:</ion-label>
+                <ion-input type="text" name="ejariNo" [formControl]="paymentattachmentForm.controls['ejariNo']">
+                </ion-input>
+              </ion-item>
+
+              <ion-label position="floating" style="color: black;padding-left: 12px;">Add File :</ion-label>
+
+              <ion-item>
+                <ion-input type="file" (change)="onSelectFile($event)"></ion-input>
+                <p *ngIf="paymentattachmentForm.controls.attachmentfile.errors && paymentattachmentForm.controls.attachmentfile.dirty"
+                  class='error'>Select the file.</p>
+              </ion-item>
+              <button ion-button type="submit" style="float: right;" color="secondary">Upload</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ion-card>
+
+  <ion-list class="agile-login" *ngIf="showejariFile == 1">
+    <ion-list-header>
+      <h2>File List</h2>
+    </ion-list-header>
+
+    <!-- <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <ion-item class="" *ngFor="let item of paymentattachmentlist; index as i;" data-parent="#accordionExample">
+            <div class="card-header" id="headingComment" style="background-color:white;">
+              <a (click)=showUndoBtn(i) role="button">
+                {{1 + i}}. {{item.FILE_NAME}}
+              </a>
+              <span style="float: right; padding-left: 20px;">
+                <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                  md="md-download" (click)="getfile(item.ROW_NO,item.COMMON_ATTACHMENT_ID,item)">
+                </ion-icon>
+              </span>
+              <p class="danger-clr"> {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}} by {{item.CREATED_BY_NAME}}</p>
+            </div>
+          </ion-item>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="agile-login" style="margin-top: inherit;">
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <div class="card" *ngFor="let item of paymentattachmentlist; index as i;" data-parent="#accordionExample">
+              <div class="card-header" id="headingComment" style="background-color:white;">
+                <a (click)=showUndoBtn(i) role="button">
+                  {{1 + i}}. {{item.FILE_NAME}}
+                </a>
+                <span style="float: right; padding-left: 20px;">
+                  <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                    md="md-download" (click)="getfile(item.ROW_NO,item.COMMON_ATTACHMENT_ID,item)">
+                  </ion-icon>
+                </span>
+                <p class="danger-clr"> {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}} by {{item.CREATED_BY_NAME}}</p>
+              </div>
+
+            </div><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ion-list>
+
+  <!-- <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <ion-item class="" *ngFor="let item of paymentcommentsdetails; index as i;" data-parent="#accordionExample">
+            <div class="" id="headingComment" style="background-color:white;">
+              <a (click)=showUndoBtn(i) role="button">
+                <span [innerHTML]="item.COMMENTS" style='white-space: pre-line;'></span>
+                <br>
+                <span style="float: right" class="danger-clr">{{item.USER_SURNAME}} -
+                  {{item.MODIFIED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span><br>
+              </a>
+            </div>
+
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </ion-list> -->
+
+
+  <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form" style="padding-right: 0px; padding-left: 0px;">
+        <div class="accordion" id="accordionExample">
+          <ion-item *ngFor="let item of paymentcommentsdetails; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;background-color: transparent;">
+            <div id="headingComment">
+              <a role="button" style="font-size: 14px;white-space: normal;">
+                {{1 + i}}. {{item.COMMENTS}}
+              </a><br>
+              <span class="danger-clr" style="text-align:right;font-size: 1.2rem;">by {{item.USER_SURNAME}} on
+                {{item.MODIFIED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+              </span>
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+                <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+              </span>
+
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                <ion-icon name="mic" style="font-size: 30px; color: red;"></ion-icon>
+              </span>
+            </div>
+          </ion-item><br>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+
+
+</ion-content>

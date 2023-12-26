@@ -1,0 +1,69 @@
+<!--
+  Generated template for the ModalPage page.
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>+ Add Case File Uploads </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="agile-login">
+    <div class="wrapper">
+      <form [formGroup]="caseUploadsForm" (submit)="insertCaseFileUpload()">
+        <div class="modal-body">
+          <ion-item>
+            <ion-label id="profile_image" color="primary" stacked>Select</ion-label>
+            <ion-input type="file" (change)="onSelectFile($event)"></ion-input>
+          </ion-item>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" color="secondary" style="float: right;" class="btn btn-primary">Upload</button>
+        </div>
+        <ion-input [(ngModel)]="CASE_REQUEST_ID" *ngFor="let case of casedata;" type="hidden" value="{{case.CASE_REQUEST_ID}}"
+          [formControl]="caseUploadsForm.controls['CASE_REQUEST_ID']">
+        </ion-input>
+      </form>
+    </div>
+  </div>
+  <div class="agile-login" style="margin-top: inherit;">
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <div class="card" *ngFor="let item of caseuploadsdetails; index as i;" data-parent="#accordionExample">
+            <div class="card-header" id="headingComment" style="background-color:white;">
+              <span style="float: left; padding-left: 20px;" item-start>
+              <a (click)=showUndoBtn(i) role="button">
+                {{1 + i}}. {{item.FILE_NAME}}
+              </a>
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+               Type: {{item.CASE_TYPE_DESCRIPTION}}
+              </p>
+            </span>
+              <span style="float: right; padding-left: 20px;" item-end >
+                <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                  md="md-download" (click)="getfile(item.ROW_NO,item)">
+                </ion-icon>
+              </span>
+            </div>
+            <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+              <div class="card-body card-bodynew">
+                <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                  Created User: {{item.CREATED_BY_NAME}}
+                </p>
+                <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                  Created Date: {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+                </p>
+              </div>
+            </div>
+          </div><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

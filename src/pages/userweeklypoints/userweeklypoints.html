@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar> 
+    <ion-title style="text-align: center;">{{modaltype[0].start_week |date:'dd-MMM-yyyy'}} to {{modaltype[0].end_week|date:'dd-MMM-yyyy'}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding> 
+   
+  <ion-item style="align-items: start !important;" *ngIf="roi_count_flag == 0">
+    <ion-label>Enter Points</ion-label>
+    <ion-badge item-right color="secondary" style="width: 30px; font-size: 16px;">{{selectedpoints}}</ion-badge>
+    <ion-range  min="-10" max="10" step="1" pin="true" [(ngModel)]="roipoints" color="secondary"
+    (ionChange)="onPointChange($event)">
+      <ion-label range-left>-10</ion-label>
+      <ion-label range-right>10</ion-label>
+    </ion-range>
+  </ion-item>
+  <ion-item style="align-items: start !important;" *ngIf="roi_count_flag > 0">
+    <ion-label>Enter Points</ion-label>
+    <ion-badge item-right color="secondary" style="width: 30px; font-size: 16px;">{{selectedpoints}}</ion-badge>
+    <ion-range  min="-10" max="0" step="1" pin="true" [(ngModel)]="roipoints" color="secondary"
+    (ionChange)="onPointChange($event)">
+      <ion-label range-left>-10</ion-label>
+      <ion-label range-right>0</ion-label>
+    </ion-range>
+  </ion-item>
+  <ion-item>
+    <ion-textarea rows="4" cols="20" [(ngModel)]="roipointscomments" placeholder="Enter Comments...">
+    </ion-textarea>
+  </ion-item>
+  <div class="example-center" style="text-align: center !important;">
+    <button ion-button type="submit" color="Primary" (click)=insertRoiWeekPoints();>Send</button>
+    <button ion-button color="dark" (click)=closeModal();>Cancel</button>
+  </div>
+
+</ion-content>

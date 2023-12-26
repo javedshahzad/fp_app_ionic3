@@ -1,0 +1,56 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>+ Add Attachments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <div class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="paymentattachmentForm" enctype="multipart/form-data" (submit)="insertAttachments()">
+          <div>
+            <div class="w3ls-form">
+              <ion-label position="floating" style="color: black;padding-left: 12px;">Add File :</ion-label>
+
+              <ion-item>
+                <ion-input type="file" (change)="onSelectFile($event)"></ion-input>
+                <p *ngIf="paymentattachmentForm.controls.attachmentfile.errors && paymentattachmentForm.controls.attachmentfile.dirty"
+                  class='error'>Select the file.</p>
+              </ion-item>
+              <button ion-button type="submit" style="float: right;" color="secondary">Upload</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ion-card>
+  <div class="agile-login" style="margin-top: inherit;">
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <div class="card" *ngFor="let item of paymentattachmentlist; index as i;" data-parent="#accordionExample">
+            <div class="card-header" id="headingComment" style="background-color:white;">
+              <a (click)=showUndoBtn(i) role="button">
+                {{1 + i}}. {{item.FILE_NAME}}
+              </a>
+              <span style="float: right; padding-left: 20px;">
+                <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                  md="md-download" (click)="getfile(item.ROW_NO,item.CONTRACT_IMAGE_ID,item)">
+                </ion-icon>
+              </span>
+              <p class="danger-clr"> {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}} by {{item.CREATED_BY_NAME}}</p>
+            </div>
+
+          </div><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

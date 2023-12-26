@@ -1,0 +1,102 @@
+<ion-header >
+    <ion-navbar style="background-color:#525b6d">
+      <ion-buttons left>
+        <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'> 
+            <ion-icon name="menu"></ion-icon>
+        </button>
+    </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center"> Customer Services </ion-title> 
+    </ion-navbar>
+</ion-header>
+<ion-content >
+    <ion-toolbar>
+      <ion-segment [(ngModel)]="ServiceTab" color="light" background='primary_1'>
+        <ion-segment-button value="Service Charges">
+            Service Charges
+        </ion-segment-button>
+        <ion-segment-button value="Demand">
+            Demand Charges
+        </ion-segment-button>
+        <ion-segment-button value="Sold">
+            Sold Units
+        </ion-segment-button>
+        <ion-segment-button value="UnSold">
+            UnSold Units
+        </ion-segment-button>
+        <ion-segment-button value="cws">
+            CWS
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+    <div  [ngSwitch]="ServiceTab" >
+      <div  *ngSwitchCase="'Service Charges'">
+                <h3 style="text-align: center; margin-top: 5px;"> Service Charges Property List</h3>
+                <ion-list>
+                  <ion-item-sliding *ngFor="let item of buildcount.ServiceBuild; index as i;">
+                    <button ion-item (click)="openModal(item.PROPERTY_NAME,type='Service Charge')">
+                      <ion-avatar item-start>
+                        <img src="assets/imgs/dom_7-320.png"/>
+                      </ion-avatar>
+                      <h2>{{item.PROPERTY_NAME}}</h2>
+                      <p>Total Unit - {{item.UNIT_COUNT}}</p>
+                      <p>Total Balance Amount<ion-badge item-end style="float: right; margin-top: 2px;" >{{item.BALAMT | currency:"AED "}}</ion-badge></p>
+                    </button>
+                  </ion-item-sliding>
+                </ion-list>  
+      </div>
+      <div *ngSwitchCase="'Demand'">
+                <h3 style="text-align: center; margin-top: 5px;"> Demand Charges Property List</h3>
+                <ion-list>
+                  <ion-item-sliding *ngFor="let item of buildcount.DemandBuild; index as i;">
+                    <button ion-item (click)="openModal(item.PROPERTY_NAME,type='Demand Charge')">
+                      <ion-avatar item-start>
+                        <img src="assets/imgs/dom_7-320.png"/>
+                      </ion-avatar>
+                      <h2>{{item.PROPERTY_NAME}}</h2>
+                      <p>Total Unit - {{item.UNIT_COUNT}}</p>
+                      <p>Total Balance Amount<ion-badge item-end style="float: right; margin-top: 2px;" >{{item.BALAMT | currency:"AED "}}</ion-badge></p>
+                    </button>
+                  </ion-item-sliding>
+                </ion-list>           
+      </div>
+      <div *ngSwitchCase="'Sold'"> 
+        <div class="container-fluid">
+          <div class="row-fluid">    
+            <div class="col-sm-12 mtb-5vh">
+              <div class="page-header">
+                <h3 style="text-align: center; margin-top: 5px;">Sold Property List</h3>              
+              </div>   
+              <div id="no-more-tables">
+              </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="'UnSold'"> 
+        <div class="container-fluid">
+          <div class="row-fluid">    
+            <div class="col-sm-12 mtb-5vh">
+              <div class="page-header">
+                <h3 style="text-align: center; margin-top: 5px;">UnSold Property List</h3>              
+              </div>   
+              <div id="no-more-tables">
+              </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="'cws'"> 
+        <div class="container-fluid">
+          <div class="row-fluid">    
+            <div class="col-sm-12 mtb-5vh">
+              <div class="page-header">
+                <h3 style="text-align: center; margin-top: 5px;">CWS Property List</h3>              
+              </div>   
+              <div id="no-more-tables">
+              </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </div>
+</ion-content>

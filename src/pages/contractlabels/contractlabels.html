@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons left>
+            <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center">Contract</ion-title>
+    </ion-toolbar>
+    
+</ion-header>
+
+<ion-content padding>
+
+    <div>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/contract-label.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Supplier Contract</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ supplierContractCount || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('Supplier Contrct')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/contract-label.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Customer Contract</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ customerContractCount || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openCustModal('Customer Contract')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+    </div>
+</ion-content>

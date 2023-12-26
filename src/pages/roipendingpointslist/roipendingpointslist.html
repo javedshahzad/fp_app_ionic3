@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{today | date: 'dd-MM-yyyy'}} {{this.label_title}} </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="show_comment_list === 0">
+    <div class="card" *ngFor="let item of roiReportData; index as i;" data-parent="#accordionExample">
+      <ion-row>
+        <ion-col>
+          <ion-card class="dash_image" text-center>
+            <ion-card-content>
+              <ion-item>
+                <ion-avatar item-start item-left class="list-time purple-border"
+                  (click)="showComment(i,item.USER_INFO_ID,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK,item.LABEL_TYPE)">
+                  <img src="assets/imgs/chat.png">
+                </ion-avatar>
+                <h2 (click)="showComment(i,item.USER_INFO_ID,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK,item.LABEL_TYPE)"
+                  style="font-size: 1.2rem;">{{item.START_OF_THE_WEEK |date:'dd-MMM-yyyy'}} -
+                  {{item.END_OF_THE_WEEK |date:'dd-MMM-yyyy'}}</h2>
+                <p>{{item.USER_SURNAME}}
+                  <span *ngIf="item.ROI_POINT_ID == 0">
+                    <ion-badge>
+                      <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                        <span>{{item.POINT_NO ||'0'}}</span>
+                      </ion-icon>
+                    </ion-badge>
+                  </span>
+                  <span *ngIf="item.ROI_POINT_ID > 0">
+                    <ion-badge style="background-color: #f55d23;">
+                      <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                        <span>{{item.POINT_NO ||'0'}}</span>
+                      </ion-icon>
+                    </ion-badge>
+                  </span>
+                  <span>
+                    <ion-badge style="background-color: #158019; margin-left: 25px;">
+                      <ion-icon ios="ios-star" md="md-star" style="font-size: 1.5em !important;">
+                        <span>{{item.TOTAL_ROI_COUNT ||'0'}}</span>
+                      </ion-icon>
+                    </ion-badge>
+                  </span>
+                </p>
+                <ion-icon right item-end item-right ios="ios-arrow-forward" md="md-arrow-forward"
+                  *ngIf="item.ROI_POINT_ID == 0"
+                  (click)="openUserPointsPage(item.USER_INFO_ID,item.START_OF_THE_WEEK,item.END_OF_THE_WEEK)">
+                </ion-icon>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <div [attr.id]="'undoCmtBtn'+i" *ngIf="showCmtBtn===i" style="padding: 10px;">
+        <div class="card">
+          <div class="card-body card-bodynew">
+
+            <div class="card" (click)="openModaldate('R')">
+              <h6 style="margin-left: 20px;">R - Result</h6>
+              <ion-badge class="badge_task"
+                style="top: 15px; right: 45px !important; position: absolute;background-color: #10dc60; font-size: 13px;">
+                {{weekly_R || '0'}}</ion-badge>
+            </div><br>
+            <div class="card">
+              <span>
+                <h6 style="margin-left: 20px;" (click)="openModaldate('O')" >O - Objective</h6>
+                <ion-icon ios="ios-create" *ngIf="label_type==='Current'" md="md-create"
+                  (click)="createNewObjective()" style="
+                  top: 0.5rem;
+                  right: 11px;
+                  position: absolute;
+                  font-size: 27px;">
+                </ion-icon>
+              </span>
+              <ion-badge class="badge_task"
+                style="top: 15px; right: 45px !important; position: absolute;background-color: #10dc60; font-size: 13px;">
+                {{weekly_O || '0'}}</ion-badge>
+            </div><br>
+            <div class="card" (click)="openModaldate('I')">
+              <h6 style="margin-left: 20px;">I - Ideas</h6>
+              <ion-badge class="badge_task"
+                style="top: 15px; right: 45px !important; position: absolute;background-color: #10dc60; font-size: 13px;">
+                {{weekly_I || '0'}}</ion-badge>
+            </div>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show_comment_list === 5" style="padding: 10px;">
+    <div class="" data-parent="#accordionExample">
+      <div style="padding: 10px;">
+        <div class="card">
+          <div class="card-body card-bodynew">
+
+            <ion-grid>
+              <ion-row style="border: solid 1px grey;border-bottom-style: none;" *ngIf="editcomment.length > 0">
+                <ion-col col-2
+                  style="font-size: small;font-weight: bold;border: solid 1px grey;border-bottom-style: none;border-top-style: none;">
+                  S.No &<br>
+                  Task Count
+                </ion-col>
+                <ion-col col-8 style="font-size: larger;font-weight: bold;text-align: center;">
+                  Comments
+                </ion-col>
+                <ion-col col-2
+                  style="font-size: larger;font-weight: bold;border: solid 1px grey;border-bottom-style: none;border-top-style: none;">
+                  Task
+                </ion-col>
+              </ion-row>
+              <ion-row *ngFor="let cmt of editcomment; index as i;"
+                style="border: solid 1px grey;border-bottom-style: none;">
+                <ion-col col-2 style="border: solid 1px grey;border-bottom-style: none;border-top-style: none;"
+                  *ngIf="cmt.COMMENTS !=null">
+                  {{i+1}} -- <ion-badge class="badge_task" (click)="tasklist(cmt.TASK_ID)"
+                    style="background-color: #10dc60;">{{gettaskcount(cmt.TASK_ID)}}</ion-badge>
+                </ion-col>
+                <ion-col col-8 *ngIf="cmt.COMMENTS !=null">
+                  <span>{{cmt.COMMENTS}}</span>
+                  <p type="text" style="color:red"> Last modified on {{cmt.MODIFIED_ON |date:'dd-MMM-yyyy hh:mm a'}}</p>
+                </ion-col>
+                <ion-col col-2 *ngIf="cmt.COMMENTS !=null"
+                  style="border: solid 1px grey;border-bottom-style: none;border-top-style: none;">
+                  <ion-fab>
+                    <button class="cmdtask" ion-fab mini
+                      (click)="createtask_to_open(cmt.COMMENTS_CHILD_ID,cmt.COMMENTS)">
+                      <ion-icon name="add" style="font-size: 15px !important;"></ion-icon>
+                    </button>
+                  </ion-fab>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="editcomment.length == 0">
+                <ion-col>
+                  -
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show_comment_attachment === 10">
+
+    <div class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="taskUploadsForm" (submit)="insertTaskFileUpload()">
+          <div class="modal-body">
+            <h3 style="padding-left: 26PX; padding-top: 10px;padding-bottom: 10px;    font-size: 15px;
+              font-weight: 500;">Add Attchament in weekly updates</h3>
+            <ion-item>
+              <ion-label id="profile_image" color="primary" stacked>Select</ion-label>
+              <ion-input type="file" (change)="onSelectFile($event)"></ion-input>
+            </ion-item>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" color="secondary" style="float: right;" class="btn btn-primary">Upload</button>
+          </div>
+          <ion-input [(ngModel)]="COMMENTS_ID" type="hidden" value="{{COMMENTS_ID}}"
+            [formControl]="taskUploadsForm.controls['COMMENTS_ID']">
+          </ion-input>
+        </form>
+      </div>
+    </div>
+
+    <div class="agile-login" style="margin-top: inherit;">
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <div class="card" *ngFor="let item of taskuploadsdetails; index as i;" data-parent="#accordionExample">
+              <div class="card-header" id="headingComment" style="background-color:white;">
+                <a role="button">
+                  {{1 + i}}. {{item.FILE_NAME}} ({{bytesToSize(item.FILE_SIZE)}})
+                </a>
+                <span style="float: right; padding-left: 20px;">
+                  <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                    md="md-download" (click)="getfile(item.ROW_NO,item)">
+                  </ion-icon>
+                </span>
+              </div>
+            </div><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="show_comment_list === 4">
+    <div class="wrapper" style="margin-top: 30px;padding-left: 10px;">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <ion-grid>
+            <ion-row style="border: solid 1px grey;border-bottom-style: none;">
+              <ion-col col-2
+                style="font-size: larger;font-weight: bold;border: solid 1px grey;border-bottom-style: none;border-top-style: none;">
+                S.No
+              </ion-col>
+              <ion-col col-10 style="font-size: larger;font-weight: bold;text-align: center;">
+                Comments
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let item of read_more_value; index as i;"
+              style="border: solid 1px grey;border-bottom-style: none;">
+              <ion-col col-2 style="border: solid 1px grey;border-bottom-style: none;border-top-style: none;">
+                {{i+1}}
+              </ion-col>
+              <ion-col col-10>
+                {{item.COMMENTS}}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

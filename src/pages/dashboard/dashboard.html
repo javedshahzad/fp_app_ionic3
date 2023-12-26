@@ -1,0 +1,417 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons left>
+      <button ion-button icon-only menuToggle style="color: #ffffff;">
+        <ion-icon slot="icon-only" name='menu'></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title text-left> Home {{today | date: 'dd-MM-yyyy'}}
+    </ion-title>
+    <ion-buttons end>
+      <button id="notification-button" style="top: 6px !important; right: 56px !important;" ion-button icon-only clear
+        (click)="notification()">
+        <ion-icon name="notifications">
+          <ion-badge *ngIf="notificationall.notificationCount ?.length > 0" id="notifications-badge" color="danger">
+            {{notificationall[0].NOTIFICATION_COUNT}}</ion-badge>
+        </ion-icon>
+      </button>
+
+      <div class="case" *ngIf="myprofilecount === 1;">
+        <button ion-button icon-only style="color: #ffffff; bottom: 22px; padding-top: 5px;" (click)="profile()">
+          <!-- <ion-icon name="contact"></ion-icon> -->
+          <img class="myprofile-picture" src="{{profileImg}}" style="width: 50px; height:50px; border-radius: 50%;">
+        </button>
+      </div>
+ 
+      <div class="case" *ngIf="myprofilecount === 0;">
+        <button ion-button icon-only style="color: #ffffff; bottom: 22px; padding-top: 5px;" (click)="profile()">
+          <!-- <ion-icon name="contact"></ion-icon> -->
+          <img class="myprofile-picture" src="assets/imgs/no-found-photo.png"
+            style="width: 50px; height:50px; border-radius: 50%;">
+        </button>
+      </div>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-slides pager>
+    <ion-slide>
+      <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+          <ion-col col-4 [ngStyle]="{'display':task_dispaly}">
+            <ion-card text-center padding class="card_btn" (click)="taskmanagement()" style="height: 100px !important;">
+              <img class="icon-btn" src="assets/imgs/checklist.png" />
+              <h2 class="name_btn">Task Mgmt</h2>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':pointing_system_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="MyMeeting()" style="height: 100px !important;">
+              <img src="assets/imgs/minutes-of-meeting.png" class="icon-btn" />
+              <h2 class="name_btn">Minutes Of Meeting</h2>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':escalation_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="escalation()" style="height: 100px !important;">
+              <ion-badge *ngIf="show_escalation_count > 0"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0;background-color: #e74c3c !important;">
+                {{escalationdetail || '0'}}</ion-badge>
+              <img src="assets/imgs/complain.png" class="icon-btn" />
+              <h2 class="name_btn">Escalation</h2>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':paymentrequest_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge (click)="OpenPaymentDetailModal(7)"
+                style="font-size: 85%;z-index: 99999;position: absolute;left: 0;top: 0;">
+                {{PENDING_FOR_CEO_PAYMENT || '0'}}</ion-badge>
+
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="OpenLegalPaymentEscalationCeo(2)"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{ESCALATION_TO_CEO_PAYMENT || '0'}}</ion-badge>
+
+              <div (click)="paymentrequest()">
+                <img src="assets/imgs/online-order.png" class="icon-btn" />
+                <h2 class="name_btn">Legal Payment Request</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':lpo_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge (click)="OpenLpoApproval()"
+                style="font-size: 85%;z-index: 1;position: absolute;left: 0;top: 0;">{{LPO_COUNT || '0'}}
+              </ion-badge>
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="OpenLpoEscalationtoceocoo()"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{Escalation_to_coo_ceo || '0'}}</ion-badge>
+              <div (click)="lpo()">
+                <img src="assets/imgs/lpo.png" class="icon-btn" />
+                <h2 class="name_btn">LPO</h2>
+              </div>
+            </ion-card>            
+          </ion-col>
+          
+          <ion-col col-4 [ngStyle]="{'display':myprofile_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="CEO_ESCLATED_COUNTbtn()"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{CALL_MANAGE_CEO_ESCLATE || '0'}}</ion-badge>
+              <div (click)="call_management()">
+                <img src="assets/imgs/Call_Centre.png" class="icon-btn" />
+                <h2 class="name_btn">Call Mgmt</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':chequelist_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+
+              <ion-badge (click)="openDetailModal(type = 'CHECEOAPPROVAL')"
+                style="font-size: 85%;z-index: 1;position: absolute;left: 0;top: 0;">{{CHEQUE_APPROVAL_COUNT || '0'}}
+              </ion-badge>
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="openDetailModal(type = 'ESCCEO')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{CHEQUE_CEO || '0'}}</ion-badge>
+
+              <div (click)="cheque()">
+                <img src="assets/imgs/cheque_list.png" class="icon-btn" />
+                <h2 class="name_btn">Cheque List</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':returncheque_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge *ngIf="show_escalation_count > 0"
+                (click)="OpenReturnChequeEscalation(type = 'ESCLATION TO CEO')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{RETURN_CHEQUE || '0'}}</ion-badge>
+
+              <div (click)="returncheque()">
+                <img src="assets/imgs/cheque.png" class="icon-btn" />
+                <h2 class="name_btn">Return Cheque</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':casemanagement_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge *ngIf="show_escalation_count > 0"
+                (click)="OpenCaseEscalationtoceocoo(type = 'ESCALATIONTOCEO')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0;background-color: #e74c3c !important;">
+                {{CASE_CEO || '0'}}</ion-badge>
+
+              <div (click)="casemanagement()">
+                <img src="assets/imgs/management.png" class="icon-btn" />
+                <h2 class="name_btn">Case Mgmt</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+          <ion-col col-4 [ngStyle]="{'display':rent_refund_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="rent_refund()" style="height: 100px !important;">
+              <img src="assets/imgs/return.png" class="icon-btn" />
+              <h2 class="name_btn">Rent Refund</h2>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':hoto_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="hoto()" style="height: 100px !important;">
+              <img src="assets/imgs/hanging-over-the-key.png" class="icon-btn" />
+              <h2 class="name_btn">HOTO</h2>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':pending_approval_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <img src="assets/imgs/pending.png" class="icon-btn" />
+              <h2 class="name_btn">Pending Approvals</h2>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+
+        <ion-row>
+          <ion-col col-4 [ngStyle]="{'display':security_deposite_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge (click)="OpenSecDepEscalation(type = 'Pending COO/CEO Approval')"
+                style="font-size: 85%;z-index: 1;position: absolute;left: 0;top: 0;">
+                {{SEC_DEPOSIT_CEO_APPROVAL || '0'}}</ion-badge>
+
+              <ion-badge *ngIf="show_escalation_count > 0"
+                (click)="OpenSecDepEscalation(type = 'Escalation to CEO/COO')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{SEC_DEPOSIT_CEO_ESCALATION || '0'}}</ion-badge>
+
+              <div (click)="securitydeposite()">
+                <img src="assets/imgs/deposit-box.png" class="icon-btn" />
+                <h2 class="name_btn">Security Deposit</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':drec_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="OpenDrecEscalation(type = 'Escalation to CEO/COO')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{DREC_CEO_ESCLATION || '0'}}</ion-badge>
+
+              <div (click)="drec()">
+                <img src="assets/imgs/real-estate.png" class="icon-btn" />
+                <h2 class="name_btn">DREC</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+          <ion-col col-4 [ngStyle]="{'display':finance_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="finance()" style="height: 100px !important;">
+              <img src="assets/imgs/finance.png" class="icon-btn" />
+              <h2 class="name_btn">Finance</h2>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <!-- <ion-col col-4 [ngStyle]="{'display':jd_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="jobassignments()" style="height: 100px !important;">
+              <img src="assets/imgs/document.png" class="icon-btn" />
+              <h2 class="name_btn">JD'S</h2>
+            </ion-card>
+          </ion-col> -->
+
+          <ion-col col-4 [ngStyle]="{'display':pointing_system_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <img src="assets/imgs/presentation.png" class="icon-btn" />
+              <h2 class="name_btn">Pointing System</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':ranking_dispaly}">
+            <ion-card text-center padding class="card_btn" style="height: 100px !important;">
+              <img class="icon-btn" src="assets/imgs/chevron.png" />
+              <h2 class="name_btn">Ranking</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':knowledge_session_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <img src="assets/imgs/book.png" class="icon-btn" />
+              <h2 class="name_btn">Knowledge Session</h2>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':myprofile_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="profile()" style="height: 100px !important;">
+              <img src="assets/imgs/boy.png" class="icon-btn" />
+              <h2 class="name_btn">My Profile</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':property_management_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="property()" style="height: 100px !important;">
+              <img src="assets/imgs/money.png" class="icon-btn" />
+              <h2 class="name_btn">Property Mgmt</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':customer_service_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="customerservice()"
+              style="height: 100px !important;">
+              <img src="assets/imgs/operator.png" class="icon-btn" />
+              <h2 class="name_btn">Customer Service</h2>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="chatoption()" style="height: 100px !important;">
+              <ion-badge *ngIf="total_msg_count > 0"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0;background-color: #e74c3c !important;">
+                {{total_msg_count || '0'}}</ion-badge>
+              <img src="assets/imgs/chatoption.png" class="icon-btn" />
+              <h2 class="name_btn">Chat</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':notification_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="notification()" style="height: 100px !important;">
+              <img src="assets/imgs/notification.png" class="icon-btn" />
+              <h2 class="name_btn">Notification</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':comments_dispaly}">
+            <ion-card class="card_btn" text-center padding (click)="comments()" style="height: 100px !important;">
+              <img src="assets/imgs/chat.png" class="icon-btn" />
+              <h2 class="name_btn">Comments</h2>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':paymentrequest_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+
+              <ion-badge (click)="OpenFinancePaymentDetailModal('CEOCOO_APPROVAL')"
+                style="font-size: 85%;z-index: 99999;position: absolute;left: 0;top: 0;">
+                {{WAITING_FOR_CEO_FINANCE_PAYMENT || '0'}}</ion-badge>
+              <ion-badge *ngIf="show_escalation_count > 0" (click)="OpenFinancePaymentDetailModal('CEO_ESCALATION')"
+                style="font-size: 85%;z-index: 1;position: absolute;right: 0;top: 0; background-color: #e74c3c !important;">
+                {{ESCALATION_TO_CEO_FINANCE_PAYMENT || '0'}}</ion-badge>
+
+              <div (click)="financepaymentrequest()">
+                <img src="assets/imgs/payment-request.png" class="icon-btn" />
+                <h2 class="name_btn">Payment Request</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="rentalbalance()" style="height: 100px !important;">
+              <img src="assets/imgs/rental-balance.png" class="icon-btn" />
+              <h2 class="name_btn">Rental Balance</h2>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="rentaloverdue()" style="height: 100px !important;">
+              <img src="assets/imgs/rental-overdue.png" class="icon-btn" />
+              <h2 class="name_btn">Rental Overdue</h2>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="contract()">
+                <img src="assets/imgs/contract.png" class="icon-btn" />
+                <h2 class="name_btn">Contract</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="documenttracking()">
+                <img src="assets/imgs/document-tracking.png" class="icon-btn" />
+                <h2 class="name_btn">Document Tracking</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="inventory()">
+                <img src="assets/imgs/inventory.png" class="icon-btn" />
+                <h2 class="name_btn">Inventory</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="utility()">
+                <img src="assets/imgs/utility.png" class="icon-btn" />
+                <h2 class="name_btn">Utility</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="attendance()">
+                <img src="assets/imgs/attendance-label.png" class="icon-btn" />
+                <h2 class="name_btn">Attendance</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4 [ngStyle]="{'display':documenttracking_dispaly}">
+            <ion-card class="card_btn" text-center padding style="height: 100px !important;">
+              <div (click)="parking()">
+                <img src="assets/imgs/parking.png" class="icon-btn" />
+                <h2 class="name_btn">Parking</h2>
+              </div>
+            </ion-card>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+</ion-content>

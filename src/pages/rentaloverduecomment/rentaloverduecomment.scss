@@ -1,0 +1,24 @@
+page-rentaloverduecomment{
+    .toolbar-background-md{
+        border:none;
+        background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+    }
+    .toolbar-background-ios{
+        background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+    }
+    .expand-wrapper {
+        transition: 0.2s linear;
+    }   
+    .collapsed {
+        height: 0 !important;
+    }
+
+    .list-header-md {
+        padding-left: 16px;
+        margin-bottom: 13px;
+        min-height: 4.5rem;
+        border-top: 0px solid #dedede; 
+        font-size: 1.4rem;
+        color: #757575;
+    }
+}

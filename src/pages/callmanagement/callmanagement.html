@@ -1,0 +1,194 @@
+<ion-header>
+    <!-- <ion-toolbar style="background-color:#525b6d">
+        <ion-buttons left>
+            <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center" style="font-size: 1.7rem; text-align: center;">
+            Call Management</ion-title>        
+        
+    </ion-toolbar> -->
+
+    <ion-navbar>
+        <ion-buttons left>
+            <button ion-button menuToggle class="navbar_leftbtn">
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title class="navbar_title">Call Management</ion-title>
+    </ion-navbar>
+    
+    <ion-toolbar>
+        <form action="." method="get" (submit)="SearchcallManagement()">
+            <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value">
+            </ion-searchbar>
+        </form>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-fab right bottom edge style="position: absolute;bottom: 0;">
+        <button ion-fab mini (click)="opencallModal()">
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="Callconfrimbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ Call_Confrim_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/clipboard.png" />
+                </ion-card>
+                <div>
+                    <h6>Registered Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="Callinspectionbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ Callinspection_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/inspection.png" />
+                </ion-card>
+                <div>
+                    <h6>Inspection Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CallEstimationbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ CallEstimation_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/economy-forecast.png" />
+                </ion-card>
+                <div>
+                    <h6>Estimation Calls</h6>
+                </div>
+            </ion-col>
+
+ 
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CallProcurementbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ CallProcurement_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/product.png" />
+                </ion-card>
+                <div>
+                    <h6>Procurement Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CallWorkAssignmentbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ CallWorkAssignment_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/task (1).png" />
+                </ion-card>
+                <div>
+                    <h6>Assignment Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="workcompleted()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ workcompleted_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/complete.png" />
+                </ion-card>
+                <div>
+                    <h6>Work Completed Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CallAllCallsbtn(0)">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ AllCalls_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/phone-receiver.png" />
+                </ion-card>
+                <div>
+                    <h6>Active Calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="MGR_ESCLATED_COUNT_btn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ MGR_ESCLATED_COUNT_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/escalation_icon.jpg" />
+                </ion-card>
+                <div>
+                    <h6>MGR escalated calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CEO_ESCLATED_COUNTbtn()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ CEO_ESCLATED_COUNT_length || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/escalation_icon.jpg" />
+                </ion-card>
+                <div>
+                    <h6>CEO escalated calls</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="Escalation_on_hold()">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ ESCALATION_ON_HOLD_COUNT || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/escalation_icon.jpg" />
+                </ion-card>
+                <div>
+                    <h6>Escalation On Hold</h6>
+                </div>
+            </ion-col>
+
+            <ion-col col-4>
+                <ion-card text-center padding class="card_btn" (click)="CallAllCallsbtn(1)">
+                    <h2 class="name_btn">
+                        <ion-badge class="badge_task"
+                            style="float: left;z-index: 1;position: absolute;top: 0;right: 0;background-color: #10dc60;width: fit-content;">
+                            {{ closed_call_list || '0' }}</ion-badge>
+                    </h2>
+                    <img class="icon-btn" src="assets/imgs/closed_call.png" />
+                </ion-card>
+                <div>
+                    <h6>Closed Calls</h6>
+                </div>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+</ion-content>

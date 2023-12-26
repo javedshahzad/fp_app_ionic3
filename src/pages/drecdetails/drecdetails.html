@@ -1,0 +1,190 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Drec Details </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+ 
+    <div class="col-md-12">
+        <div class="accordion" id="securitydepositmodal">
+            <div *ngFor="let item of drecListall; index as i;">
+                <ion-item id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed"
+                    data-toggle="collapse" [attr.data-target]="'#' + i" aria-expanded="true/false"
+                    [attr.aria-controls]="i">
+                   
+                    <div  *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white; margin-top: 8px;">
+                            <h2 style="font-size: 16px; line-height: 3px;" >{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}} </h2>
+                            <p style="font-size: 10px; line-height: 25px; white-space: pre-line;" >{{ item.STATUS_NAME }} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>                                                        
+                    </div>
+                    <div  *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <h2 style="font-size: 16px; line-height: 3px;" >{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}} </h2>
+                            <p style="font-size: 10px; line-height: 25px; white-space: pre-line;" >{{ item.BUILD_CODE}} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>                            
+                    </div>
+
+                    <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+                </ion-item>
+
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#securitydepositmodal">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="securitydepositmodal">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Property Name.</th>
+                                    <th role="columnheader">BuildCode</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">Lease No</th>
+                                    <th role="columnheader">Commencement Date</th>
+                                    <th role="columnheader">Termination Date </th>
+                                    <th role="columnheader">Tenant Name</th>
+                                    <th role="columnheader">Customer Number </th>
+                                    <th role="columnheader">STATUS</th>
+                                    <th role="columnheader">COMMENTS</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.UNIT_NO}}</td>
+                                    <td role="cell">{{item.LEASE_NUM}}</td>
+                                    <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                    </td>
+                                    <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                    </td>
+                                    <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                    <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                    <td role="cell">
+                                        <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                color="secondary"><i class="fa fa-comments"
+                                                    aria-hidden="true"></i></button>
+                                        </span>
+                                        <!-- <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                color="secondary">
+                                                <ion-icon name="attach"></ion-icon>
+                                            </button>
+                                        </span> -->
+                                        <span *ngIf="item.FILE_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="openModalAttachment(item.LEASE_NUM)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.FILE_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="openModalAttachment(item.LEASE_NUM)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                color="secondary"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i></button>
+                                        </span>
+                                        <span>
+                                            <button ion-button [color]="(item.FILE_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LEASE_NUM,item.FILE_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button> 
+                                        </span>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="backdrop" [ngStyle]="{'display':approve_cmt}"></div>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':approve_cmt}" style="margin-top: 50%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Security Deposit Status Update</h4>
+                            <button type="button" class="close" aria-label="Close"
+                                (click)="onCloseHand('approve')"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="ApproveForm" (submit)="Approve_con()">
+                            <div class="modal-body">
+                                <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                                    [formControl]="ApproveForm.controls['LEASE_NO']"></ion-input>
+
+                                <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                                    <ion-textarea name="comments" placeholder="Comments "
+                                        [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                                </ion-row>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    (click)="onCloseHand('approve')">Close</button>
+                                <span
+                                    *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                                    <button type="button" type="submit" class="btn btn-primary"
+                                        [disabled]="!ApproveForm.valid">{{btnTxt}}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="backdrop" [ngStyle]="{'display':reject_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':reject_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Security Deposit Status Update</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="RejectForm" (submit)="Reject_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                            [formControl]="RejectForm.controls['LEASE_NO']"></ion-input>
+
+                        <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('reject')">Close</button>
+                        <span *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                            <button type="button" type="submit" class="btn btn-primary"
+                                [disabled]="!RejectForm.valid">{{btnTxt}}</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</ion-content>

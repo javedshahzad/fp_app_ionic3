@@ -1,0 +1,65 @@
+<!--
+  Generated template for the ReceiptPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <ion-title> Create Payment Request Bill </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+  <ion-content>
+
+      <ion-item>
+          <h2>Create Payment Request Bill</h2>
+      </ion-item>
+
+      <ion-list>
+
+        <form [formGroup]="paymentrequestbillForm" (submit)="createpaymentrequestbill()">
+          <ion-item>
+            <ion-label stacked>Payment Request Id</ion-label>
+            <ion-input type="text" [(ngModel)]="requestdata[0].PAYMENT_REQUEST_ID[0].PAYMENT_REQUEST_ID" name="payment_request_id"  value="{{requestdata[0].PAYMENT_REQUEST_ID[0].PAYMENT_REQUEST_ID}}" readonly="true" [formControl]="paymentrequestbillForm.controls['payment_request_id']"></ion-input>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label stacked>Description</ion-label>
+            <ion-input type="text" name="description"  [formControl]="paymentrequestbillForm.controls['description']"></ion-input>
+            <p *ngIf="paymentrequestbillForm.controls.description.errors && paymentrequestbillForm.controls.description.dirty" class='error'>Enter the Description.</p>
+          </ion-item>
+
+          <ion-item>
+              <ion-label stacked>Amount</ion-label>
+              <ion-input type="text" [(ngModel)]="totalamt" name="amount"  value = "{{totalamt}}"[formControl]="paymentrequestbillForm.controls['amount']"></ion-input>
+              <p *ngIf="paymentrequestbillForm.controls.amount.errors && paymentrequestbillForm.controls.amount.dirty" class='error'>Enter the Amount.</p>
+          </ion-item>
+
+          <ion-item>
+              <ion-label>Mode of Submission</ion-label>
+              <ion-select placeholder="Select One" [formControl]="paymentrequestbillForm.controls['mode_of_submission']">
+                <ion-option value="CASH">Cash</ion-option>
+                <ion-option value="BILL">Bill</ion-option>
+                <p *ngIf="paymentrequestbillForm.controls.mode_of_submission.errors && paymentrequestbillForm.controls.mode_of_submission.dirty" class='error'>Select a Payment Method.</p>
+              </ion-select>
+          </ion-item>
+
+          <ion-item>
+              <ion-label stacked>Comments</ion-label>
+              <ion-textarea placeholder="Enter more comments here..." name="comments" [formControl]="paymentrequestbillForm.controls['comments']"></ion-textarea>
+              <p *ngIf="paymentrequestbillForm.controls.comments.errors && paymentrequestbillForm.controls.comments.dirty" class='error'>Enter the Comments.</p>
+          </ion-item>
+
+          <div class="example-center">
+              <button ion-button type="submit" color="Primary">Submit</button>
+              <button ion-button color="dark" (click)=resetForm();>Cancel</button>
+            </div>
+        </form>
+
+      </ion-list>
+
+  </ion-content>
+  

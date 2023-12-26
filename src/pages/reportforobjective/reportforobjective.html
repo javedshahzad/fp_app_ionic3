@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title text-center>{{today | date: 'dd-MM-yyyy'}} Reporting User</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+  <!-- <ion-toolbar>
+    <form (submit)="SearchTaskDetail()">
+      <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value">
+      </ion-searchbar>
+    </form>
+  </ion-toolbar> -->
+</ion-header>
+
+<ion-content>
+
+  <!-- <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+    <ion-row style="margin-right: 0px !important;margin-left: 5px !important;">
+      <div *ngFor="let item of taskdetails; index as i;" style="width: 121px; height: 170px;">
+        <ion-col col-4>
+          <ion-card text-center padding class="card_btn" style="padding: 0px;width: 80%;" (click)="getObjectiveList(item.USER_INFO_ID)">
+            
+            <ion-avatar item-start>
+              <ion-fab color="secondary" color="light" top left edge style="top: 70px !important;
+                    margin-left: 55px;">
+
+                <span *ngIf="item.STATUS == 'Offline'">
+                  <button ion-fab mini style="width: 18px !important;
+                        height: 18px !important;background-color: #ff0000;">
+                    <ion-icon></ion-icon>
+                  </button>
+                </span>
+
+                <span *ngIf="item.STATUS == 'Online'">
+                  <button ion-fab mini (click)="openUserChat(item.USER_INFO_ID,item.USER_SURNAME)"
+                    style="width: 28px !important;height: 28px !important;margin-top: 5px;margin-left: 2px;background-color: #3aec3a;">
+                    <ion-icon name="chatbubbles"></ion-icon>
+                  </button>
+                </span>
+              </ion-fab>
+
+              <span *ngIf="item.MYPROFILECOUNT > 0">
+                <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture" src="{{item.FILE_PATH}}">
+              </span>
+
+              <span *ngIf="item.MYPROFILECOUNT == 0">
+                <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture"
+                  src="assets/imgs/no-found-photo.png">
+              </span>
+            </ion-avatar>
+          </ion-card>
+          <div style="width: 100px; height: 19px; margin-left: 12px;">
+            <h6 style="font-size: 1.3rem !important;">
+              {{ item.USER_SURNAME.length > 12 ? item.USER_SURNAME.substring(0,12)+"..." : item.USER_SURNAME }}</h6>
+          </div>
+        </ion-col>
+      </div>
+    </ion-row>
+  </ion-grid> -->
+
+  <div>
+    <ion-searchbar (ionChange)="getItems($event)"></ion-searchbar>
+  </div> 
+
+  <ion-item *ngFor="let item of taskdetails;index as i;" (click)="getObjectiveList(item.USER_INFO_ID,'Idea')">    
+    <ion-label>
+      <h2>{{item.USER_SURNAME}} ({{item.ASSIGED_OBJECTIVE_COUNT}})</h2>      
+    </ion-label>
+  </ion-item>
+
+</ion-content>

@@ -1,0 +1,129 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Payment Request Status Update </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="agile-login">
+    <div class="wrapper">
+      <ion-input [(ngModel)]="PAYMENT_REQUEST_ID" *ngFor="let payment of payment_req_data;" type="hidden"
+        value="{{payment.PAYMENT_REQUEST_ID}}">
+      </ion-input>
+
+      <div class="w3ls-form">
+        <ion-item *ngIf="showIsHardCopyCheckBox == 1">
+          <ion-label>Is Hard Copy Received</ion-label>
+          <ion-checkbox color="secondary" [checked]="isChecked" (ionChange)="checkHardCopyReceived($event)">
+          </ion-checkbox>
+        </ion-item>
+
+        <ion-item *ngIf="showDetailsBox == 1">
+          <ion-textarea [(ngModel)]="PAYMENT_DETAILS" name="PAYMENT_DETAILS" placeholder="Enter any Details here...">
+          </ion-textarea>
+        </ion-item>
+
+        <h3 style="padding-left: 26PX; padding-top: 10px;
+                  padding-bottom: 10px;">Description</h3>
+        <ion-item>
+          <ion-textarea [(ngModel)]="PAYMENT_COMMENTS" name="PAYMENT_COMMENTS" placeholder="Enter any Comments here...">
+          </ion-textarea>
+        </ion-item>
+      </div>
+
+      <div class="modal-footer">
+
+        <span float-right ion-button icon-left clear class="font-size-12" 
+                            style="width: 60px; height: 50px;" (click)="uploadAudioForApprove()">
+              <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+        </span>
+        <span *ngIf="lnkrevertcheck == 1">
+          <button type="button" (click)="rejectpayment(PAYMENT_REQUEST_ID)" style="font-size: 1.25rem !important;"
+            color="danger" class="btn btn-danger"> {{btnTxtReject}} </button>
+        </span>        
+        <span *ngIf="lbkConf == 1">
+          <button type="button" (click)="ApprovePaymentStatusUpdate()" style="font-size: 1.25rem !important;"
+            class="btn btn-primary" color="primary"> {{btnTxtYes}} </button>
+        </span>
+
+        <span *ngIf="lnkceoapp == 1">
+          <button type="button" (click)="ApproveAndForwardPaymentStatusUpdate()"
+            style="font-size: 1.25rem !important;" class="btn btn-primary" color="primary"> {{btnTxtApproveandForward}}
+          </button>
+        </span>
+
+        <span>
+          <button type="button" class="btn btn-danger" style="font-size: 1.25rem !important;"
+            style="background-color: #373737;color: #fcfcfc; height: 28px;" (click)="closeModal()">Cancel</button>
+        </span>
+
+      </div>
+    </div>
+  </ion-card>
+
+  <!-- <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <ion-item class="" *ngFor="let item of paymentcommentsdetails; index as i;" data-parent="#accordionExample">
+            <div class="" id="headingComment" style="background-color:white;">
+              <a (click)=showUndoBtn(i) role="button">
+                <span [innerHTML]="item.COMMENTS" style='white-space: pre-line;'></span>
+                <br>
+                <span style="float: right" class="danger-clr">{{item.USER_SURNAME}} -
+                  {{item.MODIFIED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span><br>
+              </a>
+            </div>
+
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </ion-list> -->
+
+  <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form" style="padding-right: 0px; padding-left: 0px;">
+        <div class="accordion" id="accordionExample">
+          <!-- <ion-item>
+            <ion-label>Show Escalation</ion-label>
+            <ion-checkbox color="danger" (click)="showEscalation($event)" [(ngModel)]="ischecked"></ion-checkbox>
+          </ion-item> -->
+          <ion-item *ngFor="let item of paymentcommentsdetails; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;background-color: transparent;">
+            <div id="headingComment">
+              <a role="button" style="font-size: 14px;white-space: normal;">
+                {{1 + i}}. {{item.COMMENTS}}
+              </a><br>
+              <span class="danger-clr"
+                style="text-align:right;font-size: 1.2rem;">by {{item.USER_SURNAME}} on {{item.MODIFIED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+              </span>
+              <!-- <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+                <ion-icon name="microphone" style="font-size: 40px; color: #1968f3;"></ion-icon>
+              </span>
+ 
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                <ion-icon name="microphone" style="font-size: 40px; color: red;"></ion-icon>
+              </span> -->
+
+            </div>
+          </ion-item><br>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+
+
+</ion-content>

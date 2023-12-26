@@ -1,0 +1,32 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header >
+    <ion-navbar>
+            <ion-buttons left>
+                    <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'> 
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
+                </ion-buttons> 
+        <ion-title style="text-transform: capitalize;text-align: center"> Departments </ion-title> 
+    </ion-navbar>
+    <ion-toolbar>
+            <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchdrecDetail()">
+                </ion-searchbar>
+        </ion-toolbar>
+  </ion-header>
+<ion-content> 
+    <div class="col-md-12">
+        <div class="accordion" id="jobassignment" [ngStyle]="{'display':jobassignmentdepall}">
+            <div  *ngFor="let item of jobassignmentsearch; index as i;" >
+                    <ion-item id="headingOne"  *ngIf="item.DEPARTMENT_NAME != null" style="background-color:white;" class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+                    aria-expanded="true/false" [attr.aria-controls]="i" (click)="openModal(item.DEPARTMENT_NAME)">
+                    <h2>{{item.DEPARTMENT_NAME}}</h2>
+                </ion-item>
+            </div>
+        </div>
+    </div>
+</ion-content>      

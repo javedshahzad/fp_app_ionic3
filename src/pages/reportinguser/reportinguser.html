@@ -1,0 +1,142 @@
+<ion-header>
+  <ion-navbar>
+    <span>
+      <ion-title>{{header_name}}</ion-title>
+      <h6 class="user_status">{{user_status}}</h6>
+    </span>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+ 
+<ion-content padding>
+  <h2 style="text-align: center;">ROI</h2>
+  <div *ngIf="show_model_1 == 0">
+    <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+      <ion-row>
+        <div *ngFor="let item of reportinguserlist; index as i;">
+          <ion-col col-4>
+            <ion-card text-center padding class="card_btn" style="padding: 0px;width: 80%;">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task" color="primary" (click)="openTaskdailycmd(item.USER_INFO_ID)"
+                  style="float: left;z-index: 1;position: absolute;top: 0;left: 0;font-size: 14px;">
+                  ROI
+                </ion-badge>
+              </h2>
+              <h2 class="name_btn">
+                <ion-badge class="badge_task" color="secondary" (click)="openReportUser2(item.USER_INFO_ID)"
+                  style="float: left;z-index: 1;position: absolute;top: 0;right: 0;font-size: 14px;">
+                  {{item.REPORTING_USER_COUNT}}
+                </ion-badge>
+              </h2>
+              <ion-avatar item-start>
+                <ion-fab color="secondary" color="light" top left edge style="top: 70px !important; margin-left: 55px;">
+                  <!-- <span *ngIf="item.STATUS == 'Online'">
+                  <button ion-fab mini style="width: 18px !important;
+                      height: 18px !important;background-color: #3aec3a;">
+                    <ion-icon></ion-icon>
+                  </button>
+                </span> -->
+
+                  <span *ngIf="item.STATUS == 'Offline'">
+                    <button ion-fab mini style="width: 18px !important;
+                    height: 18px !important;background-color: #ff0000;">
+                      <ion-icon></ion-icon>
+                    </button>
+                  </span>
+
+                  <span *ngIf="item.STATUS == 'Online'">
+                    <button ion-fab mini (click)="openUserChat(item.USER_INFO_ID)"
+                      style="width: 28px !important;height: 28px !important;margin-top: 5px;margin-left: 2px;background-color: #3aec3a;">
+                      <ion-icon name="chatbubbles"></ion-icon>
+                    </button>
+                  </span>
+
+                </ion-fab>
+
+                <span *ngIf="item.MYPROFILECOUNT > 0">
+                  <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture" src="{{item.FILE_PATH}}">
+                </span>
+
+                <span *ngIf="item.MYPROFILECOUNT == 0">
+                  <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture"
+                    src="assets/imgs/no-found-photo.png">
+                </span>
+              </ion-avatar>
+            </ion-card>
+            <div>
+              <h6 style="font-size: 1.3rem !important; text-align: center;">
+                {{ item.USER_SURNAME.length > 12 ? item.USER_SURNAME.substring(0,12)+"..." : item.USER_SURNAME }}</h6>
+            </div>
+          </ion-col>
+        </div>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="show_model_2 == 1">
+    <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+      <ion-row>
+        <div *ngFor="let item of reportinguserlist1; index as i;">
+          <ion-col col-4>
+            <ion-card text-center padding class="card_btn" style="padding: 0px;width: 80%;">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task" color="primary" (click)="openTaskdailycmd(item.USER_INFO_ID)"
+                  style="float: left;z-index: 1;position: absolute;top: 0;left: 0;font-size: 14px;">
+                  ROI
+                </ion-badge>
+              </h2>
+              <h2 class="name_btn">
+                <ion-badge class="badge_task" color="secondary" (click)="openReportUser2(item.USER_INFO_ID)"
+                  style="float: left;z-index: 1;position: absolute;top: 0;right: 0;font-size: 14px;">
+                  {{item.REPORTING_USER_COUNT}}
+                </ion-badge>
+              </h2>
+              <ion-avatar item-start>
+                <ion-fab color="secondary" color="light" top left edge style="top: 70px !important; margin-left: 55px;">
+                  <!-- <span *ngIf="item.STATUS == 'Online'">
+                  <button ion-fab mini style="width: 18px !important;
+                      height: 18px !important;background-color: #3aec3a;">
+                    <ion-icon></ion-icon>
+                  </button>
+                </span> -->
+
+                  <span *ngIf="item.STATUS == 'Offline'">
+                    <button ion-fab mini style="width: 18px !important;
+                    height: 18px !important;background-color: #ff0000;">
+                      <ion-icon></ion-icon>
+                    </button>
+                  </span>
+
+                  <span *ngIf="item.STATUS == 'Online'">
+                    <button ion-fab mini (click)="openUserChat(item.USER_INFO_ID)"
+                      style="width: 28px !important;height: 28px !important;margin-top: 5px;margin-left: 2px;background-color: #3aec3a;">
+                      <ion-icon name="chatbubbles"></ion-icon>
+                    </button>
+                  </span>
+
+                </ion-fab>
+
+                <span *ngIf="item.MYPROFILECOUNT > 0">
+                  <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture" src="{{item.FILE_PATH}}">
+                </span>
+
+                <span *ngIf="item.MYPROFILECOUNT == 0">
+                  <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture"
+                    src="assets/imgs/no-found-photo.png">
+                </span>
+              </ion-avatar>
+            </ion-card>
+            <div>
+              <h6 style="font-size: 1.3rem !important; text-align: center;">
+                {{ item.USER_SURNAME.length > 12 ? item.USER_SURNAME.substring(0,12)+"..." : item.USER_SURNAME }}</h6>
+            </div>
+          </ion-col>
+        </div>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
+</ion-content>

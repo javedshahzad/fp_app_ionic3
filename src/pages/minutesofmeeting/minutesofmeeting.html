@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title text-center>Minutes Of Meeting</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content style="background-color: #009199;">
+
+  <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+    <ion-row>
+      <ion-col col-6 [ngStyle]="{'display':pointing_system_dispaly}" style="max-width: 35%; margin: 20px;">
+        <ion-card class="card_btn" text-center padding (click)="createNewMeeting()">
+          <img src="assets/imgs/new-meeting.png" class="icon-btn" />
+          <h2 class="name_btn">New MoM</h2>
+        </ion-card>
+      </ion-col>
+      <ion-col col-6 [ngStyle]="{'display':pointing_system_dispaly}" style="max-width: 35%; margin: 20px;">
+        <ion-card class="card_btn" text-center padding (click)="MyMeeting()">
+          <img src="assets/imgs/minutes-of-meeting.png" class="icon-btn" />
+          <h2 class="name_btn">My MoM</h2>
+        </ion-card>
+      </ion-col>
+    </ion-row> 
+  </ion-grid>
+
+</ion-content>

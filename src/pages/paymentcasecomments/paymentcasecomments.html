@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Case Comments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="All" style="font-size: 13px; color: #fff;">
+        All
+      </ion-segment-button>
+      <ion-segment-button value="User" style="font-size: 13px; color: #fff;">
+        User
+      </ion-segment-button>
+      <ion-segment-button value="System" style="font-size: 13px; color: #fff;">
+        System
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content fullscreen>
+
+  <ion-fab right bottom edge vertical="bottom" horizontal="end" slot="fixed" style="bottom: 10px !important;">
+    <button ion-fab mini (click)="createComments()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <div [ngSwitch]="pet">
+    <ion-list *ngSwitchCase="'All'">
+
+      
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <ion-item style="border: unset !important;" *ngFor="let item of allcomments; index as i;"
+              data-parent="#accordionExample">
+              <div id="headingComment" style="background-color:white;">
+                <a role="button" style="white-space: normal;">
+                  {{1 + i}}. <span>
+                    <span [innerHTML]="item.COMMENTS" style='white-space: pre-line;font-size: 1.3rem;'></span><br>
+                    <span class="danger-clr" style="text-align:right;color:#f53d3d;font-size: 1.1rem;">by
+                      {{item.USER_SURNAME}}
+                      on {{item.DDATE |date:'dd-MMM-yyyy,HH:mm a'}} {{item.COMMENT_TYPE}}</span></span>
+                </a>
+              </div>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'User'">
+
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <ion-item style="border: unset !important;" *ngFor="let item of usercomments; index as i;"
+              data-parent="#accordionExample">
+              <div id="headingComment" style="background-color:white;">
+                <a role="button" style="white-space: normal;">
+                  {{1 + i}}. <span>
+                    <span [innerHTML]="item.COMMENTS" style='white-space: pre-line;font-size: 1.3rem;'></span><br>
+                    <span class="danger-clr" style="text-align:right;color:#f53d3d;font-size: 1.1rem;">by
+                      {{item.USER_SURNAME}}
+                      on {{item.DDATE |date:'dd-MMM-yyyy,HH:mm a'}} {{item.COMMENT_TYPE}}</span></span>
+                </a>
+              </div>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+      
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'System'">
+
+      <div class="wrapper">
+        <div class="col-md-12 w3ls-form">
+          <div class="accordion" id="accordionExample">
+            <ion-item style="border: unset !important;" *ngFor="let item of systemcomments; index as i;"
+              data-parent="#accordionExample">
+              <div id="headingComment" style="background-color:white;">
+                <a role="button" style="white-space: normal;">
+                  {{1 + i}}. <span>
+                    <span [innerHTML]="item.COMMENTS" style='white-space: pre-line;font-size: 1.3rem;'></span><br>
+                    <span class="danger-clr" style="text-align:right;color:#f53d3d;font-size: 1.1rem;">by
+                      {{item.USER_SURNAME}}
+                      on {{item.DDATE |date:'dd-MMM-yyyy,HH:mm a'}} {{item.COMMENT_TYPE}}</span></span>
+                </a>
+              </div>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+    </ion-list>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,73 @@
+<ion-header>
+    <ion-navbar style="background-color:#525b6d">
+        <ion-buttons left>
+          <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'> 
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center"> Property Management </ion-title> 
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-toolbar>
+      <ion-segment [(ngModel)]="AvailabilityTab" color="light" background='primary_1'>
+        <ion-segment-button value="avail">
+            Availabilty
+        </ion-segment-button>
+        <ion-segment-button value="overdue">
+            Overdue
+        </ion-segment-button>
+        <ion-segment-button value="rental">
+            Rental Balance
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+    <div  [ngSwitch]="AvailabilityTab" >
+      <div  *ngSwitchCase="'avail'">
+                <h3 style="text-align: center; margin-top: 5px;"> Availabilty Property List</h3>  
+                <ion-list>
+                <ion-item-sliding  *ngFor="let item of buildcount.AvailabilityBuild; index as i;">
+                  <button ion-item (click)="openModal(item.PROPERTY_NAME,type='Availability')">
+                      <ion-avatar item-start>
+                          <img src="assets/imgs/dom_7-320.png"/>
+                        </ion-avatar>
+                        <h2>{{item.PROPERTY_NAME}}</h2>
+                        <p> Total Unit<ion-badge item-end style="float: right; margin-top: 2px;">{{item.UNIT_COUNT}}</ion-badge></p>
+                  </button>
+                </ion-item-sliding >  
+              </ion-list> 
+      </div>
+      <div *ngSwitchCase="'overdue'">
+            <ion-list>
+                <h3 style="text-align: center; margin-top: 5px;" > Overdue Property List</h3>             
+                <ion-item-sliding *ngFor="let item of buildcount.OverdueBuild; index as i;">
+                  <button ion-item (click)="openModal(item.PROPERTY_NAME,type='Overdue')">
+                      <ion-avatar item-start>
+                          <img src="assets/imgs/dom_7-320.png"/>
+                        </ion-avatar>
+                        <h2>{{item.PROPERTY_NAME}}</h2>
+                        <p> Total Unit<ion-badge item-end style="float: right; margin-top: 2px;">{{item.UNIT_COUNT}}</ion-badge></p>
+                  </button>
+                </ion-item-sliding>  
+              </ion-list>               
+      </div>
+      <div *ngSwitchCase="'rental'"> 
+        <ion-list>
+                <h3 style="text-align: center; margin-top: 5px;" >Rental Property List</h3>   
+                <ion-item-sliding *ngFor="let item of buildcount.RentalBuild; index as i;">
+                  <button ion-item (click)="openModal(item.PROPERTY_NAME,type='Rental')">
+                      <ion-avatar item-start>
+                          <img src="assets/imgs/dom_7-320.png"/>
+                        </ion-avatar>
+                        <h2>{{item.PROPERTY_NAME}}</h2>
+                        <p>Total Unit - {{item.UNIT_COUNT}}</p>
+                        <p> Amount Due Remaining<ion-badge item-end style="float: right; margin-top: 2px;">{{item.AMOUNT_DUE_REMAINING | currency:"AED "}}</ion-badge></p>
+                  </button>
+                </ion-item-sliding >  
+              </ion-list>               
+              <div id="no-more-tables">
+              </div>
+      </div>
+    </div>
+</ion-content>

@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{title_page}}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">{{title_btn}}</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchManagement()"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="col-md-12">
+        <div class="accordion" id="accordionExample" *ngIf="showitemin == 1">
+            <div class="" *ngFor="let item of lpoItemInList; index as i;">
+                <ion-card>
+                    <ion-grid>
+                        <ion-row>
+                          <ion-col col-9>
+                            <ion-item>                        
+                                <div>
+                                    <h2>{{item.CREATED_ON |date:'dd-MM-yyyy'}}</h2>
+                                    <p>{{item.SUPPLIER_NAME.length > 15 ? item.SUPPLIER_NAME.substring(0,10): item.SUPPLIER_NAME}}</p>
+                                    <p>{{item.RATE || ''}}</p>
+                                    <p>{{item.LPO_ID}}</p>
+                                </div>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col col-3>
+                            <button ion-button [color]="(item.ATTACH_COUNT > 0) ? 'secondary' : 'disableed'"
+                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                <ion-icon ios="ios-attach" md="md-attach"></ion-icon>
+                            </button>
+                          </ion-col>
+                        </ion-row>                        
+                      </ion-grid>
+                </ion-card>                
+            </div>
+        </div>
+
+        <div class="accordion" id="accordionExample" *ngIf="showiteminall == 1">
+            <div class="" *ngFor="let item of lpoItemInList; index as i;">
+                <ion-card>
+                    <ion-grid>
+                        <ion-row>
+                          <ion-col col-12>
+                            <ion-item>                        
+                                <div>
+                                    <h2>Item ID: {{item.ASSET_ID}}</h2>
+                                    <p style="white-space: pre-wrap;">Item Name: {{item.CATEGORY_NAME}}</p>
+                                    <p>Last Price: {{item.RATE || ''}}</p>
+                                </div>
+                            </ion-item>
+                          </ion-col>
+                          <!-- <ion-col col-3>
+                            <button ion-button [color]="(item.ATTACH_COUNT > 0) ? 'secondary' : 'disableed'"
+                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                <ion-icon ios="ios-attach" md="md-attach"></ion-icon>
+                            </button>
+                          </ion-col> -->
+                        </ion-row>                        
+                      </ion-grid>
+                </ion-card>                
+            </div>
+        </div>
+
+    </div>
+
+</ion-content>

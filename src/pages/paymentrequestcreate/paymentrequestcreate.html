@@ -1,0 +1,300 @@
+<!--
+  Generated template for the ReceiptPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+        <ion-navbar>
+            <ion-title> Create Payment Request </ion-title>
+            <ion-buttons end>
+                <button ion-button (click)="closeModal()">Close</button>
+            </ion-buttons>
+        </ion-navbar>
+</ion-header>
+         
+<ion-content>
+
+    <ion-item>
+        <h2>Create Payment Request</h2>
+    </ion-item>
+
+    <ion-list>
+        <form [formGroup]="paymentrequestForm" (submit)="createpaymentrequest()">
+
+        <ion-item>
+          <ion-label stacked>Case Request Id</ion-label>
+          <ion-input type="text" [(ngModel)]="requestdata[0].CASE_REQUEST_ID" name="request_trans_id"  value="{{requestdata[0].CASE_REQUEST_ID}}" readonly="true" [formControl]="paymentrequestForm.controls['request_trans_id']"></ion-input>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label stacked>Title</ion-label>
+          <ion-input type="text" name="title" [formControl]="paymentrequestForm.controls['title']"></ion-input>
+          <p *ngIf="paymentrequestForm.controls.title.errors && paymentrequestForm.controls.title.dirty" class='error'>Enter the Title</p>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Description</ion-label>
+            <ion-input type="text" name="description" [formControl]="paymentrequestForm.controls['description']"></ion-input>
+            <p *ngIf="paymentrequestForm.controls.description.errors && paymentrequestForm.controls.description.dirty" class='error'>Enter the Description</p>
+          </ion-item>
+
+          <ion-item>
+              <h3>Transaction Type</h3>
+          </ion-item>
+          <ion-list>
+          <ion-item>
+              <ion-label>Type</ion-label>
+              <ion-select interface="popover"  [(ngModel)]="amount_type" [ngModelOptions]="{standalone: true}" (ionChange)="setamount(amount_type)">
+                <ion-option value="{{item.TYPE_ID}}" *ngFor="let item of transactiondata">{{item.TRANSACTIONTYPE}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+              <ion-item [ngStyle]="{'display':display}" *ngIf="modaldata">
+                  <ion-input type="hidden" value="{{modaldata[0].TYPE_ID}}" [(ngModel)]="transact_number" [ngModelOptions]="{standalone: true}"></ion-input>
+                  <ion-label stacked>{{modaldata[0].TRANSACTIONTYPE}}</ion-label>
+                  <ion-input type="number" name = "transact_amt" [(ngModel)]="transact_amt" [ngModelOptions]="{standalone: true}" placeholder="Enter Amount"></ion-input>
+                  <button ion-button color="secondary" type="button" style="float: right;" (click)="add(transact_amt,transact_description,transact_number)">Add</button>    
+              </ion-item>
+
+              <ion-item>
+                  <div *ngIf="filtereddata.length>0" style="margin-left: 15px;margin-right: 18px;margin-top: 3px;">
+                      <div class="row header">
+                          <div class="col">Type </div>
+                          <div class="col">Description</div>
+                          <div class="col">Amount</div>
+                          <div class="col">Action</div>
+                        </div>
+                        <div class="row" *ngFor="let transaction of filtereddata">
+                          <div class="col">{{transaction.TRANSACTIONTYPE}}</div>
+                          <div class="col">{{transaction.DESCRIPTION}}</div>
+                          <div class="col">{{transaction.AMOUNT}}</div>
+                          <div class="col"><button ion-button color="secondary" type="button" (click)="removefiltereddata(transaction.TYPE_ID)" ><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                        </div>
+                  </div>
+              </ion-item>
+
+            </ion-list>
+            <ion-item>
+                <ion-label stacked>Amount</ion-label>
+                <ion-input type="number" [(ngModel)]="totalamt" name="amount" value = "{{totalamt}}"[formControl]="paymentrequestForm.controls['amount']"></ion-input>
+                <p *ngIf="paymentrequestForm.controls.amount.errors && paymentrequestForm.controls.amount.dirty" class='error'>Enter the Amount</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-label stacked>Payee</ion-label>
+                  <ion-input type="text" name="payee"  [formControl]="paymentrequestForm.controls['payee']" ></ion-input>
+                  <p *ngIf="paymentrequestForm.controls.payee.errors && paymentrequestForm.controls.payee.dirty" class='error'>Enter the Payee</p>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label stacked>supplier</ion-label>
+                    <ion-input type="text"  name="supplier"  [formControl]="paymentrequestForm.controls['supplier']"></ion-input>
+                    <p *ngIf="paymentrequestForm.controls.supplier.errors && paymentrequestForm.controls.supplier.dirty" class='error'>Enter the Supplier</p>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Mode Of Payment</ion-label>
+                      <ion-select placeholder="Select One" [formControl]="paymentrequestForm.controls['mode_of_payment']">
+                        <ion-option value="CASH">Cash</ion-option>
+                        <ion-option value="CHEQUE">Cheque</ion-option>
+                      </ion-select>
+                      <p *ngIf="paymentrequestForm.controls.mode_of_payment.errors && paymentrequestForm.controls.mode_of_payment.dirty" class='error'>Select a Payment Method</p>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label stacked>Location</ion-label>
+                        <ion-input type="text" name="location"  [formControl]="paymentrequestForm.controls['location']" ></ion-input>
+                        <p *ngIf="paymentrequestForm.controls.location.errors && paymentrequestForm.controls.location.dirty" class='error'>Enter the Location</p>
+                      </ion-item>
+
+                      <ion-item>
+                          <ion-label stacked>Comments</ion-label>
+                          <ion-textarea type="text-area" placeholder="Enter more comments here..." name="comments"  [formControl]="paymentrequestForm.controls['comments']"></ion-textarea>
+                          <p *ngIf="paymentrequestForm.controls.comments.errors && paymentrequestForm.controls.comments.dirty" class='error'>Enter the Comments</p>
+                        </ion-item>
+
+                        <div class="example-center">
+                            <button ion-button type="submit" color="Primary">Confirm</button>
+                            <button ion-button color="dark" (click)=resetForm();>Cancel</button>
+                        </div>
+
+        </form>
+      </ion-list>
+
+<!-- 
+        <div class="agile-login">
+      
+          <div class="wrapper"> -->
+      
+            <!-- <a href="" class="bst"> + Add Receipt Details</a> -->
+            <!-- <img src="./images/logo.png" style="margin-top:10%;"> -->
+            <!-- <form [formGroup]="paymentrequestForm" (submit)="createpaymentrequest()">
+              <div class="w3ls-form">
+                  <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6"></div>
+                  </div>
+                   <div class="row">
+                     <div class="col-6">
+                        <label>Case Request Id :</label>
+                     </div>
+                     <div class="col-6">
+                        <input type="text" [(ngModel)]="requestdata[0].CASE_REQUEST_ID" name="request_trans_id" placeholder="Case Request Id" value="{{requestdata[0].CASE_REQUEST_ID}}" readonly="true" [formControl]="paymentrequestForm.controls['request_trans_id']" /> 
+                     </div>
+                   </div>     -->
+                   <!-- <div class="row">
+                      <div class="col-6">
+                        <label>Title</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="text" name="title" placeholder="Title" [formControl]="paymentrequestForm.controls['title']" />
+                          <p *ngIf="paymentrequestForm.controls.title.errors && paymentrequestForm.controls.title.dirty" class='error'>Enter the Title</p>        
+                      </div>
+                    </div>           -->
+                                   
+                  <!-- <div class="row">
+                      <div class="col-6">
+                        <label>Description</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="text" name="description" placeholder="Description" [formControl]="paymentrequestForm.controls['description']" />
+                          <p *ngIf="paymentrequestForm.controls.description.errors && paymentrequestForm.controls.description.dirty" class='error'>Enter the Description.</p>        
+                      </div>
+                    </div>  -->
+                  <!-- <div>
+                    <h3>Transaction Type</h3>
+                      <div class="row">
+                          <div class="col-6">
+                            <label>Type</label>
+                          </div>
+                          <div class="col-6">
+                              <ion-item>
+                                  <ion-select class="select1"  interface="popover"  [(ngModel)]="amount_type" [ngModelOptions]="{standalone: true}" (ionChange)="setamount(amount_type)" >
+                                      <ion-option value="0">Select Type</ion-option>
+                                      <ion-option value="{{item.TYPE_ID}}" *ngFor="let item of transactiondata">{{item.TRANSACTIONTYPE}}</ion-option>
+                                  </ion-select>   
+                              </ion-item>
+                          </div>
+                        </div> 
+
+                        <div>
+                            <div [ngStyle]="{'display':display}" *ngIf="modaldata">
+                              <ion-input type="hidden" name = "transact_number" value="{{modaldata[0].TYPE_ID}}" [(ngModel)]="transact_number" [ngModelOptions]="{standalone: true}"></ion-input>
+                              <div class="row">
+                                <div class="col-6">
+                                    <label>{{modaldata[0].TRANSACTIONTYPE}}</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name = "transact_amt" [(ngModel)]="transact_amt" [ngModelOptions]="{standalone: true}" placeholder="Enter Amount"/>
+                                </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col-6">
+                                      <label>Description</label>
+                                  </div>
+                                  <div class="col-6">
+                                      <input type="text-area" name = "transact_description" [(ngModel)]="transact_description" [ngModelOptions]="{standalone: true}" placeholder="Enter Amount"/>
+                                  </div>
+                                </div>
+                              <button ion-button color="secondary" type="button" style="float: right;" (click)="add(transact_amt,transact_description,transact_number)">Add</button>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div *ngIf="filtereddata.length>0" style="margin-left: 15px;margin-right: 18px;margin-top: 3px;">
+                                <div class="row header">
+                                    <div class="col">Type </div>
+                                    <div class="col">Description</div>
+                                    <div class="col">Amount</div>
+                                    <div class="col">Action</div>
+                                  </div>
+                                  <div class="row" *ngFor="let transaction of filtereddata">
+                                    <div class="col">{{transaction.TRANSACTIONTYPE}}</div>
+                                    <div class="col">{{transaction.DESCRIPTION}}</div>
+                                    <div class="col">{{transaction.AMOUNT}}</div>
+                                    <div class="col"><button ion-button color="secondary" type="button" (click)="removefiltereddata(transaction.TYPE_ID)" ><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                                  </div>
+                            </div>
+                        </div>
+                  </div>
+                  
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Amount</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="number" [(ngModel)]="totalamt" name="amount" placeholder="Amount" value = "{{totalamt}}"[formControl]="paymentrequestForm.controls['amount']" />
+                          <p *ngIf="paymentrequestForm.controls.amount.errors && paymentrequestForm.controls.amount.dirty" class='error'>Enter the Amount.</p>        
+                      </div>
+                    </div> 
+                  
+                 
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Payee</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="text" name="payee" placeholder="Payee" [formControl]="paymentrequestForm.controls['payee']" />
+                          <p *ngIf="paymentrequestForm.controls.payee.errors && paymentrequestForm.controls.payee.dirty" class='error'>Enter the Payee.</p>        
+                      </div>
+                    </div> 
+                 
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Supplier</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="text"  name="supplier" placeholder="Supplier" [formControl]="paymentrequestForm.controls['supplier']" />
+                          <p *ngIf="paymentrequestForm.controls.supplier.errors && paymentrequestForm.controls.supplier.dirty" class='error'>Enter the Supplier.</p>        
+                      </div>
+                    </div> 
+                  
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Mode Of Payment</label>
+                      </div>
+                      <div class="col-6">
+                          <select class="select1"  [formControl]="paymentrequestForm.controls['mode_of_payment']" >
+                              <option value="">---Select---</option>
+                              <option value="CASH">Cash</option>
+                              <option value="CHEQUE">Cheque</option>
+                          </select>
+                          <p *ngIf="paymentrequestForm.controls.mode_of_payment.errors && paymentrequestForm.controls.mode_of_payment.dirty" class='error'>Select a Payment Method.</p>      
+                      </div>
+                    </div> 
+                  
+                    <div class="row">
+                        <div class="col-6">
+                          <label>Location</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="location" placeholder="Location" [formControl]="paymentrequestForm.controls['location']" />
+                            <p *ngIf="paymentrequestForm.controls.location.errors && paymentrequestForm.controls.location.dirty" class='error'>Enter the Location.</p>          
+                        </div>
+                      </div> 
+                  
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Comments</label>
+                      </div>
+                      <div class="col-6">
+                          <input type="text-area" class="select1" name="comments" placeholder="Comments" [formControl]="paymentrequestForm.controls['comments']" />
+                          <p *ngIf="paymentrequestForm.controls.comments.errors && paymentrequestForm.controls.comments.dirty" class='error'>Enter the Comments.</p>
+                      </div>
+                    </div>     
+              </div>
+              <div style="margin-top:3%;color: #fff !important;"> -->
+
+                  <!-- <button style="float: left; color: #fff;" class="bst2"><a href="" style="color: #fff !important;">Cancel</a></button> -->
+                  <!-- <button style="float: right;" class="bst1"><a href="" style="color: #fff !important;" (click)= "insertReceiptData()">Confirm</a></button> 
+      
+                  <button style="float: left; color: #fff;" class="bst2" (click)=resetForm();>Cancel</button>
+                  <button type="submit" style="float: right; color: #fff !important;"  class="bst1">Confirm</button>
+      
+              </div> 
+            </form>
+          </div>
+        </div> -->
+      </ion-content>
+      

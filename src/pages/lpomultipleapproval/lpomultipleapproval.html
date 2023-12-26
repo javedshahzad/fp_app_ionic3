@@ -1,0 +1,278 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{title_page}}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">{{title_btn}}</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchManagement()"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="col-md-12" *ngIf="title_btn=='Close'">
+        <div class="accordion" id="accordionExample">
+
+            <div *ngFor="let item of Lpomanament_data; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-10>
+                                <ion-item>
+                                    <ion-label>
+                                        <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                        <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                        <p>{{item.TOTAL | currency: "AED "}}</p>
+                                        <p>{{item.COST_BEAR_BY}}</p>
+                                    </ion-label>
+                                    <ion-checkbox color="dark" (ionChange)="CheckboxClicked(item.LPO_ID, $event)">
+                                    </ion-checkbox>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col col-2>
+                                <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                                    <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                        (click)=showUndoBtn(i,item.LPO_ID)>
+                                        <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                            name="arrow-dropdown"></ion-icon>
+                                    </button>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-list>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">{{item.TOTAL | currency: "AED "}}</td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+                                        <button ion-button color="secondary"
+                                            [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                            (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                    </td>
+                                    <td role="cell">
+                                        <button ion-button color="secondary"
+                                            [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                            (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                            (click)="getcallCompliantdetails(item.LPO_ID)">
+                                            <ion-icon name="call"></ion-icon>
+                                        </button>
+                                        <button ion-button [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                            (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                            <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                        </button>
+                                        <button ion-button [color]="(item.ATTACH_COUNT > 0) ? 'secondary' : 'disableed'"
+                                            (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                            <ion-icon ios="ios-attach" md="md-attach"></ion-icon>
+                                        </button>
+                                        <button ion-button color="secondary" (click)="openModal(item.LPO_ID)">
+                                            <ion-icon name="chatbubbles"></ion-icon>
+                                        </button>
+                                        <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                            <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                            </ion-thumbnail>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ion-grid>
+        <ion-row>
+            <ion-col col-6>
+                <button ion-button color="secondary" style="float: right;" (click)="multipleLpoApprovebtn()"
+                    [ngStyle]="{'display':rejectbtn_approvebtn_show}">Approve</button>
+            </ion-col>
+            <ion-col col-6>
+                <button ion-button color="danger" (click)="multipleLpoRejectbtn()"
+                    [ngStyle]="{'display':rejectbtn_approvebtn_show}">Reject</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+    <div class="backdrop" [ngStyle]="{'display':reject_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':reject_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="RejectForm" (submit)="Reject_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="RejectForm.controls['LPOno']"></ion-input>
+
+
+                        <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('reject')">Close</button>
+                        <button type="button" type="submit" class="btn btn-primary"
+                            [disabled]="!RejectForm.valid">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="backdrop" [ngStyle]="{'display':approve_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':approve_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('approve')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="ApproveForm" (submit)="Approve_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="ApproveForm.controls['LPOno']"></ion-input>
+
+
+                        <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('approve')">Close</button>
+                        <button type="button" type="submit" class="btn btn-primary"
+                            [disabled]="!ApproveForm.valid">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- multiple approval comments -->
+
+    <div class="backdrop" [ngStyle]="{'display':multiple_approve_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_approve_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('approve')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="ApproveForm" (submit)="multiple_approve_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="ApproveForm.controls['LPOno']"></ion-input>
+
+                        <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('approve')">Close</button>
+                        <button type="button" type="submit" class="btn btn-primary">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="backdrop" [ngStyle]="{'display':multiple_reject_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_reject_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="RejectForm" (submit)="multiple_reject_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="RejectForm.controls['LPOno']"></ion-input>
+
+                        <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('reject')">Close</button>
+                        <button type="button" type="submit" class="btn btn-primary">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="title_btn=='Back'">
+        <div class="accordion" id="accordionExample">
+            <ion-item *ngFor="let item of LpoItemsList; index as i;">
+                <h5 style='white-space: pre-line;font-size: 1.6rem;'>
+                    {{1 + i}}.) {{item.MATERIAL_NAME}} / {{item.MATERIAL_DESC}} - {{item.ASSET_ID}}
+                </h5>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6><span class="primary-clr p_12">Qty : {{item.QUANTITY}}</span></ion-col>
+                        <ion-col col-6><span class="danger-clr p_12"> Rate : {{item.RATE | number:'1.0-2'}}</span>
+                        </ion-col>
+
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-5><span class="secondary-clr p_12"> Amount : {{item.TOTAL | number:'1.0-2'}}</span>
+                        </ion-col>
+                        <ion-col col-3><span class="danger-clr p_12" (click)="openLpoItemInModal(item.ASSET_ID)">Item
+                                In</span></ion-col>
+                        <ion-col col-4><span class="danger-clr p_12"
+                                (click)="openLpoLedgerReport(item.ASSET_ID)">Ledger</span></ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+        </div>
+    </div>
+</ion-content>

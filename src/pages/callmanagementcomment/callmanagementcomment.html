@@ -1,0 +1,65 @@
+<!--
+  Generated template for the ModalPage page.
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>+ Add Call Management Comments </ion-title>
+      <ion-buttons end>
+        <button ion-button (click)="closeModal()">Close</button>
+      </ion-buttons>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  <ion-content padding>
+    <div class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="callmanagementcommentsForm" (submit)="insertcallmanagementComments()">
+          <div>
+            <div class="w3ls-form">
+                <ion-label position="floating" style="color: black;">Add Comments :</ion-label>
+                <ion-item>
+                    <ion-textarea  name="COMMENTS" placeholder="Enter any Comments here..." [formControl]="callmanagementcommentsForm.controls['COMMENTS']"></ion-textarea>
+                    <p *ngIf="callmanagementcommentsForm.controls.COMMENTS.errors && callmanagementcommentsForm.controls.COMMENTS.dirty" class='error'>Enter Your Comments.</p>
+                </ion-item>
+                <button ion-button  type="submit" style="float: right;" color="secondary" >Submit</button>
+            </div>
+            <ion-input [(ngModel)]="CALL_LOG_ID" *ngFor="let cdata of callmanagementdata;"  type="hidden" value="{{cdata.CALL_LOG_ID}}" [formControl]="callmanagementcommentsForm.controls['CALL_LOG_ID']"></ion-input>
+            <ion-input [(ngModel)]="STATUS_NAME" *ngFor="let cdata of callmanagementdata;"  type="hidden" value="{{cdata.STATUS_NAME}}" [formControl]="callmanagementcommentsForm.controls['STATUS_NAME']"></ion-input>
+          </div>                  
+        </form> 
+      </div>
+    </div>
+
+    <div class="agile-login" style="margin-top: inherit;">
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form">
+            <div class="accordion" id="accordionExample">
+              <div class="card" *ngFor="let item of callmanagementcommentsdetails; index as i;" data-parent="#accordionExample">
+                  <div class="card-header" id="headingComment" style="background-color:white;">
+                      <a  (click)=showUndoBtn(i) role="button">
+                          {{1 + i}}. {{ item.COMMENTS.length > 5 ? item.COMMENTS.substring(0,5)+"..." : item.COMMENTS }}<span style="float: right;">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>              
+                      </a>
+                  </div>  
+                  <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i" >
+                    <div class="card-body card-bodynew">
+                        <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                          Created User:  {{item.CREATED_NAME}}
+                        </p>
+                        <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                          Created Date:  {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+                        </p>
+                        <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                          Comments:  {{item.COMMENTS}}
+                        </p>
+                    </div>
+                  </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+      </div>
+  </ion-content>

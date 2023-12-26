@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Inventory Item List</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <div class="container-fluid" style="padding-top: 15px;">
+    <!-- <div class="row"> -->
+      <div class="col-md-12 col-12 col-sm-12 col-md-offset-3">
+
+        <div class="card" *ngIf="imagecount == 0">
+          <img class="card-img-top" src="./assets/imgs/inventory-icon.png" alt="Card image" style="width:100%">
+          <div class="card-body   card-bodynew1" style="margin-top: 12px;">
+            <h4 class="card-title txth4">{{itemDetails.ITEM_NAME}}</h4>
+          </div>
+        </div>
+
+        <div class="card" *ngIf="imagecount > 0">
+          <img class="card-img-top" [src]="getImage()" alt="Card image" style="width:100%">
+          <!-- <img [src]="getImage(item.ROW_NO)"> -->
+          <div class="card-body   card-bodynew1" style="margin-top: 12px;">
+            <h4 class="card-title txth4">{{itemDetails.ITEM_NAME}}</h4>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-body card-bodynew">
+            <table role="table">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th role="columnheader">Item Id</th>
+                  <th role="columnheader">Code</th>
+                  <th role="columnheader">Name</th>
+                  <th role="columnheader">Majer Category</th>
+                  <th role="columnheader">SubCategory</th>
+                  <th role="columnheader">Stores</th>
+                  <th role="columnheader">Qty</th>
+                </tr>
+              </thead>
+              <tbody role="rowgroup">
+                <tr role="row">
+                  <td role="cell">{{itemDetails.ITEM_ID}}</td>
+                  <td role="cell">{{itemDetails.CATEGORY_CODE}}</td>
+                  <td role="cell">{{itemDetails.CATEGORY_NAME}}</td>
+                  <td role="cell">{{itemDetails.MAJOR}}</td>
+                  <td role="cell">{{itemDetails.SUB}}</td>
+                  <td role="cell">{{itemDetails.STORE_NAME}}</td>
+                  <td role="cell">{{itemDetails.QTY}}</td>                  
+                  <td role="cell" role="cell" style="padding-left: 0% !important;">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <!-- </div> -->
+  </div>
+</ion-content>

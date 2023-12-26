@@ -1,0 +1,83 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons left>
+            <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center">Utility Details</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+    <div class="col-md-12">
+        
+        <div class="accordion" id="accordionExample" *ngIf="showiteminall == 1">
+            <div class="" *ngFor="let item of utilityDetails; index as i;">
+                <ion-card>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-12 style="border-bottom: none !important; border-top: none !important;">
+                                <ion-item (click)="openModal(item.GROUP_ID,item.OPERATIONAL_UNIT_NAME,item.PAY_MODE)">
+                                    <div>
+                                        <h2>Group ID: {{item.GROUP_ID}}</h2>
+                                        <p style="white-space: pre-wrap;">Unit Name: {{item.OPERATIONAL_UNIT_NAME}} </p>
+                                        <p>Payment Mode: {{item.PAY_MODE}}</p>
+                                    </div>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card>
+            </div>
+        </div>
+
+        <div class="accordion" id="accordionExample1" *ngIf="showiteminall1 == 1">
+
+            <div class="card" *ngFor="let item of utilitySummaryDetails; index as i;" data-parent="#accordionExample">
+                <ion-item class="card-header" id="headingComment" style="background-color:white;" (click)=showUndoBtn(i)
+                    role="button">
+                    <h2>{{1 + i}}. {{item.BUILDING_NAME}}</h2>
+                    <p style="float: left;">{{item.LOCATION_NAME}}</p><br>
+                    <p style="float: left;">{{item.ACCOUNT_NAME}}</p><br>
+                    <button ion-button clear item-end>
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+                </ion-item>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Location Name</th>
+                                    <th role="columnheader">Building Name</th>
+                                    <th role="columnheader">Unit Name</th>
+                                    <th role="columnheader">Type</th>
+                                    <th role="columnheader">Account Name</th>
+                                    <th role="columnheader">Account Number</th>
+                                    <th role="columnheader">Service Id</th>
+                                    <th role="columnheader">Payment Due</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LOCATION_NAME}}</td>
+                                    <td role="cell">{{item.BUILDING_NAME}}</td>
+                                    <td role="cell"></td>
+                                    <td role="cell">{{item.TYPE}}</td>
+                                    <td role="cell">{{item.ACCOUNT_NAME}}</td>
+                                    <td role="cell">{{item.ACCOUNT_NUMBER}}</td>
+                                    <td role="cell"></td>
+                                    <td role="cell"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>

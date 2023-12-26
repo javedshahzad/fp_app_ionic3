@@ -1,0 +1,91 @@
+<ion-header>
+    <ion-navbar style="background-color:#525b6d">
+        <ion-buttons left>
+            <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center"> HOTO </ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchhotoDetail()">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="col-md-12">
+        <div class="accordion" id="hoto">
+            <div *ngFor="let item of hotoDetailsall; index as i;">
+                <ion-item id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed"
+                    style="margin-bottom: 2px;" data-toggle="collapse" [attr.data-target]="'#' + i"
+                    aria-expanded="true/false" [attr.aria-controls]="i">
+                    <h2>{{item.LEASE_NUMBER}}</h2>
+                    <h4>{{item.BUILD_CODE}} - {{item.UNIT}}</h4>
+                    <p style="float: left; white-space: pre-line;">{{item.STATUS_NAME }}</p>
+                    <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+                </ion-item>
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#hoto">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="hoto">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Lease Number</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">Tenant Name</th>
+                                    <th role="columnheader">Start Date</th>
+                                    <th role="columnheader">End Date</th>
+                                    <th role="columnheader">Appointment Date </th>
+                                    <th role="columnheader">Status </th>
+                                    <th role="columnheader">Building</th>
+                                    <th role="columnheader">App Type</th>
+                                    <th role="columnheader">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LEASE_NUMBER}}</td>
+                                    <td role="cell">{{item.UNIT}}</td>
+                                    <td role="cell">{{item.TENANT_NAME}}</td>
+                                    <td role="cell">{{item.START_DATE|date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.END_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.APPOINTMENT_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.DOCUMENT_TYPE}}</td>
+                                    <td role="cell">{{item.LDC_COMMENTS}}<br>{{item.USER_SURNAME}}
+                                        {{item.LDC_MODIFIED_DATE |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                    <td role="cell">
+                                        <span style="padding: 10px;" >
+                                            <button ion-button (click)="openModal(item.LEASE_NUMBER,item.HANDOVER_ID)" color="primary">
+                                                <i class="fa fa-comments" style="font-size: 20px; " aria-hidden="true"></i>                                         
+                                            </button>
+                                        </span> 
+                                        <span style="padding: 10px;" *ngIf="item.TASK_FILE_COUNT == 0">
+                                            <button ion-button (click)="openAttachment(item.HANDOVER_ID,item.LEASE_NUMBER)" color="primary">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;" aria-hidden="true"></i>
+                                            </button>                                            
+                                        </span>
+                                        <span style="padding: 10px;" *ngIf="item.TASK_FILE_COUNT > 0" >                                            
+                                            <button ion-button (click)="openAttachment(item.HANDOVER_ID,item.LEASE_NUMBER)" color="primary">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;" aria-hidden="true"></i>
+                                            </button>   
+                                        </span>
+                                        <span style="padding: 10px;">
+                                            <button ion-button [color]="(item.TASK_FILE_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LEASE_NUMBER,item.TASK_FILE_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button> 
+                                        </span>
+                                    </td> 
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

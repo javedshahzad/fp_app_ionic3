@@ -1,0 +1,162 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="navbar_title">Cheque List</ion-title>
+  </ion-navbar>  
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="search_value"
+        (ionInput)="SearchCase()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="col-md-12" >
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>CHEQUE WAITING FOR HOLD REQUEST APPROVAL<ion-badge item-end class="card_p_badge">{{ chequeListData.HOLD_REQ_APPROVAL || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'CHRA')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>CHEQUE ON HOLD<ion-badge item-end class="card_p_badge">{{ chequeListData.CHEQUE_ON_HOLD || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'COH')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>RE-DEPOSIT APPROVED<ion-badge item-end class="card_p_badge">{{ chequeListData.REDEPOSIT_APPROVED || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'REDA')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p style="color : #ff2d2d">ESCALATION TO MGR<ion-badge item-end class="card_p_badge" style="background-color:#ff2d2d" >{{ chequeListData.ESCMGRLIST || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ESCMGR')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p style="color : #ff2d2d">ESCALATION TO CEO<ion-badge item-end class="card_p_badge" style="background-color:#ff2d2d" >{{ chequeListData.ESCCEOLIST || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>        
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ESCCEO')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p class="card_p">PENDING CHEQUE TO BE CLEAR<ion-badge item-end class="card_p_badge">
+            {{ chequeListData.CHEQUE_TO_CLEAR || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <span item-start>
+          <ion-badge>{{ chequeListData.CHEQUE_TO_CLEAR_AMOUNT |currency:"AED " }}</ion-badge>
+        </span>
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'PC2BC')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <!--ALL RETURN CHEQUE LIST-->
+  
+    <ion-card [ngStyle]="{'display':return_cheque_list}">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+
+        <p>All Cheque list<ion-badge item-end class="card_p_badge">
+            {{ chequeListData.TOTAL_COUNT || '0' }}</ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{0 | currency:"AED "}}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'ALL CHEQUE LIST')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+  </div>
+</ion-content>

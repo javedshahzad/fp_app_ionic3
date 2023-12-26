@@ -1,0 +1,74 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>+ Add Drec Attachments </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="card">
+        <div class="card-header" id="headingOne" style="background-color:white;">
+
+        </div>
+        <div class="card-body card-bodynew" [ngStyle]="{'display':drec_attachment}">
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,1)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                TL
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary"  (click)="openModalDrecUpload(drec.LEASE_NUM,2)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                TC
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,3)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                CHQ
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,4)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                RCPT
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary"(click)="openModalDrecUpload(drec.LEASE_NUM,5)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                RRL
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,6)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                EJ
+            </button>
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,7)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                SUB.R CPT
+            </button>
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,8)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                FL
+            </button>
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,9)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                TRL
+            </button>
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,10)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                LL
+            </button>
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,11)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                LRA
+            </button>
+
+            <button type="button" ion-button *ngFor="let drec of drecattachment;" color="secondary" (click)="openModalDrecUpload(drec.LEASE_NUM,12)"
+            style="white-space:unset; width: -webkit-fill-available;">
+                DREC Inv
+            </button>
+
+        </div>
+    </div>
+
+</ion-content>

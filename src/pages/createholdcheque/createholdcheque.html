@@ -1,0 +1,151 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title> {{holddata[0].type}} Hold Cheque </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+
+</ion-header>
+<ion-content >
+
+        <!-- <form [formGroup]="createholdchequeForm" (submit)="insertholdcheque()">
+                <ion-list lines="full" class="ion-no-margin ion-no-padding">
+                  <ion-item>
+                    <ion-label position="stacked">First Name <ion-text color="danger">*</ion-text></ion-label>
+                    <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
+                  </ion-item>
+        
+                  <ion-item>
+                    <ion-label position="stacked">Last Name <ion-text color="danger">*</ion-text></ion-label>
+                    <ion-input required type="text" oninput="handleLastNameValue(event)"></ion-input>
+                  </ion-item>
+        
+                  <ion-item>
+                    <ion-label position="stacked">Address</ion-label>
+                    <ion-input placeholder="Address Line 1"></ion-input>
+                    <ion-input placeholder="Address Line 2"></ion-input>
+                    <ion-input placeholder="City"></ion-input>
+                    <ion-input placeholder="State"></ion-input>
+                    <ion-input placeholder="Zip Code"></ion-input>
+                  </ion-item>
+        
+                  <ion-item>
+                    <ion-label position="stacked">Notes</ion-label>
+                    <ion-textarea></ion-textarea>
+                  </ion-item>
+                </ion-list>
+        
+                <div class="ion-padding">
+                  <ion-button expand="block" type="submit" class="ion-no-margin">Create account</ion-button>
+                </div>
+              </form> -->
+              <ion-card>
+                    <ion-card-header>
+                            <ion-card-title style="    font-size: medium;
+                            font-weight: 800;" >{{holddata[0].type}} Hold Cheque</ion-card-title>
+                          </ion-card-header>
+    <div class="agile-login">
+        <div class="wrapper" *ngIf="(holddata[0].type=='Create')||(holddata[0].type=='Update')">
+            <form [formGroup]="createholdchequeForm" (submit)="insertholdcheque()">
+                <div class="w3ls-form" *ngIf="chequeholddetailsall.length>0;else nodata;">
+                    <div *ngFor="let item of chequeholddetailsall">
+                        <ion-input name="cash_receipt_id" type="hidden" value="{{item.CASH_RECEIPT_ID}}"
+                            [formControl]="createholdchequeForm.controls['cash_receipt_id']"></ion-input>
+                        <ion-input name="hold_by" type="hidden" value="{{item.HOLD_BY}}"
+                            [formControl]="createholdchequeForm.controls['hold_by']"></ion-input>
+                        <label>Hold Date To</label>
+                        <input type="date" class="select1" name="hold_date" placeholder="Due Date"
+                            min="{{holddata[0].maxdate}}" max="{{holddata[0].mindate}}" value="{{item.hold_date}}"
+                            [formControl]="createholdchequeForm.controls['hold_date']" />
+                        <p *ngIf="createholdchequeForm.controls.hold_date.errors && createholdchequeForm.controls.hold_date.dirty"
+                            class='error'>
+                            Enter the Hold date.</p>
+                        <label>Reason</label>
+                        <ion-item>
+                            <ion-textarea name="Reason" placeholder="Enter more Reason here..." value="{{item.REASON}}"
+                                [formControl]="createholdchequeForm.controls['Reason']"></ion-textarea>
+                        </ion-item>
+                        <p *ngIf="createholdchequeForm.controls.Reason.errors && createholdchequeForm.controls.Reason.dirty"
+                            class='error'>Enter
+                            the Reason.</p>
+                        <label>Oracle No</label>
+                        <ion-item>
+                            <ion-input type="text" name="oracle_no" placeholder="Oracle No" value="{{item.ORACLE_NO}}"
+                                [formControl]="createholdchequeForm.controls['oracle_no']"></ion-input>
+                        </ion-item>
+                        <p *ngIf="createholdchequeForm.controls.oracle_no.errors && createholdchequeForm.controls.oracle_no.dirty"
+                            class='error'>Enter
+                            the Oracle No.</p>
+                    </div>
+                    <div style="margin-top:3%;color: #fff !important;">
+                        <!-- <button style="float: left; color: #fff;" class="bst2"><a href="" style="color: #fff !important;">Cancel</a></button>
+                    <button style="float: right;" class="bst1"><a href="" style="color: #fff !important;" (click)= "insertReceiptData()">Confirm</a></button> -->
+
+                        <button type="button" style="float: left; color: #fff;" class="bst2"
+                            (click)=resetform();>Cancel</button>
+                        <button type="submit" style="float: right; color: #fff !important;" class="bst1">Save</button>
+                    </div>
+
+                </div>
+                <ng-template #nodata>
+                    <div class="w3ls-form">
+                        <ion-input name="cash_receipt_id" type="hidden" value="{{holddata[0].ID}}"
+                            [formControl]="createholdchequeForm.controls['cash_receipt_id']"></ion-input>
+                        <label>Hold Date To</label>
+                        <input type="date" class="select1" name="hold_date" placeholder="Hold Date"
+                            min="{{holddata[0].maxdate}}" max="{{holddata[0].mindate}}"
+                            [formControl]="createholdchequeForm.controls['hold_date']" />
+                        <p *ngIf="createholdchequeForm.controls.hold_date.errors && createholdchequeForm.controls.hold_date.dirty"
+                            class='error'>
+                            Enter the Hold date.</p>
+                        <label>Reason</label>
+                        <ion-item>
+                            <ion-textarea name="Reason" placeholder="Enter more Reason here..."
+                                [formControl]="createholdchequeForm.controls['Reason']"></ion-textarea>
+                        </ion-item>
+                        <p *ngIf="createholdchequeForm.controls.Reason.errors && createholdchequeForm.controls.Reason.dirty"
+                            class='error'>Enter
+                            the Reason.</p>
+                        <label>Oracle No</label>
+                        <ion-item>
+                            <ion-input type="text" name="oracle_no" placeholder="Oracle No"
+                                [formControl]="createholdchequeForm.controls['oracle_no']"></ion-input>
+                        </ion-item>
+                        <p *ngIf="createholdchequeForm.controls.oracle_no.errors && createholdchequeForm.controls.oracle_no.dirty"
+                            class='error'>Enter
+                            the Oracle No.</p>
+                        <div style="margin-top:3%;color: #fff !important;">
+                            <!-- <button style="float: left; color: #fff;" class="bst2"><a href="" style="color: #fff !important;">Cancel</a></button>
+                    <button style="float: right;" class="bst1"><a href="" style="color: #fff !important;" (click)= "insertReceiptData()">Confirm</a></button> -->
+
+                            <button type="button" style="float: left; color: #fff;" class="bst2"
+                                (click)=resetform();>Cancel</button>
+                            <button type="submit" style="float: right; color: #fff !important;"
+                                class="bst1">Save</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </form>
+        </div>
+
+        <div class="wrapper" *ngIf="holddata[0].type=='View'">
+            <div class="w3ls-form" *ngFor="let item of chequeholddetailsall">
+                <label>Hold Date To</label>
+                <input type="text" class="select1" value="{{item.hold_date}}" name="hold_date" placeholder="Due Date"
+                    readonly="true" />
+                <label>Reason</label>
+                <ion-item>
+                    <ion-textarea name="Reason" value="{{item.REASON}}" placeholder="Enter more Reason here..."
+                        readonly="true"></ion-textarea>
+                </ion-item>
+                <label>Oracle No</label>
+                <ion-item>
+                    <ion-input type="text" value="{{item.ORACLE_NO}}" name="oracle_no" placeholder="Oracle No"
+                        readonly="true"></ion-input>
+                </ion-item>
+            </div>
+        </div>
+    </div>
+    </ion-card>
+</ion-content>

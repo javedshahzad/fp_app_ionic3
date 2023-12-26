@@ -1,0 +1,205 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons left>
+            <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center">Utility Details</ion-title>
+    </ion-toolbar>
+    
+</ion-header>
+
+<ion-content padding>
+    <div>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for Bill Copy Upload</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingforbillcopyupload || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('billcopyupload')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Utility Payment Not Initiated</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ utilitypaymentnotinitiated || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('paymentnotinitiated')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for Manager verification</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingformanagerverfication || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(0)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for booking</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingforbooking || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(1)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for Finance confirmation</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingforfinanceconfirmation || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(2)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for COO / CEO approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingforcooceoapproval || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(3)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Under Cheque Preparation, Bank Transfer,Mollak</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ banktransfermollak || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(4)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Sent for Director Signature</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ sentfordirectorsignature || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(5)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;"> Pending for Cheque Dispatch</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pendingforchequedispatch || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(6)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/utilities.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Transaction Completed</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ transactioncompleted || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModalByStatus(7)">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        
+    </div>
+
+</ion-content>

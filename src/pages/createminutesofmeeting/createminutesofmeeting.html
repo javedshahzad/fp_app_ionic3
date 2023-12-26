@@ -1,0 +1,300 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title> + Add Minutes Of Meetings</ion-title>
+    <ion-buttons end *ngIf="insertActionPointShow == 0" style="width: 100px; height: 30px;">
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <div *ngIf="insertActionPointShow == 0">
+      <form [formGroup]="createtaskForm" (submit)="insertminutesofmeeting()">
+
+        <ion-item>
+          <ion-label stacked>Subject</ion-label>
+          <ion-input type="text" name="title" [formControl]="createtaskForm.controls['title']"></ion-input>
+          <p *ngIf="createtaskForm.controls.title.errors && createtaskForm.controls.title.dirty" class='error'>Enter the
+            Title.</p>
+        </ion-item>
+
+        <ion-item>
+          <span>Held On</span><br><br>
+          <span>
+            <span (click)="opencalendarheldon()">{{heldOn}}</span>
+            <span>
+              <ion-icon name="clipboard" (click)="opencalendarheldon()"
+                style="float: right;font-size: 31px;margin-right: 10px;">
+              </ion-icon>
+            </span>
+          </span><br>
+          <span *ngIf="calendarshowheldon === 1">
+            <ion-calendar name="date_of_meeting" (onChange)="heldOnChange($event)" [type]="string"
+              [formControl]="createtaskForm.controls['date_of_meeting']" [format]="'YYYY-MM-DD'">
+            </ion-calendar>
+          </span>
+        </ion-item>
+
+        <ion-item>
+          <span>Next Meeting Date</span><br><br>
+          <span>
+            <span (click)="opencalendarnextmeetingshow()">{{nextmeeting}}</span>
+            <span>
+              <ion-icon name="clipboard" (click)="opencalendarnextmeetingshow()"
+                style="float: right;font-size: 31px;margin-right: 10px;">
+              </ion-icon>
+            </span>
+          </span><br>
+          <span *ngIf="calendarshownextmeeting === 1">
+            <ion-calendar name="next_of_meeting" (onChange)="nextmeetingonChange($event)" [options]="options"
+              [type]="string" [formControl]="createtaskForm.controls['next_of_meeting']" [format]="'YYYY-MM-DD'">
+            </ion-calendar>
+          </span>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Organizer</ion-label>
+          <select-searchable [(ngModel)]="organizer_selected"
+            [formControl]="createtaskForm.controls['organizer_selected']" item-content [items]="userdetails"
+            itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true"
+            (onChange)="addActionByUserAccess($event)" [shouldStoreItemValue]="true">
+          </select-searchable>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Recurring Meeting</ion-label>
+          <ion-checkbox color="danger" [formControl]="createtaskForm.controls['recurring_meeting']"
+            [(ngModel)]="recurring_meeting" (ionChange)="recurringmeeting($event)" checked=false></ion-checkbox>
+        </ion-item>
+
+        <ion-list *ngIf="showrecurringmeeting == 1">
+          <ion-item>
+            <ion-label>Frequency</ion-label>
+            <ion-select name="frequency" [(ngModel)]="frequency" [formControl]="createtaskForm.controls['frequency']">
+              <ion-option value="daily">Daily</ion-option>
+              <ion-option value="weekly">Weekly</ion-option>
+              <ion-option value="fortnightly">Fortnightly</ion-option>
+              <ion-option value="monthly">Monthly</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <ion-item *ngIf="showrecurringmeeting == 1">
+          <span>Upto Date</span><br><br>
+          <span>
+            <span (click)="opencalendaruptodateshow()">{{uptoDate}}</span>
+            <span>
+              <ion-icon name="clipboard" (click)="opencalendaruptodateshow()"
+                style="float: right;font-size: 31px;margin-right: 10px;">
+              </ion-icon>
+            </span>
+          </span><br>
+          <span *ngIf="calendarshowuptodate === 1">
+            <ion-calendar name="upto_date" (onChange)="uptoDateonChange($event)" [options]="options" [type]="string"
+              [formControl]="createtaskForm.controls['upto_date']" [format]="'YYYY-MM-DD'">
+            </ion-calendar>
+          </span>
+        </ion-item>
+
+        <ion-item style="margin-top: 4px;">
+          <ion-label>Attendees</ion-label>
+        </ion-item>
+        <div style="padding: 14px;">
+          <ion-grid *ngFor="let item of attendess; let i = index">
+            <ion-row>
+              <ion-col col-6>{{item.USER_SURNAME}}</ion-col>
+              <ion-col col-6>
+                <ion-checkbox color="danger" (ionChange)="getUpdateAttendance($event,i)"checked="true"></ion-checkbox>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <ion-card (click)="addActionPoint()">
+          <ion-card-header style="background-color: #f5a106;">
+            <h2 style="width: 100px;"> Add Action Points</h2>
+          </ion-card-header>
+        </ion-card>
+        <ion-card style="background: #4c9a9a !important;" *ngFor="let item of actionpointarray; let i = index">
+          <div>
+            <ion-grid>
+              <ion-row>
+                <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Action Point</ion-col>
+                <ion-col col-8 style="padding-right: 18px; height: 75px; overflow: auto;">{{item.action_point}}
+                </ion-col>
+                <ion-col col-1 style="padding-right: 18px;">
+                  <span
+                    (click)="updateAddActionPoint(i,item.action_point,item.action_by_id,item.action_complete_date,item.group_id,item.non_group_by_id,item.group_by_id,item.group_name)"><img
+                      src="assets/imgs/edit.png" class="icon-btn" style="max-width: 60% !important" /></span><br>
+                  <span (click)="deletePointArray(i,item.action_point)"><img src="assets/imgs/delete.png"
+                      class="icon-btn" style="max-width: 60% !important" />
+                  </span>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Action by</ion-col>
+                <ion-col col-9 style="padding-right: 18px;">{{item.action_by_name}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Group Name</ion-col>
+                <ion-col col-9 style="padding-right: 18px;">{{item.group_name}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-3 style="padding-left: 12px; font-weight: bold;">When</ion-col>
+                <ion-col col-9 style="padding-right: 18px;">{{item.action_complete_date | date:'dd/MM/yyyy'}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card>
+
+        <div class="example-center" style="text-align: center;">
+          <button ion-button type="submit" color="Primary"
+            style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;">Save</button>
+          <button ion-button color="dark"
+            style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+            (click)=clearvalues();>Clear</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="insertActionPointShow == 1">
+      <ion-item>
+        <ion-label floating>Action Point</ion-label>
+        <ion-textarea rows="4" cols="20" autocomplete="on" autocorrect="on" spellcheck="true"
+          [(ngModel)]="enteractionpoint">
+        </ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Action By</ion-label>
+        <select-searchable [(ngModel)]="selected_userid" item-content [items]="userdetails"
+          itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true" [canClear]="true"
+          [isMultiple]="true" (onChange)="addUserAccess($event)" [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Group By</ion-label>
+        <select-searchable [(ngModel)]="selected_groupid" item-content [items]="groudetails" itemValueField="ID"
+          itemTextField="GROUP_NAME" [canSearch]="true" [canClear]="true" (onChange)="addUserGroupAccess($event)"
+          [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+      <ion-item>
+        <span>Expected Completion Date</span><br><br>
+        <span>
+          <span (click)="opencalendar()">{{localDate}}</span>
+          <span>
+            <ion-icon name="clipboard" (click)="opencalendar()"
+              style="float: right;font-size: 31px;margin-right: 10px;">
+            </ion-icon>
+          </span>
+        </span><br>
+        <span *ngIf="calendarshow === 1">
+          <ion-calendar name="action_complete_date" (onChange)="onChange($event)" [options]="options" [type]="string"
+            [format]="'YYYY-MM-DD'">
+          </ion-calendar>
+        </span>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Email to</ion-label>
+        <ion-textarea rows="4" cols="20" autocomplete="on" autocorrect="on" spellcheck="true" [(ngModel)]="emailto">
+        </ion-textarea>
+      </ion-item>
+
+      <div class="example-center" style="text-align: center;">
+        <button ion-button color="Primary"
+          style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+          (click)=addpointarray();>Add</button>
+        <button ion-button color="dark"
+          style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+          (click)=canceladdActionpoint();>Back</button>
+      </div>
+
+      <ion-card style="background: #4c9a9a !important;" *ngFor="let item of actionpointarray; let i = index">
+        <div>
+          <ion-grid>
+            <ion-row>
+              <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Action Point</ion-col>
+              <ion-col col-7 style="padding-right: 18px; height: 75px; overflow: auto;">{{item.action_point}}
+              </ion-col>
+              <ion-col col-1 style="padding-right: 18px;">
+                <span
+                  (click)="updateAddActionPoint(i,item.action_point,item.action_by_id,item.action_complete_date,item.group_id,item.non_group_by_id,item.group_by_id,item.group_name)"><img
+                    src="assets/imgs/edit.png" class="icon-btn" style="max-width: 60% !important" /></span><br>
+                <span (click)="deletePointArray(i,item.action_point)"><img src="assets/imgs/delete.png" class="icon-btn"
+                    style="max-width: 60% !important" />
+                </span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Action by</ion-col>
+              <ion-col col-9 style="padding-right: 18px;">{{item.action_by_name}}</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-3 style="padding-left: 12px; font-weight: bold;">Group Name</ion-col>
+              <ion-col col-9 style="padding-right: 18px;">{{item.group_name}}</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-3 style="padding-left: 12px; font-weight: bold;">When</ion-col>
+              <ion-col col-9 style="padding-right: 18px;">{{item.action_complete_date | date:'dd/MM/yyyy'}}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- Update existing action point -->
+
+    <div *ngIf="updateActionPointShow == 1">
+      <ion-item>
+        <ion-label floating>Action Point</ion-label>
+        <ion-textarea rows="4" cols="20" autocomplete="on" autocorrect="on" spellcheck="true"
+          [(ngModel)]="updateenteractionpoint">
+        </ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Action By</ion-label>
+        <select-searchable [(ngModel)]="update_selected_userid" item-content [items]="userdetails"
+          itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true" [isMultiple]="true"
+          [canClear]="true" (onChange)="editUserAccess($event)" [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Group By</ion-label>
+        <select-searchable [(ngModel)]="update_selected_groupid" item-content [items]="groudetails" itemValueField="ID"
+          itemTextField="GROUP_NAME" [canSearch]="true" [canClear]="true" (onChange)="editUserGroupAccess($event)"
+          [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+      <ion-item>
+        <span>Expected Completion Date</span><br><br>
+        <span>
+          <span (click)="opencalendar()">{{localDate}}</span>
+          <span>
+            <ion-icon name="clipboard" (click)="opencalendar()"
+              style="float: right;font-size: 31px;margin-right: 10px;">
+            </ion-icon>
+          </span>
+        </span><br>
+        <span *ngIf="calendarshow === 1">
+          <ion-calendar name="update_action_complete_date" [(ngModel)]="update_action_complete_date"
+            (onChange)="onChange($event)" [options]="options" [type]="string" [format]="'YYYY-MM-DD'">
+          </ion-calendar>
+        </span>
+      </ion-item>
+
+      <div class="example-center" style="text-align: center;">
+        <button ion-button color="Primary"
+          style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+          (click)=editpointarray();>Update</button>
+        <button ion-button color="dark"
+          style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+          (click)=canceladdActionpoint();>Back</button>
+      </div>
+    </div>
+
+  </ion-list>
+
+</ion-content>

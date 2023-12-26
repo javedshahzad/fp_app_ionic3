@@ -1,0 +1,182 @@
+page-createminutesofmeeting {
+    .modal {
+        margin-top: 50px !important;
+        overflow-y: scroll !important;
+    }
+    
+    .cmdtask{
+        margin: 4px !important;
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 40px !important;
+    }
+
+    .modal-footer{
+        justify-content: center !important;
+    }
+
+    .font-size-12{
+        font-size: 10px !important;
+    }
+
+    .card {
+        border:0px !important;
+    }
+
+    .col {
+        padding: 0px !important;
+    }
+
+    .row {
+        margin-right: -5px !important;
+        margin-left: 0px !important;
+    }
+
+    .item-inner {
+        padding-right: 0px !important;
+    }
+
+    .text-color{
+        color: red;
+        margin-left: 18px !important;        
+    }
+    
+    .item-inner{
+        box-shadow: inset 0 -1px 0 0 white !important;
+    }
+
+    .button-md {
+        margin: 0.4rem 0.2rem 0 0 !important;
+        padding: 1px !important;
+    }
+
+    .card {
+        width: 300px;
+        box-sizing: border-box;
+        padding: 2em;
+        font-family: Ubuntu;
+        border-radius: 25px;
+        color: white;
+        line-height: 25px;
+        box-shadow: 5px 5px 10px #ccc;
+        float: left;
+        margin-right: 1em;
+      }
+      
+      .card.purple {
+        background: linear-gradient(150deg, #f731db, #4600f1 100%) !important;
+      }
+      
+      .card.green {
+        background: linear-gradient(150deg, #39ef74, #4600f1 100%) !important;
+      }
+      
+      button {
+        text-transform: uppercase;
+        width: 150px;
+        display: block;
+        margin: 0 auto;
+        color: #4600f1;
+        border-radius: 50px;
+        padding: 1em;
+        background: white;
+        border: none;
+        font-weight: bold;
+        margin-top: 4em;
+      }
+
+      @media only screen and (max-width: 760px), (min-device-width: 768px) 
+        and (max-device-width: 1024px)  {      
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            /* Hide table headers (but not display: none;, for accessibility) */
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }      
+            tr {
+                margin: unset !important;
+            }
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }         
+            td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: 0;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                height: 100%;
+                background-color: #add8e6 !important;
+            }
+            .blc{
+
+                font-size: 1.25rem !important;
+                position: relative !important;    
+                bottom: 0px !important;
+                padding: 0px !important;
+            }  
+            /*
+            Label the data
+            You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+            */
+            td:nth-of-type(1):before { content: "User Name"; }
+            td:nth-of-type(2):before { content: "Access"; }
+            td:nth-of-type(3):before { content: "Action"; }
+      
+        }
+
+      @media only screen and (max-width: 760px), (max-device-width: 1024px) and (min-device-width: 268px){
+        td:before{
+            background-color: #add8e6 !important;
+            padding-left: 1%;
+            margin-left: -6px;
+        }
+    }
+
+      @media only screen and (max-width: 760px){
+     
+        td {
+        //    border: 1px solid #e2e0e0 !important;
+           position: relative !important;
+           padding-left: 50% !important;
+           height: max-content!important;
+           min-height: 6vh !important;
+           line-height: 16px !important;
+           display: flex !important;
+           align-items: center !important;
+           font-size: 1.2rem !important;
+           overflow-x: scroll !important;
+       }
+   
+      td::before{
+           white-space: normal !important;
+           display: flex !important;
+           align-items: center !important;
+           background-color: #add8e6 !important;
+       }
+  
+       
+   }
+
+   
+   td:nth-of-type(1):before { content: "User Name"; }
+   td:nth-of-type(2):before { content: "Access"; }
+   td:nth-of-type(3):before { content: "Action"; }
+
+
+   ion-icon {
+    color: blue;
+  }
+
+}

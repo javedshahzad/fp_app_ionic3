@@ -1,0 +1,941 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{title_page}} </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">{{title_btn}}</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <!-- <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchrtcaseDetail()">
+        </ion-searchbar> -->
+        <form (submit)="getLpoData()">
+            <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value">
+            </ion-searchbar>
+        </form>
+    </ion-toolbar>
+    <ion-toolbar no-border-top>
+        <ion-segment [(ngModel)]="selectedSegment">
+            <ion-segment-button *ngFor="let item of branchListdetails; index as i;"  (ionSelect)="segmentChanged(item.KEY)" value="{{item.KEY}}" style="font-size: 13px; color:#fff;">
+                {{item.NAME}}
+            </ion-segment-button>
+        </ion-segment>
+
+        <ion-segment [(ngModel)]="petSev" (ionChange)="segmentChangedSev($event)">
+            <ion-segment-button value="urgent" style="font-size: 13px; color:#fff;">
+                URG
+            </ion-segment-button>
+            <ion-segment-button value="important" style="font-size: 13px; color:#fff;">
+                IMP
+            </ion-segment-button>
+            <ion-segment-button value="priority" style="font-size: 13px; color:#fff;">
+                PRI
+            </ion-segment-button>
+            <ion-segment-button value="normal" style="font-size: 13px; color:#fff;">
+                NOR
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content style="margin-top: 10px;">
+    <div [ngSwitch]="selectedSegment">
+        <div *ngFor="let branch of branchListdetails">
+        <ion-list *ngSwitchCase="branch.KEY">
+            <div *ngFor="let item of itemsToDisplay; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                    " }}</p><br>
+                                    <!-- <p>{{item.SEVERITY_TYPE}}</p> -->
+                                <p>{{item.COST_BEAR_BY}}</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} day</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} days</p>
+                                    <h2 style="white-space: break-spaces;color: rgb(243, 17, 17);" *ngIf="item.SPECIAL_ATTENTION == '1'">THIS IS A SPECIAL ATTENTION LPO</h2>
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                            "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                      
+
+                                    </td>
+                                    <td role="cell" style="padding-left: 45%!important;">
+                                        <span
+                                        *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO'">
+                                        <button style="font-size: 1.2rem;" ion-button color="secondary"
+                                            (click)="ApprovebtnWithSA(item.LPO_ID)">Approve with Special Attention</button>
+                                    </span>
+
+                                    <span *ngIf="user_type =='COO'">
+                                        <button style="font-size: 1.2rem;" ion-button color="secondary"
+                                            [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                            (click)="ApprovebtnWithSA(item.LPO_ID)">Approve with Special Attention</button>
+                                    </span>
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                                (click)="getcallCompliantdetails(item.LPO_ID)">
+                                                <ion-icon name="call"></ion-icon>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="primary"
+                                                (click)="openModal(item.LPO_ID,item.MANAGER_MASTER_ID)">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                                <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                                </ion-thumbnail>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content class="loadingspinner" loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-list>
+        </div>
+
+        <!-- <ion-list *ngSwitchCase="'uganda'">
+            <div *ngFor="let item of itemsToDisplay_ug; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                    " }}</p><br>
+                                    <p>{{item.SEVERITY_TYPE}}</p>
+                                <p>{{item.COST_BEAR_BY}}</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} day</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} days</p>
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                            "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                                (click)="getcallCompliantdetails(item.LPO_ID)">
+                                                <ion-icon name="call"></ion-icon>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="primary"
+                                                (click)="openModal(item.LPO_ID,item.MANAGER_MASTER_ID)">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                                <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                                </ion-thumbnail>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content class="loadingspinner" loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'uk'">
+            <div *ngFor="let item of itemsToDisplay_uk; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                    " }}</p><br>
+                                    <p>{{item.SEVERITY_TYPE}}</p>
+                                <p>{{item.COST_BEAR_BY}}</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} day</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} days</p>
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                            "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                                (click)="getcallCompliantdetails(item.LPO_ID)">
+                                                <ion-icon name="call"></ion-icon>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="primary"
+                                                (click)="openModal(item.LPO_ID,item.MANAGER_MASTER_ID)">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                                <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                                </ion-thumbnail>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content class="loadingspinner" loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'treppan'">
+            <div *ngFor="let item of itemsToDisplay_treppan; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                    " }}</p><br>
+                                <p>{{item.SEVERITY_TYPE}}</p>
+                                <p>{{item.COST_BEAR_BY}}</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} day</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} days</p>
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                            "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                                (click)="getcallCompliantdetails(item.LPO_ID)">
+                                                <ion-icon name="call"></ion-icon>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="primary"
+                                                (click)="openModal(item.LPO_ID,item.MANAGER_MASTER_ID)">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                                <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                                </ion-thumbnail>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content class="loadingspinner" loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-list>
+        <ion-list *ngSwitchCase="'oa'">
+            <div *ngFor="let item of itemsToDisplay_oa; index as i;">
+                <ion-list style="margin: -6px 0 0px;">
+                    <ion-item-sliding>
+                        <ion-item id="headingOne" (click)=showUndoBtn(i,item.LPO_ID)>
+                            <div>
+                                <h2 style="white-space: break-spaces;">{{item.LPO_ID}} - {{item.CREATEDBYNAME}}</h2>
+                                <p style="white-space: break-spaces;">{{item.SUPPLIER_NAME}}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                    " }}</p>
+                                <p style="float: left;" *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                    " }}</p><br>
+                                    <p>{{item.SEVERITY_TYPE}}</p>
+                                <p>{{item.COST_BEAR_BY}}</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} day</p>
+                                <p *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red">
+                                    Escalated {{item.ESCALATED_DAYS}} days</p>
+                            </div>
+                            <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                (click)=showUndoBtn(i,item.LPO_ID)>
+                                <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i,item.LPO_ID)
+                                    name="arrow-dropdown"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="searchinventory">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">LPO ID</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Purpose of LPO</th>
+                                    <th role="columnheader">Validity</th>
+                                    <th role="columnheader">Delivery Address</th>
+                                    <th role="columnheader">Operational Unit</th>
+                                    <th role="columnheader">Total Amount</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Payment Term</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Cost borne By</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.LPO_ID}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME}}</td>
+                                    <td role="cell">{{item.SPECIAL_REMARKS || ''}}</td>
+                                    <td role="cell">{{item.VALIDITY}}</td>
+                                    <td role="cell">{{item.DELIVERY_ADDRESS}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY_TYPE == 'AED'">{{item.TOTAL | currency:"AED
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'USD'">{{item.TOTAL | currency:"USD
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'GBP'">{{item.TOTAL | currency:"GBP
+                                            "}}</span>
+                                        <span *ngIf="item.CURRENCY_TYPE == 'UGX'">{{item.TOTAL | currency:"UGX
+                                            "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.PAYMENT_TERM}}</td>
+                                    <td role="cell">{{item.COMMENTS}}</td>
+                                    <td role="cell">{{item.COST_BEAR_BY}}</td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Rejectbtn(item.LPO_ID)">Reject</button>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+
+                                        <span
+                                            *ngIf="item.STATUS_ID == 1 && item.NEXT_APPROVAL_ID == user_resource_id && item.NEXT_APPROVAL_TYPE == user_type_id && user_type !='COO' && user_type !='CEO'">
+                                            <button ion-button color="secondary"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                        <span *ngIf="user_type =='COO' || user_type =='CEO'">
+                                            <button ion-button color="secondary"
+                                                [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                                (click)="Approvebtn(item.LPO_ID)">Approve</button>
+                                        </span>
+
+                                    </td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button color="secondary" *ngIf="item.CALL_COUNT > 0"
+                                                (click)="getcallCompliantdetails(item.LPO_ID)">
+                                                <ion-icon name="call"></ion-icon>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.LPO_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT == 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.ATTACH_COUNT > 0">
+                                            <button ion-button color="secondary"
+                                                (click)="upload(item.LPO_ID,item.ATTACH_COUNT)">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="primary"
+                                                (click)="openModal(item.LPO_ID,item.MANAGER_MASTER_ID)">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary" (click)="itemListbtn(item.LPO_ID)">
+                                                <ion-thumbnail> <img src="./assets/imgs/construction.png" />
+                                                </ion-thumbnail>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content class="loadingspinner" loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-list> -->
+    </div>
+    
+    <div class="backdrop" [ngStyle]="{'display':reject_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':reject_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Update LPO Status</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="RejectForm" (submit)="Reject_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="RejectForm.controls['LPOno']"></ion-input>
+
+                        <ion-row style="margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="onCloseHand('reject')">Close</button>
+                        <button type="button" type="submit" class="btn btn-primary"
+                            [disabled]="!RejectForm.valid">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal !-->
+
+    <div class="backdrop" [ngStyle]="{'display':approve_cmt}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':approve_cmt}" style="margin-top: 50%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Update LPO Status</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="onCloseHand('approve')"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="ApproveForm" (submit)="Approve_con()">
+                    <div class="modal-body">
+                        <ion-input type="hidden" name="LPOno" value="{{LPOno}}"
+                            [formControl]="ApproveForm.controls['LPOno']"></ion-input>
+
+                        <ion-row style="margin: 5px;">
+                            <ion-textarea name="comments" placeholder="Comments "
+                                [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                        </ion-row>
+                    </div>
+                    <div class="modal-footer">
+                        <span float-right ion-button icon-left clear class="font-size-12"
+                            style="width: 60px; height: 50px;" (click)="uploadAudioForApprove()">
+                            <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+                        </span>
+                        <button type="button" style="font-size: 16px;" class="btn btn-danger"
+                            (click)="onCloseHand('approve')">Close</button>
+                        <button type="button" style="font-size: 16px;" type="submit" class="btn btn-primary"
+                            [disabled]="!ApproveForm.valid">{{btnTxt}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="title_btn=='Back'">
+        <div class="accordion" id="accordionExample">
+            <ion-item *ngFor="let item of LpoItemsList; index as i;">
+                <h5 style='white-space: pre-line;font-size: 1.6rem;'>
+                    {{1 + i}}.) {{item.MATERIAL_NAME}} / {{item.MATERIAL_DESC}} - {{item.ASSET_ID}}
+                </h5>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-4><span class="primary-clr p_12">Qty : {{item.QUANTITY}}</span></ion-col>
+                        <ion-col col-8><span class="danger-clr p_12"> Purchase Price : {{item.RATE |
+                                number:'1.0-2'}}</span></ion-col>
+
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-5><span class="secondary-clr p_12"> Amount : {{item.TOTAL | number:'1.0-2'}}</span>
+                        </ion-col>
+                        <ion-col col-3><span class="danger-clr p_12"
+                                (click)="openLpoItemInModal(item.ASSET_ID,'Itemin')">Item In</span></ion-col>
+                        <ion-col col-4><span class="danger-clr p_12"
+                                (click)="openLpoLedgerReport(item.ASSET_ID)">Ledger</span></ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-3><span class="danger-clr p_12"
+                                (click)="openLpoItemInModal(item.ASSET_ID,'Iteminall')">Item in all</span></ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </ion-item>
+        </div>
+    </div>
+</ion-content>

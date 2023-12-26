@@ -1,0 +1,49 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{user_name}}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+ 
+    
+</ion-header>
+
+<ion-content padding>
+
+    <ion-list>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/attendance-label.png"
+                    style="width: 40px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Daily Attendance</h2>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="attendanceReport('Daily')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/attendance-label.png"
+                    style="width: 40px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Monthly Attendance</h2>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="attendanceReport('Monthly')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+    </ion-list>
+
+</ion-content>

@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>+ Add Case Comments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-card class="agile-login">
+    <div class="wrapper">
+      <form [formGroup]="casecommentsForm" (submit)="insertCaseComments()">
+        <ion-input [(ngModel)]="CASE_ID" *ngFor="let case of casemodaldata;" type="hidden" value="{{case.CASE_ID}}"
+          [formControl]="casecommentsForm.controls['CASE_ID']"></ion-input>
+        <ion-input [(ngModel)]="CASE_REQ_ID" *ngFor="let case of casemodaldata;" type="hidden"
+          value="{{case.CASE_REQ_ID}}" [formControl]="casecommentsForm.controls['CASE_REQ_ID']"></ion-input>
+        <div class="w3ls-form">
+          <h3 style="padding-left: 26PX; padding-top: 10px;
+              padding-bottom: 10px;">Add Comments</h3>
+          <ion-item>
+            <ion-textarea name="COMMENTS" placeholder="Enter any Comments here..."
+              [formControl]="casecommentsForm.controls['COMMENTS']"></ion-textarea>
+            <p *ngIf="casecommentsForm.controls.COMMENTS.errors && casecommentsForm.controls.COMMENTS.dirty"
+              class='error'>Enter Your Comments.</p>
+          </ion-item>
+          <!-- <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+            (click)="uploadAudioNewComment()">
+            <ion-icon name="mic" style="font-size: 40px; color: #1968f3;"></ion-icon>
+          </span> -->
+        </div>
+        <button ion-button block type="submit" style=" margin-top: 35px;" color="primary"
+          [disabled]="!casecommentsForm.valid">Submit</button>
+      </form>
+    </div>
+  </ion-card>
+
+  <ion-list class="agile-login">
+
+    <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)" style="background-color: #679eff;">
+      <ion-segment-button value="Comments" style="font-size: 13px; color: #fff;">
+        Comments
+      </ion-segment-button>
+      <ion-segment-button value="Recording" style="font-size: 13px; color: #fff;">
+        Voice Recording
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="pet">
+      <ion-list *ngSwitchCase="'Comments'">
+
+        <ion-list-header>
+          <h2>Comments List</h2>
+        </ion-list-header>
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form" style="padding-right: 0px; padding-left: 0px;">
+            <div class="accordion" id="accordionExample">
+              <ion-item>
+                <ion-label>Show Escalation</ion-label>
+                <ion-checkbox color="danger" (click)="showEscalation($event)" [(ngModel)]="ischecked"></ion-checkbox>
+              </ion-item>
+              <ion-item *ngFor="let item of casecommentsdetails; index as i;" data-parent="#accordionExample"
+                style="border: unset !important;background-color: transparent;">
+                <div id="headingComment">
+                  <a role="button" style="font-size: 14px;white-space: normal;">
+                    {{1 + i}}. {{item.NOTES}}
+                  </a><br>
+                  <span class="danger-clr" style="text-align:right;font-size: 1.2rem;">by {{item.USERNAME}} on {{item.DDATE
+                    |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+                </div>
+                <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                    (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+                    <ion-icon name="mic" style="font-size: 40px; color: #1968f3;"></ion-icon>
+                  </span>
+    
+                  <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                    (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                    <ion-icon name="mic" style="font-size: 40px; color: red;"></ion-icon>
+                  </span>
+              </ion-item>
+            </div>
+          </div>
+        </div>
+               
+      </ion-list>
+
+      <ion-list *ngSwitchCase="'Recording'">
+
+        <div class="accordion" id="accordionExample">
+          <ion-item style="border: unset !important; height: 126px;" *ngFor="let audio of LpoaudioList; index as i;"
+            data-parent="#accordionExample">
+            <div id="headingComment" style="background-color:white;">
+              <ion-card *ngIf="audio.IS_DELETED ==0">
+                <ion-card-header *ngIf="audio.REP_FILE_NAME != null">
+                  <p>{{audio.REP_FILE_NAME}}</p>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col col-10>
+                        <span (click)="playAudio(audio.FILE_NAME,audio.FILE_PATH, i)">
+                          <p>{{audio.FILE_NAME}}  <span style="font-size: 16px; color:green; float: right;">{{audio.AUDIO_DURATION}}</span></p>
+                          <p style="color:red">{{audio.RECORDED_BY}}, {{audio.MODIFIED_ON | date:'dd-MM-yyyy hh:mm a'}}
+                          </p>
+                        </span>
+                      </ion-col>
+                      <ion-col col-2 style="text-align: end;">
+                        <ion-icon name="undo" style="font-size: 30px;" *ngIf="audio.CREATED_BY != login_user_id"
+                          (click)="uploadRecordingTabReplyAudio(i,audio,audio.ID)">
+                        </ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card *ngIf="audio.IS_DELETED ==1">
+                <ion-card-content>
+                  <p>This audio is deleted</p>
+                  <p style="color:red">{{audio.MODIFIED_BY}}, {{audio.MODIFIED_ON | date:'dd-MM-yyyy hh:mm
+                    a'}}</p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-item>
+        </div>
+
+      </ion-list>
+    </div>
+  
+  </ion-list>
+
+</ion-content>

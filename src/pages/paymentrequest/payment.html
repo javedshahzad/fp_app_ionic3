@@ -1,0 +1,96 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title> {{paymentdetailsall[0].type}} List </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+            <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchpaymentDetail()">
+                </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="col-md-12">
+                
+        <div class="accordion" id="paymentrequest">
+            <div class="card" *ngFor="let item of paymentdetailsall[0].paymentrequestdata let i = index ;">
+                <ion-item class="card-header" id="headingOne" style="background-color:white;" (click)=showUndoBtn(i) role="button">
+                        <h2>{{item.CASE_REQUEST_ID}}</h2>
+                        <p style="float: left;" >{{item.CLIENT_DESCRIPTION}}</p>
+                    <button ion-button clear item-end (click)=showUndoBtn(i) role="button" >
+                    <ion-icon  style="font-size: x-large;" name="arrow-dropdown"></ion-icon></button>    
+                </ion-item>
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="paymentrequest">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Case Request Id.</th>
+                                    <th role="columnheader">Description</th>
+                                    <th role="columnheader">Client Description</th>
+                                    <th role="columnheader">Issued Amount</th>
+                                    <th role="columnheader">Bill Amount</th>
+                                    <th role="columnheader">Cash Amount </th>
+                                    <th role="columnheader">Bal Amount</th>
+                                    <th role="columnheader">Initial Claim Amount</th>
+                                    <th role="columnheader">Execution Amt</th>
+                                    <th role="columnheader">Recovered Amount</th>
+                                    <th role="columnheader">Type</th>
+                                    <th role="columnheader">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                    <td role="cell">{{item.CASE_REQUEST_DESCRIPTION}}</td>
+                                    <td role="cell">{{item.CLIENT_DESCRIPTION}}</td>
+                                    <td role="cell">{{item.ISSUED_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.BILL_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.CASH_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">
+                                        {{item.ISSUED_AMOUNT*1 - (item.BILL_AMOUNT*1 + item.CASH_AMOUNT*1) | currency:"AED "}}
+                                    </td>                   
+                                    <td role="cell">{{item.CLAIM_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.EXECUTIONAMT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.RECOVER_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{getPaymentRequestType(item.REQUEST_TYPE)}}</td>
+                                    <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">
+                                        <span>
+                                            <button ion-button (click)="openModal(item.CASE_REQUEST_ID)"
+                                                color="secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button (click)="openDetailModal(item.CASE_REQUEST_ID,item)"
+                                                color="secondary"><i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.FILE_COUNT == 0">
+                                            <button ion-button color="secondary" (click)="openAttachment(item.CASE_REQUEST_ID)"> 
+                                                <i class="fa fa-paperclip" style="font-size: 20px;" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.FILE_COUNT > 0">
+                                            <button ion-button color="secondary" (click)="openAttachment(item.CASE_REQUEST_ID)"> 
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button [color]="(item.IMG_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.CASE_REQUEST_ID,item.IMG_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button>   
+                                        </span>                                     
+                                    </td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </div>
+</ion-content>

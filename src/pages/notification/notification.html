@@ -1,0 +1,67 @@
+<ion-header>     
+    <ion-navbar>
+        <ion-buttons left>
+          <button ion-button menuToggle class="navbar_leftbtn">
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        </ion-buttons>
+        <ion-title class="navbar_title">Notification List</ion-title>        
+    </ion-navbar>
+</ion-header>
+
+<ion-content class="list-avatar-page">
+
+    <ion-list>
+        <ion-list-header>Today</ion-list-header>
+        <div *ngFor="let item of notificationall.TodayNotification; index as i;">
+            <a (click)="openModel(item.ID,item.LABEL_ID,item.LABEL_TYPE,item.CASE_REQUEST_ID,item.STATUS_NAME,item.LEASE_NO)" role="button">
+                <ion-item>
+                    <ion-avatar item-start>
+                        <img style="border-radius: 0% !important;overflow: hidden;width: 40px;height: 40px"
+                            [src]="item.IMG_SRC">
+                    </ion-avatar>
+                    <h2>{{item.USERNAME}}</h2>
+                    <p >{{item.SEQ_TEXT}}<br>{{item.TITLE}}<br>{{item.COMMENTS}}</p>
+                    <ion-note item-end>{{item.CREATED_ON |date:'HH:mm a'}}</ion-note>
+                </ion-item>
+            </a>
+        </div>
+    </ion-list>
+    <ion-list>
+
+        <ion-list-header>Yesterday</ion-list-header>
+        <div *ngFor="let item of notificationall.YesterdayNotification; index as i;">
+            <a (click)="openModel(item.ID,item.LABEL_ID,item.LABEL_TYPE,item.CASE_REQUEST_ID,item.STATUS_NAME,item.LEASE_NO)" role="button">
+                <ion-item>
+                    <ion-avatar item-start>
+                        <img style="border-radius: 0% !important;overflow: hidden;width: 40px;height: 40px"
+                            [src]="item.IMG_SRC">
+                    </ion-avatar>
+                    <h2>{{item.USERNAME}}</h2>
+                    <p >{{item.SEQ_TEXT}}<br>{{item.TITLE}}<br>{{item.COMMENTS}}</p>
+                    <ion-note item-end>{{item.CREATED_ON |date:'HH:mm a'}}</ion-note>
+                </ion-item>
+            </a>
+
+        </div>
+    </ion-list>
+
+    <ion-list>
+
+        <ion-list-header>Last Week</ion-list-header>
+        <div *ngFor="let item of notificationall.LastWeekNotification; index as i;">
+            <a (click)="openModel(item.ID,item.LABEL_ID,item.LABEL_TYPE,item.CASE_REQUEST_ID,item.STATUS_NAME,item.LEASE_NO)" role="button">
+                <ion-item>
+                    <ion-avatar item-start>
+                        <img style="border-radius: 0% !important;overflow: hidden;width: 40px;height: 40px"
+                            [src]="item.IMG_SRC">
+                    </ion-avatar>
+                    <h2>{{item.USERNAME}}</h2>
+                    <p >{{item.SEQ_TEXT}}<br>{{item.TITLE}}<br>{{item.COMMENTS}}</p>
+                    <ion-note item-end>{{item.CREATED_ON |date:'HH:mm a'}}</ion-note>
+                </ion-item>
+            </a>
+        </div>
+    </ion-list>
+
+</ion-content>

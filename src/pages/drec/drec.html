@@ -1,0 +1,884 @@
+<ion-header>
+    <ion-navbar style="background-color:#525b6d">
+        <ion-buttons left>
+            <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center"> DREC </ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchdrecDetail()">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" id="headingOne" style="background-color:white;"></div>
+            <div class="card-body card-bodynew" [ngStyle]="{'display':drec_all_label}">
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqnotcollectedlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ NOT COLLECTED FROM CLIENT({{drecDetailsall.lnkchqnotcollectedlist?.length || '0'}})
+                </button>
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_chenotcpllected_fromclient}">
+
+                    <h6 style="margin-top:6px;">DREC CHQ NOT COLLECTED FROM CLIENT</h6>
+    
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqnotcollectedlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndodrecChqNotCollectedBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndodrecChqNotCollectedBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undochqnotcollectedBtn'+i" *ngIf="showchqnotcollectedBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <!--  CONTRACT SENT FOR MGMT SIGNATURE -->
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqsentformgr')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    CONTRACT SENT FOR MGMT SIGNATURE({{drecDetailsall.lnkchqsentformgrlist?.length || '0'}})
+                </button>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_lnkchqsentformgr}">
+                    <h6 style="margin-top:6px;">CONTRACT SENT FOR MGMT SIGNATURE
+                    </h6>
+    
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqsentformgrlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqSentforMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqSentforMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoShowChqSentforMgrBtn'+i" *ngIf="ShowChqSentforMgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTRACT SIGNED RECEIVED FROM MANAGEMENT -->
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqrcvdfrommgrlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    CONTRACT SIGNED RECEIVED FROM MANAGEMENT({{drecDetailsall.lnkchqrcvdfrommgrlist?.length || '0'}})
+                </button>
+
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_lnkchqrcvdfrommgrlist}">
+                    <h6 style="margin-top:6px;">CONTRACT SIGNED RECEIVED FROM MANAGEMENT
+                    </h6>
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqrcvdfrommgrlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqRcvdFromMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqRcvdFromMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoShowChqRcvdFromMgrBtn'+i" *ngIf="ShowChqRcvdFromMgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DREC CHQ COLLECTED BUT NOT SENT FOR MANAGEMENT SIGN  -->
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqcollectedpmgrlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ COLLECTED BUT NOT SENT FOR MANAGEMENT SIGN ({{drecDetailsall.lnkchqcollectedpmgrlist?.length || '0'}})
+                </button>
+
+        
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_lnkchqcollectedpmgrlist}">
+                    <h6 [ngStyle]="{'display':drec_lnkchqcollectedpmgrlist}">DREC CHQ COLLECTED BUT NOT SENT FOR MANAGEMENT SIGN 
+                    </h6>
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqcollectedpmgrlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqCollectedpMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=undoShowChqCollectedpMgrBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoShowChqCollectedpMgrBtn'+i" *ngIf="ShowChqCollectedpMgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqreceivednotHolist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ RCVD NOT HANDED OVER TO PRO({{drecDetailsall.lnkchqreceivednotHolist?.length || '0'}})
+                </button>
+
+                <h6 [ngStyle]="{'display':dre_chqreceivednotHolist}">DREC CHQ RCVD NOT HANDED OVER TO PRO</h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':dre_chqreceivednotHolist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqreceivednotHolist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndoChqreceivednotHolistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndoChqreceivednotHolistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoChqreceivednotHoBtn'+i" *ngIf="showChqreceivednotHoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkhonotacknowledgedlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ HANDED OVER TO PRO BUT NOT
+                    ACKNOWLEDGED({{drecDetailsall.lnkhonotacknowledgedlist?.length || '0'}})
+                </button>
+
+                <h6 [ngStyle]="{'display':drec_honotacknowledgedlist}">DREC CHQ HANDED OVER TO PRO BUT NOT ACKNOWLEDGED
+                </h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_honotacknowledgedlist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkhonotacknowledgedlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndohonotacknowledgedlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndohonotacknowledgedlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undohonotacknowledgedlistBtn'+i" *ngIf="showhonotacknowledgedlistBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqreceivednotsubmittedlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ RECEIVED BY PRO NOT YET SUBMITTED TO DREC
+                    DEPT({{drecDetailsall.lnkchqreceivednotsubmittedlist?.length || '0'}})
+                </button>
+
+                <h6 [ngStyle]="{'display':drec_chqreceivednotsubmittedlist}">DREC CHQ RECEIVED BY PRO NOT YET SUBMITTED TO DREC DEPT</h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_chqreceivednotsubmittedlist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqreceivednotsubmittedlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndochqreceivednotsubmittedlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndochqreceivednotsubmittedlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undochqreceivednotsubmittedlistBtn'+i"
+                            *ngIf="showchqreceivednotsubmittedlistBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkchqsubmitedtodeplist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    DREC CHQ SUBMITTED TO DEPARTMENT AND OBTAIN
+                    EJARI({{drecDetailsall.lnkchqsubmitedtodeplist?.length || '0'}})
+                </button>
+
+                <h6 [ngStyle]="{'display':drec_chqsubmitedtodeplist}">DREC CHQ SUBMITTED TO DEPARTMENT AND OBTAIN EJARI
+                </h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_chqsubmitedtodeplist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkchqsubmitedtodeplist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndochqsubmitedtodeplistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndochqsubmitedtodeplistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undochqsubmitedtodeplistBtn'+i" *ngIf="showchqsubmitedtodeplistBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkbtnejariDetailsGetlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    EJARI RENEWED ({{drecDetailsall.lnkbtnejariDetailsGetlist?.length || '0'}})
+                </button>
+                <h6 [ngStyle]="{'display':drec_ejariDetailsGetlist}">EJARI RENEWED</h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_ejariDetailsGetlist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkbtnejariDetailsGetlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showUndoejariDetailsGetlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showUndoejariDetailsGetlistBtn(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoejariDetailsGetlistBtn'+i" *ngIf="showejariDetailsGetlistBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='lnkbtnEscalationCeoGetlist')"
+                    style="white-space:unset; width: -webkit-fill-available;">
+                    ESCALATION TO CEO ({{drecDetailsall.lnkbtnEscalationCeoGetlist?.length || '0'}})
+                </button>
+                <h6 [ngStyle]="{'display':drec_EscalationCeoGetlist}">ESCALATION TO CEO</h6>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_EscalationCeoGetlist}">
+                    <div class="card" *ngFor="let item of drecDetailsall.lnkbtnEscalationCeoGetlist; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white; margin-top: 8px;">
+                            <h2 style="font-size: 16px; line-height: 3px;" (click)=showUndoEscalationCeoGetlistBtn(i)>{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}} </h2>
+                            <p style="font-size: 10px; line-height: 13px;" (click)=showUndoEscalationCeoGetlistBtn(i)>{{ item.STATUS_NAME }} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>                                                        
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <h2 style="font-size: 16px; line-height: 3px;" (click)=showUndoEscalationCeoGetlistBtn(i)>{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}} </h2>
+                            <p style="font-size: 10px; line-height: 13px;" (click)=showUndoEscalationCeoGetlistBtn(i)>{{ item.BUILD_CODE}} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>                            
+                        </div>
+                        
+                            
+                        <div [attr.id]="'undoejariDetailsGetlistBtn'+i" *ngIf="showEscalationCeoGetlistBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                        color="primary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                                <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                        color="secondary">
+                                                        <ion-icon name="attach"></ion-icon>
+                                                    </button>
+                                                </span>
+                                                <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)"
+                                                        color="secondary"><i class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Search Drec -->
+
+        <div class="accordion" id="drec" [ngStyle]="{'display':drec_all_list}">
+            <div class="card" *ngFor="let item of drecsearch; index as i;">
+                <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                    style="background-color:white;">
+
+                    <button class="btn btn-link blc collapsed" type="button" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        {{1 + i}}. {{item.PROPERTY_NAME}} - {{item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                    </button>
+                </div>
+
+                <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                    style="background-color:white;">
+
+                    <button class="btn btn-link blc collapsed" type="button" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                    </button>
+                </div>
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#drec">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="drec">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Property Name.</th>
+                                    <th role="columnheader">BuildCode</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">Lease No</th>
+                                    <th role="columnheader">Commencement Date</th>
+                                    <th role="columnheader">Termination Date </th>
+                                    <th role="columnheader">Tenant Name</th>
+                                    <th role="columnheader">Customer Number </th>
+                                    <th role="columnheader">STATUS</th>
+                                    <th role="columnheader">COMMENTS</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.UNIT_NO}}</td>
+                                    <td role="cell">{{item.LEASE_NUM}}</td>
+                                    <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date : 'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.LEASE_TERMINATION_DATE |date : 'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                    <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} - {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                    <td role="cell">
+                                        <span><button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                color="primary"><i class="fa fa-comments"
+                                                    aria-hidden="true"></i></button>
+                                        </span>
+                                        <span><button ion-button (click)="openModalAttachment(item.LEASE_NUM)"
+                                                color="secondary">
+                                                <ion-icon name="attach"></ion-icon>
+                                            </button>
+                                        </span>
+                                        <span><button ion-button (click)="showConfirmAlert(item.LEASE_NUM,item.DREC_STATUSTYPE_ID,item.FILE_TYPE1,item.FILE_TYPE2,item.FILE_TYPE3,item.FILE_TYPE4)" 
+                                            color="secondary"><i
+                                            class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>

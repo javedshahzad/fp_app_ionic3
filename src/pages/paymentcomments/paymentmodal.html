@@ -1,0 +1,244 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>+Add {{payment_req_data[0].type}} Comments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card class="agile-login">
+    <div class="wrapper">
+      <form [formGroup]="paymentcommentsForm" (submit)="insertPaymentComments()">
+        <ion-input [(ngModel)]="PAYMENT_REQUEST_ID" *ngFor="let payment of payment_req_data;" type="hidden"
+          value="{{payment.PAYMENT_REQUEST_ID}}" [formControl]="paymentcommentsForm.controls['PAYMENT_REQUEST_ID']">
+        </ion-input>
+        <ion-input [(ngModel)]="PAYMENT_REQ_BILL_ID" *ngFor="let payment of payment_req_data;" type="hidden"
+          value="{{payment.PAYMENT_REQ_BILL_ID}}" [formControl]="paymentcommentsForm.controls['PAYMENT_REQ_BILL_ID']">
+        </ion-input>
+        <div class="w3ls-form">
+          <h3 style="padding-left: 26PX; padding-top: 10px;
+                  padding-bottom: 10px;">Add Comments</h3>
+          <ion-item>
+            <ion-textarea name="COMMENTS" placeholder="Enter any Comments here..."
+              [formControl]="paymentcommentsForm.controls['COMMENTS']"></ion-textarea>
+            <p *ngIf="paymentcommentsForm.controls.COMMENTS.errors && paymentcommentsForm.controls.COMMENTS.dirty"
+              class='error'>Enter Your Comments.</p>
+          </ion-item>
+          <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+            (click)="uploadAudioNewComment()">
+            <ion-icon name="mic" style="font-size: 40px; color: #1968f3;"></ion-icon>
+          </span>
+        </div>
+        <button ion-button block type="submit" style=" margin-top: 35px;" color="primary"
+          [disabled]="!paymentcommentsForm.valid">Submit</button>
+      </form>
+    </div>
+  </ion-card>
+
+
+  <ion-list class="agile-login">
+
+    <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)" style="background-color: #679eff;">
+      <ion-segment-button value="Comments" style="font-size: 13px; color: #fff;">
+        Comments
+      </ion-segment-button>
+      <ion-segment-button value="Recording" style="font-size: 13px; color: #fff;">
+        Voice Recording
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="pet">
+      <ion-list *ngSwitchCase="'Comments'">
+
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form">
+            <div class="accordion" id="accordionExample">
+              <ion-item>
+                <ion-label>Show Escalation</ion-label>
+                <ion-checkbox color="danger" (click)="showEscalation($event)" [(ngModel)]="ischecked"></ion-checkbox>
+              </ion-item>
+              <ion-item style="border: unset !important;" *ngFor="let item of paymentcommentsdetails; index as i;"
+                data-parent="#accordionExample">
+                <div id="headingComment" style="background-color:white;">
+                  <ion-grid style="height: 100px;">
+                    <ion-row>
+                      <ion-col col-10>
+                        <label style="font-size: 12px;white-space: normal; margin-left: 13px;">{{i+1}}.{{
+                          item.COMMENTS}}</label>
+                        <p class="danger-clr" style="text-align: left; font-size: 11px; margin-left: 13px;">by
+                          {{item.USER_SURNAME}} on {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</p>
+                        <span style="margin-left: 13px;">
+                          <button ion-button (click)="callmobileNumber(item.USER_MOBILE)"
+                            style="width: 11%; height: 38%;" color="success">
+                            <i class="fa fa-phone" style="font-size: 18px;" aria-hidden="true"></i>
+                          </button>
+                          <span style="top:10px">{{item.USER_MOBILE}}</span>
+                        </span>
+                        <span *ngIf="item.AUDIO_COUNT > 0">
+                          <button ion-button clear item-end (click)="showAddSourceUndoBtn(i,item)">
+                            View Audio<ion-icon style="font-size: x-large;" [name]="passwordIcon"></ion-icon>
+                          </button>
+                        </span>
+                      </ion-col>
+                      <ion-col col-2>
+                        <span float-right ion-button icon-left clear class="font-size-12"
+                          style="width: 60px; height: 50px;" (click)="uploadAudio(i,item)"
+                          *ngIf="item.AUDIO_COUNT == 0">
+                          <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+                        </span>
+                        <span float-right ion-button icon-left clear class="font-size-12"
+                          style="width: 60px; height: 50px;" (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                          <ion-icon name="mic" style="font-size: 30px; color: red;"></ion-icon>
+                        </span>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  <div [attr.id]="'undoAddSourceBtn'+j" *ngIf="showAddSourceBtn===i">
+                    <div class="card-body card-bodynew">
+                      <div *ngFor="let audio of audioList; index as i;" style="height: 70px;">
+                        <ion-list style="margin: 0px 0 7px !important;">
+                          <ion-item-sliding>
+                            <ion-item *ngIf="audio.IS_DELETED ==0">
+                              <ion-grid>
+                                <ion-row style="margin-left: 1px;">
+                                  <ion-col col-10>
+                                    <span (click)="playAudio(audio.FILE_NAME,audio.FILE_PATH, i)">
+                                      <p style="font-size: 12px; color: darkgrey" *ngIf="audio.REP_FILE_NAME != null">
+                                        {{audio.REP_FILE_NAME}} </p>
+                                      <p style="font-size: 12px;">{{audio.FILE_NAME}}  <span style="font-size: 16px; color:green; float: right;">{{audio.AUDIO_DURATION}}</span></p>
+                                      <p style="color:red; font-size: 12px;">{{audio.RECORDED_BY}}, {{audio.MODIFIED_ON
+                                        | date:'dd-MM-yyyy
+                                        hh:mm a'}}
+                                      </p>
+                                    </span>
+                                  </ion-col>
+                                  <ion-col col-2>
+                                    <ion-icon name="undo" style="font-size: 30px;"
+                                      *ngIf="audio.CREATED_BY != login_user_id"
+                                      (click)="uploadReplyAudio(i,item,audio.ID,audio.CREATED_BY)"></ion-icon>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-item>
+
+                            <ion-item *ngIf="audio.IS_DELETED ==1">
+                              <p>This audio is deleted</p>
+                              <p style="color:red">{{audio.MODIFIED_BY}}, {{audio.MODIFIED_ON | date:'dd-MM-yyyy hh:mm
+                                a'}}
+                              </p>
+                            </ion-item>
+
+                            <ion-item-options side="left" *ngIf="audio.IS_DELETED ==0">
+                              <div>
+                                <button ion-button style="font-size: 10px;"
+                                  (click)="deleteAudio(audio.ID, audio.COMMENTS_ID, audio.COMMENTS_CHILD_ID)">
+                                  <img src="assets/imgs/delete.png" class="icon-btn" style="width: 35px;" /></button>
+                              </div>
+                            </ion-item-options>
+                          </ion-item-sliding>
+                        </ion-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ion-item>
+            </div>
+          </div>
+        </div>
+
+      </ion-list>
+
+      <ion-list *ngSwitchCase="'Recording'">
+
+        <div class="accordion" id="accordionExample">
+          <ion-item style="border: unset !important; height: 126px;" *ngFor="let audio of LpoaudioList; index as i;"
+            data-parent="#accordionExample">
+            <div id="headingComment" style="background-color:white;">
+              <ion-card *ngIf="audio.IS_DELETED ==0">
+                <ion-card-header *ngIf="audio.REP_FILE_NAME != null">
+                  <p>{{audio.REP_FILE_NAME}}</p>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col col-10>
+                        <span (click)="playAudio(audio.FILE_NAME,audio.FILE_PATH, i)">
+                          <p>{{audio.FILE_NAME}}  <span style="font-size: 16px; color:green; float: right;">{{audio.AUDIO_DURATION}}</span></p>
+                          <p style="color:red">{{audio.RECORDED_BY}}, {{audio.MODIFIED_ON | date:'dd-MM-yyyy hh:mm a'}}
+                          </p>
+                        </span>
+                      </ion-col>
+                      <ion-col col-2 style="text-align: end;">
+                        <ion-icon name="undo" style="font-size: 30px;" *ngIf="audio.CREATED_BY != login_user_id"
+                          (click)="uploadRecordingTabReplyAudio(i,audio,audio.ID)">
+                        </ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card *ngIf="audio.IS_DELETED ==1">
+                <ion-card-content>
+                  <p>This audio is deleted</p>
+                  <p style="color:red">{{audio.MODIFIED_BY}}, {{audio.MODIFIED_ON | date:'dd-MM-yyyy hh:mm
+                    a'}}</p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-item>
+        </div>
+
+      </ion-list>
+    </div>
+  </ion-list>
+
+
+  <!-- <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form" style="padding-right: 0px; padding-left: 0px;">
+        <div class="accordion" id="accordionExample">
+          <ion-item>
+            <ion-label>Show Escalation</ion-label>
+            <ion-checkbox color="danger" (click)="showEscalation($event)" [(ngModel)]="ischecked"></ion-checkbox>
+          </ion-item>
+          <ion-item *ngFor="let item of paymentcommentsdetails; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;background-color: transparent;">
+            <div id="headingComment">
+              <a role="button" style="font-size: 14px;white-space: normal;">
+                <span>{{i+1}}.{{ item.COMMENTS}}</span><br>
+                <span class="danger-clr" style="text-align:right;font-size: 1.2rem;">by {{item.USER_SURNAME}} on
+                  {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+                </span><br>
+                <span>
+                  <button ion-button (click)="callmobileNumber(item.USER_MOBILE)" color="success"> <i
+                      class="fa fa-phone" aria-hidden="true"></i></button>
+                  <span style="top:10px">{{item.USER_MOBILE}}</span>
+                </span>
+              </a>
+
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+                <ion-icon name="mic" style="font-size: 40px; color: #1968f3;"></ion-icon>
+              </span>
+
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+                (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                <ion-icon name="mic" style="font-size: 40px; color: red;"></ion-icon>
+              </span>
+              
+            </div>
+          </ion-item><br>
+        </div>
+      </div>
+    </div>
+  </ion-list> -->
+
+</ion-content>

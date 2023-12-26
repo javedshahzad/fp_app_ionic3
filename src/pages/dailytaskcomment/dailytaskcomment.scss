@@ -1,0 +1,53 @@
+page-dailytaskcomment {
+    .modal {
+        margin-top: 50px !important;
+        overflow-y: scroll !important;
+    }
+    
+    .cmdtask{
+        margin: 4px !important;
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 40px !important;
+    }
+
+    .modal-footer{
+        justify-content: center !important;
+    }
+
+    .font-size-12{
+        font-size: 10px !important;
+    }
+
+    .card {
+        border:0px !important;
+    }
+
+    .col {
+        padding: 0px !important;
+    }
+
+    .row {
+        margin-right: -5px !important;
+        margin-left: 0px !important;
+    }
+
+    .item-inner {
+        padding-right: 0px !important;
+    }
+
+    .text-color{
+        color: red;
+        margin-left: 18px !important;        
+    }
+    
+    .item-inner{
+        box-shadow: inset 0 -1px 0 0 white !important;
+    }
+
+    .button-md {
+        margin: 0.4rem 0.2rem 0 0 !important;
+        padding: 1px !important;
+    }
+    
+}

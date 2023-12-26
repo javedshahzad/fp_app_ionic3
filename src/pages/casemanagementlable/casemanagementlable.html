@@ -1,0 +1,357 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="navbar_title">Case Management</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="search_value" (ionInput)="SearchCase()">
+    </ion-searchbar>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Pending For Leasing Verification<ion-badge item-end class="card_p_badge">
+          {{ PENDING_LEASE_VERIFY }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'PENDING_LEASE_VERIFY')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Under Legal Notice Process <ion-badge item-end class="card_p_badge">
+          {{ LEGAL_NOTICE_PROCESS }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'LEGAL_NOTICE_PROCESS')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Case Not Registered <ion-badge item-end class="card_p_badge">
+          {{CASE_NOT_REGISTER }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'CASE_NOT_REGISTER')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p> Under Case Registeration Process<ion-badge item-end class="card_p_badge">
+          {{ CASE_REGISTER_PROCESS }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'CASE_REGISTER_PROCESS')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Execution Case Not Started<ion-badge item-end class="card_p_badge">
+          {{ CASE_EXEC_NOT_STARTED }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'CASE_EXEC_NOT_STARTED')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Under Case Execution Process<ion-badge item-end class="card_p_badge">
+          {{ CASE_EXEC_PROCESS }}</ion-badge>
+      </p>
+    </ion-item>
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'CASE_EXEC_PROCESS')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Holded Cases<ion-badge item-end class="card_p_badge">
+          {{HOLDED }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'HOLDED')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p> Settled <ion-badge item-end class="card_p_badge">
+          {{ SETTLED }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'SETTLED')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Notice Period Over <ion-badge item-end class="card_p_badge">
+          {{ NOTICE }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'NOTICE')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Legal Notice Not Yet Sent / <ion-badge item-end class="card_p_badge">
+          {{ LEGALNOTICE }}</ion-badge><br>Case Not Yet Registered
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'LEGALNOTICE')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Under notification <ion-badge item-end class="card_p_badge">
+          {{NOTIFICATIONUNT }}</ion-badge><br>(vacat / claim)
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'NOTIFICATIONUNT')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Case Registered/ <ion-badge item-end class="card_p_badge">
+          {{ HEARINGNOT }}</ion-badge><br>Hearing Not Started
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'HEARINGNOT')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Execution case not yet Registered<ion-badge item-end class="card_p_badge">
+          {{ CASENOTYETREG }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'CASENOTYETREG')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Pending For Execution Notification <ion-badge item-end class="card_p_badge">
+          {{PENDINGEXECUTENOTIFY }}</ion-badge><br>(time period finished)
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'PENDINGEXECUTENOTIFY')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Pending For Notification To <ion-badge item-end class="card_p_badge">
+          {{ PENDINGDEFENDAR }}</ion-badge><br>Defendar Party
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'PENDINGDEFENDAR')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Appeal Period Under Notice<ion-badge item-end class="card_p_badge">
+          {{ PERIODUNDRNOTICEOVR }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'PERIODUNDRNOTICEOVR')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Appeal Period Under Notice <ion-badge item-end class="card_p_badge">
+          {{ PERIODUNDRNOTICE }}</ion-badge><br> (Period Over)
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'PERIODUNDRNOTICE')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>Escalation to CEO<ion-badge item-end class="card_p_badge">
+          {{ ESCALATIONTOCEO }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'ESCALATIONTOCEO')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <!-- <h2>Payment Request</h2> -->
+      <p>All Case<ion-badge item-end class="card_p_badge">
+          {{ ALL_CASE }}</ion-badge>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-start clear item-end class="dash_image" text-center
+        (click)="openDetailModal(type = 'ALL_CASE')">
+        <ion-icon name="navigate"></ion-icon>
+        View
+      </button>
+    </ion-item>
+  </ion-card>
+
+</ion-content>

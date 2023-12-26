@@ -1,0 +1,107 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+.bar-profile {
+    background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+    height: 160px;
+}
+
+.normalToast { 
+    .toast-message { 
+        border-radius: 0.65rem !important; 
+        background: #06dc3f !important;
+    } 
+    .toast-ios-background{
+        border-radius: 0.65rem !important; 
+        background: #06dc3f !important; 
+    } 
+}
+
+.profile {
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-top: 15px;
+}
+.profile .name {
+    color: #FFFFFF;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+.profile-picture {
+    border-radius: 50%;
+    background-color: #fff;
+    height: 80px;
+    width: 80px;
+}
+.menu .has-header{
+    top: 169px;
+}
+
+ion-app.platform-ios12 ion-content { pointer-events: auto; /*fix scroll lock on ios12.2*/ }
+
+.toolbar-background-md{
+    border:none;
+    background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+}
+.toolbar-background-ios{
+    background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+}
+
+.rich-text[_ngcontent-c0]  div.decorator[_ngcontent-c0] {
+  margin: 5px 1px 5px 1px;
+  text-align: center;
+  display:none !important;
+}
+
+.rich-text[_ngcontent-c0] [contenteditable=true][_ngcontent-c0] {
+  -webkit-user-select: auto !important;
+  padding: 2px;
+  border: 1px solid #CECECE;
+  word-wrap: normal;
+  height: 20vh;
+  background-color: #fff;
+  width: 85% !important;
+  margin-left: 15px !important;
+  overflow: auto !important;
+  height: 100px !important;
+}
+.danger-clr{
+    color: #f53d3d
+}
+
+  .primary-clr{
+    color:    #488aff !important;}
+  .secondary-clr{
+    color: #32db64 !important;}
+  .danger-clr{
+    color:    #f53d3d !important;}
+  .light-clr{
+    color:      #f4f4f4 !important;}
+  .dark-clr{
+    color:     #222 !important;}
+  .primary-1-clr{
+    color:#083a81 !important;}
+   button:focus {
+       outline: 0px none !important;
+      /* outline: 5px auto -webkit-focus-ring-color; */
+  }

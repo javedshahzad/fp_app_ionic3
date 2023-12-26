@@ -1,0 +1,226 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-buttons left>
+          <button ion-button menuToggle class="navbar_leftbtn">
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        </ion-buttons>
+        <ion-title class="navbar_title">LPO </ion-title>
+    </ion-navbar>     
+    <!-- <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchcallManagement()">
+        </ion-searchbar>
+    </ion-toolbar> -->
+    <ion-toolbar>
+        <form (submit)="SearchcallManagement()">
+          <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value">
+          </ion-searchbar>
+        </form>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For Manager Verification</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Waiting_For_Manager_Verification_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="Waiting_For_Manager_Verification_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For Finance Confirmation</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Waiting_For_Finance_Confirmation_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="Waiting_For_Finance_Confirmation_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For General Manager Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Waiting_For_General_Manager_Approval_length || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="Waiting_For_General_Manager_Approval_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For COO Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Waiting_For_COO_Approval_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="Waiting_For_COO_Approval_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For CEO Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Waiting_For_CEO_Approval_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="Waiting_For_CEO_Approval_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Rejected LPO's</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Rejected_LPO_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="Rejected_LPO_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">CEO Approved</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ CEO_Approved_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="CEO_Approved_length_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Waiting For CEO Approval With Other Manager's Verification</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Ceo_approval_for_other_manager || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="ceo_approval_for_other_manager()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Escalation to COO/CEO</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Escalation_to_coo_ceo || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="Escalation_to_coo_ceo_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">All LPO List</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ All_LPO_List_length || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="All_LPO_List_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/lpo_list.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Multiple Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ multiple_approval_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="Multiple_Approval_btn()">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+    </div>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{today | date: 'dd-MM-yyyy'}} {{this.label_title}} </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+ 
+  <div *ngIf="show_comment_list === 1">
+    <ion-card class="agile-login">
+      <div class="wrapper">
+        <form [formGroup]="form" (submit)="inserttaskComments()">
+          <div class="w3ls-form">
+ 
+            <div formArrayName="comments" margin-bottom>
+              <section [formGroupName]="i" *ngFor="let tech of form.controls.comments.controls; let i = index">
+                <ion-item-group>
+                  <ion-item>
+                    <ion-textarea rows="2" autocomplete="on" autocorrect="on" spellcheck="true" cols="20" formControlName="name" placeholder="Enter {{showplaceholder}}..." >
+                    </ion-textarea>
+                  </ion-item>
+                  <span float-right ion-button icon-left clear *ngIf="form.controls.comments.length > 10"
+                    (click)="removeInputField(i)">
+                    <ion-icon name="close"></ion-icon>
+                    Remove
+                  </span>
+                </ion-item-group>
+              </section>
+            </div>
+            <span ion-button float-left icon-left clear (click)="addNewInputField()">
+              <ion-icon name="add"></ion-icon>
+              Add
+            </span>
+            <button ion-button block type="submit" style=" margin-top: 10px;" color="primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </ion-card>
+  </div>
+
+</ion-content>

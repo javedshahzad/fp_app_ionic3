@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>+ Add Hoto Comments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="agile-login">
+    <div class="wrapper">
+      <form [formGroup]="hotocommentsForm" (submit)="inserthotoComments()">
+        <div>
+          <div class="w3ls-form">
+            <h3 style="padding-left: 26PX; padding-top: 10px;
+                    padding-bottom: 10px;">Add Comments</h3>
+            <ion-item>
+              <ion-textarea name="COMMENTS" placeholder="Enter any Comments here..."
+                [formControl]="hotocommentsForm.controls['COMMENTS']"></ion-textarea>
+              <p *ngIf="hotocommentsForm.controls.COMMENTS.errors && hotocommentsForm.controls.COMMENTS.dirty"
+                class='error'>Enter Your Comments.</p>
+            </ion-item>
+            <button ion-button block type="submit" style=" margin-top: 35px;" color="primary"
+              [disabled]="!hotocommentsForm.valid">Submit</button>
+            <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+              (click)="uploadAudioNewComment()">
+              <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+            </span>
+          </div>
+          <ion-input [(ngModel)]="LEASE_NUMBER" *ngFor="let hoto of hotodata;" type="hidden" value="{{hoto.LEASE_NUM}}"
+            [formControl]="hotocommentsForm.controls['LEASE_NUMBER']"></ion-input>
+          <ion-input [(ngModel)]="HOTO_ID" *ngFor="let hoto of hotodata;" type="hidden" value="{{hoto.HOTO_ID}}"
+            [formControl]="hotocommentsForm.controls['HOTO_ID']"></ion-input>
+        </div>
+      </form>
+    </div>
+  </ion-card>
+
+  <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <div class="accordion" id="accordionExample">
+          <ion-item>
+            <ion-label>Show Escalation</ion-label>
+            <ion-checkbox color="danger" (click)="showEscalation($event)" [(ngModel)]="ischecked"></ion-checkbox>
+          </ion-item>
+          <ion-item style="border: unset !important;" *ngFor="let item of hotocommentsdetails; index as i;"
+            data-parent="#accordionExample">
+            <ion-grid>
+              <ion-row>
+                <ion-col col-11>
+                  <div id="headingComment" style="background-color:white;padding: 10px;">
+                    <a role="button" style="white-space: normal;">
+                      {{1 + i}}. <span>
+                        <span [innerHTML]="item.NOTES" style='white-space: pre-line;font-size: 1.5rem;'></span><br>
+                        <span class="danger-clr" style="text-align:right;color:#f53d3d;font-size: 1.3rem;">by
+                          {{item.USERNAME}}
+                          on {{item.DDATE |date:'dd-MMM-yyyy,HH:mm a'}}</span></span>
+                    </a>
+                  </div>
+                </ion-col>
+                <ion-col col-1>
+                  <span float-right ion-button icon-right clear class="font-size-12" style="width: 60px; height: 50px;"
+                    (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+                    <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+                  </span>
+
+                  <span float-right ion-button icon-right clear class="font-size-12" style="width: 60px; height: 50px;"
+                    (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+                    <ion-icon name="mic" style="font-size: 30px; color: red;"></ion-icon>
+                  </span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>

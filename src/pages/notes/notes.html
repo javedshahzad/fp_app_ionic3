@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title style="text-align: left;">
+      <ion-label *ngIf="title">{{title}}</ion-label>
+      <ion-label *ngIf="!title">{{Note.date | date:'dd-MMM-yyyy,HH:mm a'}}</ion-label>
+    </ion-title>
+    <ion-buttons right>
+      <button ion-button *ngIf="!isList" style='margin: 0em; margin-left: 6px; height: 4em'
+        (click)="noteDelete(index)">
+        <ion-icon name="trash" style="zoom:1.5;"></ion-icon>
+      </button>
+      <button ion-button *ngIf="isList" (click)="noteAdded()">
+        <ion-icon name="clipboard" style="zoom:1.5;"></ion-icon>
+      </button>
+      <button ion-button *ngIf="!isList" (click)="backTolist()">
+        done
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  
+</ion-header>
+
+
+<ion-content padding>
+  <div id="accordionExample">
+    <div *ngIf="isList">
+      <ion-list>
+        <ion-item button detail *ngFor="let note of NotesList; index as i;">
+          <label (click)="noteEdit(i)">
+            <p>{{ note.title || '-' }}</p>
+            <small style='font-size: 1.2rem;'>{{ note.date | date:'dd-MMM-yyyy,HH:mm a' }}</small>
+          </label>
+          <span item-end (click)="openReminder(i)">
+            <ion-icon [color]="(note.isReminder > 0) ? 'secondary' : 'dark'" name="notifications-outline"></ion-icon>
+          </span>
+          <span item-end (click)="noteDelete(i)">
+            <ion-icon color='danger' name="trash"></ion-icon>
+          </span>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div *ngIf="!isList">
+      <ion-textarea (input)="noteChanged()" [(ngModel)]="content" autocomplete="on" autocorrect="on" row=40
+        placeholder="Notes..."></ion-textarea>
+    </div>
+
+
+    <div class="backdrop" [ngStyle]="{'display':reminder_model}"></div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':reminder_model}" style="margin-top: 50%">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            Reminder
+            <button type="button" class="close" aria-label="Close" (click)="onCloseModelDiv('reminder')"><span
+                aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ion-grid>
+              <ion-row>
+                <ion-col col-6>
+                  <ion-label stacked>Reminder Date</ion-label>
+                  <ion-datetime displayFormat="DDD, MMM D YYYY" pickerFormat="YYYY MMM DD" name="reminder_date"
+                    placeholder="DAY, MMM D YYYY" [(ngModel)]="reminderDate">
+                  </ion-datetime>
+                </ion-col>
+                <ion-col col-6>
+                  <ion-label stacked>Reminder Time</ion-label>
+                  <ion-datetime displayFormat="hh:mm A" pickerFormat="hh:mm A" name="reminder_hr" placeholder="hh:mm "
+                    [(ngModel)]="reminderTime">
+                  </ion-datetime>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="onCloseModelDiv('reminder')">Close</button>
+            <button type="button" class="btn btn-primary" (click)="saveReminder()">Reminder</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal !-->
+  </div>
+</ion-content>

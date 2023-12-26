@@ -1,0 +1,73 @@
+<!--
+  Generated template for the ReceiptPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em' icon-end>
+    <ion-title style="text-transform: capitalize;">+ Add Receipt Details</ion-title>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="agile-login">
+
+    <div class="wrapper">
+
+      <!-- <a href="" class="bst"> + Add Receipt Details</a> -->
+      <!-- <img src="./images/logo.png" style="margin-top:10%;"> -->
+      <form [formGroup]="receiptForm" (submit)="validReceiptData()">
+        <div class="w3ls-form">
+           
+          <input id="trigger" type="checkbox" [formControl]="receiptForm.controls['isSecChq']" >It's Security Cheque
+          <div class="box">
+            <label>Payment type</label>
+            <input type="radio" name="cash_chq" value="1"  [formControl]="receiptForm.controls['cash_chq']">Cash<br>
+            <input type="radio" name="cash_chq" value="2"  [formControl]="receiptForm.controls['cash_chq']">Cheque<br>
+          </div>
+            <!--  <label>Building</label> -->            
+            <select class="select1"  [formControl]="receiptForm.controls['buidling']" >
+              <option value="0">Select Building</option>
+              <option value="{{building.BUILDING_ID}}" *ngFor = "let building of buildingList" >{{building.BUILDING_NAME}}</option>
+            </select>
+            <p *ngIf="receiptForm.controls.buidling.errors && receiptForm.controls.buidling.dirty" class='error'>Select a Buliding.</p>
+          
+            <input type="text" name="unitno" placeholder="Unit No" [formControl]="receiptForm.controls['unitno']" /> 
+            <p *ngIf="receiptForm.controls.unitno.errors && receiptForm.controls.unitno.dirty" class='error'>Enter the  Unit Number.</p>
+           
+            <input type="text" name="amount" placeholder="Amount" [formControl]="receiptForm.controls['amount']" />
+            <p *ngIf="receiptForm.controls.amount.errors && receiptForm.controls.amount.dirty" class='error'>Enter the cheque no.</p>
+          
+            <input type="text" name="receivedfrom" placeholder="Recived From" [formControl]="receiptForm.controls['receivedfrom']" />
+            <p *ngIf="receiptForm.controls.receivedfrom.errors && receiptForm.controls.receivedfrom.dirty" class='error'>Enter the cheque no</p>
+           
+            <input type="text" name="email" placeholder="Email" [formControl]="receiptForm.controls['email']" />
+            <p *ngIf="receiptForm.controls.email.errors && receiptForm.controls.email.dirty" class='error'>Enter the Email is not valid.</p>
+           
+            <input type="text" name="mobile_number" placeholder="Mobile" [formControl]="receiptForm.controls['mobile_number']" />
+            <p *ngIf="receiptForm.controls.mobile_number.errors && receiptForm.controls.mobile_number.dirty" class='error'>Enter the Mobile no. is not valid.</p>
+           
+            <input type="text-area" class="select1" name="remarks" placeholder="Remarks" [formControl]="receiptForm.controls['remarks']" />
+            <p *ngIf="receiptForm.controls.remarks.errors && receiptForm.controls.remarks.dirty" class='error'>Enter the cheque no.</p>
+           
+            <input type="text" name="chqno" placeholder="Cheque No" [formControl]="receiptForm.controls['chqno']" />
+            <p *ngIf="receiptForm.controls.chqno.errors && receiptForm.controls.chqno.dirty" class='error'>Enter the cheque no.</p>
+            
+            <input type="date" class="select1" name="chequedate" placeholder="Cheque Date" [formControl]="receiptForm.controls['chequedate']" />
+            <p *ngIf="receiptForm.controls.chequedate.errors && receiptForm.controls.chequedate.dirty" class='error'>Enter the cheque date.</p>
+        </div>
+        <div style="margin-top:3%;color: #fff !important;">
+            <!-- <button style="float: left; color: #fff;" class="bst2"><a href="" style="color: #fff !important;">Cancel</a></button>
+            <button style="float: right;" class="bst1"><a href="" style="color: #fff !important;" (click)= "insertReceiptData()">Confirm</a></button> -->
+
+            <button style="float: left; color: #fff;" class="bst2" (click)=resetForm();>Cancel</button>
+            <button type="submit" style="float: right; color: #fff !important;" [disabled]="!receiptForm.valid" class="bst1">Confirm</button>
+
+        </div> 
+      </form>
+    </div>
+  </div>
+</ion-content>

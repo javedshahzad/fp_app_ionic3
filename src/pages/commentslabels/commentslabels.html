@@ -1,0 +1,473 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="text-transform: capitalize;text-align: center">Comments</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+
+  <div class="col-md-12">
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img class="icon-btn" src="assets/imgs/checklist.png" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>TMS - Task Management System <ion-badge item-end class="card_p_badge">{{ CmtData.CmtTMS.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My Task Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':Task_Comments_display}">Task Management System</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':Task_Comments_display}">
+      <div class="card" *ngFor="let item of CmtTaskList.GetAllTask; index as i;" data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showTaskCommentUndoBtn(i,item.TASK_ID)" role="button">
+            {{1 + i}}. {{ item.SEQ_TEXT}} - {{item.TITLE}}
+          </a>
+          <span><button ion-button (click)="openTaskCommentModal(item.TASK_ID)" color="primary"><i
+                class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoTaskCmtBtn'+i" *ngIf="showTaskCmtBtn===i">
+          <div class="card" *ngFor="let cmt of Taskcommentsdetailsall.MyCommentDataAll; index as i;">
+
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{cmt.MESSAGE}}<br />
+                <span style="color: #FF0000;">{{cmt.USER_SURNAME}}</span>&nbsp;&nbsp;<span
+                  style="color: #FF0000;">{{cmt.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/chat.png" class="icon-btn" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>CMS - Case Management System<ion-badge item-end class="card_p_badge">{{ CmtData.CmtCMS.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My Case Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':Case_Comments_display}">Case Management System</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':Case_Comments_display}">
+      <div class="card" *ngFor="let item of CmtCaseList.GetAllCase; index as i;" data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showCaseCommentUndoBtn(i,item.CASE_ID,label_type='CMT')" role="button">
+            {{1 + i}}. {{ item.CASE_REQUEST_ID }} - {{ item.REQUESTED_BY }} -
+            {{item.REQUESTED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+          </a>
+          <span><button ion-button (click)="openCaseCommentModal(item.CASE_REQUEST_ID,item.CASE_ID)"
+              color="primary"><i class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoCaseCmtBtn'+i" *ngIf="showCaseCmtBtn===i">
+              <div class="card" *ngFor="let cmt of Casecommentsdetailsall.MyComments; index as i;">
+
+                  <div class="card-body card-bodynew">
+                      <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                          {{1 + i}}. {{cmt.NOTES}}<br />
+                          <span style="color: #FF0000;">{{cmt.USERNAME}}</span>&nbsp;&nbsp;<span
+                          style="color: #FF0000;">{{cmt.DDATE |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div><br>
+    </div>
+
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/cheque_list.png" class="icon-btn" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>CS - Cheque System<ion-badge item-end class="card_p_badge">{{ CmtData.CmtCS.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My Cheque Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <h3 [ngStyle]="{'display':Cheque_Comments_display}">Cheque System</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':Cheque_Comments_display}">
+      <div class="card" *ngFor="let item of CmtChequeList.GetAllCheque; index as i;" data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showChqCommentUndoBtn(i,item.ID,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.CHQNO}} - {{ item.CUSTOMER }}
+          </a>
+          <span><button ion-button (click)="openChequeListCommentModal(item.ID)" color="primary"><i
+                class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoCheCmtBtn'+i" *ngIf="showChqCmtBtn===i">
+          <div class="card" *ngFor="let cmt of Chqcommentsdetailsall.MyComments; index as i;">
+
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{cmt.NOTES}}<br />
+                <span style="color: #FF0000;">{{cmt.USERNAME}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/online-order.png" class="icon-btn" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>CPR - Case Payment Request<ion-badge item-end class="card_p_badge">{{ CmtData.CmtCPR.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My PaymentReq Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':PaymentReq_Comments_display}">Payment Request</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':PaymentReq_Comments_display}">
+      <div class="card" *ngFor="let item of CmtPaymentReqList.GetAllPayment; index as i;"
+        data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showPayReqCmtUndoBtn(i,item.CASE_REQUEST_ID)" role="button">
+            {{1 + i}}. {{item.CASE_REQUEST_ID}}-{{item.CLIENT_DESCRIPTION}}
+          </a>
+        </div>
+        <div [attr.id]="'undoPayReqCmtBtn'+i" *ngIf="showPayReqCmtBtn===i">
+          <div class="card" *ngFor="let item of getpaymentrequestlist.PaymentReqList; index as i;">
+            <div class="card-body card-bodynew">
+              <a (click)="showPayReqlistUndoBtn(i,item.PAYMENT_REQUEST_ID,label_type='CMT')" role="button">
+                {{1 + i}}.{{item.PAYMENT_NUMBER}}-{{ item.TITLE.length > 15 ? item.TITLE.substring(0,15)+"..." : item.TITLE }}
+              </a>
+              <span><button ion-button
+                  (click)="openPaymentRequestCommentModal(item.PAYMENT_REQUEST_ID,type ='Payment Request')"
+                  color="primary"><i class="fa fa-comments" aria-hidden="true"></i></button>
+              </span>
+
+            </div>
+          </div>
+        </div>
+        <div [attr.id]="'undoPayReqlistBtn'+i" *ngIf="showPayReqlistBtn===i">
+          <div class="card" *ngFor="let cmt of PayReqcommentsdetailsall.MyComments; index as i;">
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{ item.COMMENTS}}
+                <span style="color: #FF0000;">{{cmt.USER_SURNAME}}</span> <span
+                  style="float: right;">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/cheque.png" class="icon-btn" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>RCS - Return Cheque System<ion-badge item-end class="card_p_badge">{{ CmtData.CmtRCS.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My ReturnCheque Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':ReturnCheque_Comments_display}">Return Cheque System</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':ReturnCheque_Comments_display}">
+      <div class="card" *ngFor="let item of CmtReturnChqList.GetAllReturnChq; index as i;"
+        data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showRtnChqCommentUndoBtn(i,item.ID,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.CHQNO}} - {{ item.CUSTOMER}}
+          </a>
+          <span><button ion-button (click)="openReturnChequeCommentModal(item.ID,item.ESCLATED_COUNT)"
+              color="primary"><i class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoRtnChqCmtBtn'+i" *ngIf="showRtnChqCmtBtn===i">
+          <div class="card" *ngFor="let cmt of Chqcommentsdetailsall.MyComments; index as i;">
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{cmt.NOTES}}<br />
+                <span style="color: #FF0000;">{{cmt.USERNAME}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/hanging-over-the-key.png" class="icon-btn" style="width: 30px; float: left; padding-right: 4px;" />
+        <p>HOTO - Handover And Takeover<ion-badge item-end class="card_p_badge">{{ CmtData.CmtHOTO.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My Hoto Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':Hoto_Comments_display}">Handover And Takeover</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':Hoto_Comments_display}">
+      <div class="card" *ngFor="let item of CmtHotoList.GetAllHoto; index as i;" data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showhotoCommentUndoBtn(i,item.LEASE_NUMBER,item.HANDOVER_ID,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.LEASE_NUMBER}} - {{ item.TENANT_NAME}}
+          </a>
+          <span><button ion-button (click)="openHotoCommentModal(item.LEASE_NUMBER,item.HANDOVER_ID)"
+              color="primary"><i class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoHotoCmtBtn'+i" *ngIf="showHotoCmtBtn===i">
+              <div class="card" *ngFor="let cmt of Hotocommentsdetailsall.MyComments; index as i;">
+                  <div class="card-body card-bodynew">
+                      <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                          {{1 + i}}. {{cmt.NOTES}}<br />
+                          <span style="color: #FF0000;">{{cmt.USERNAME}}</span>
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div><br>
+    </div>
+
+
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>CM - Call Management <ion-badge item-end class="card_p_badge">{{ CmtData.CmtCM.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My CallMgnt Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <h3 [ngStyle]="{'display':CallMgnt_Comments_display}">Call Management</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':CallMgnt_Comments_display}">
+      <div class="card" *ngFor="let item of CmtCallMgntList.GetAllCallMgnt; index as i;"
+        data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" style="background-color:white;">
+          <a (click)="showcallCommentUndoBtn(i,item.CALL_LOG_ID,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.CALL_LOG_ID}} -{{ item.REQUESTOR_NAME}}
+          </a>
+          <span><button ion-button (click)="openCallManagementModal(item.CALL_LOG_ID,item.STATUS_NAME)"
+              color="primary"><i class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+
+        </div>
+
+        <div [attr.id]="'undocallMgntCmtBtn'+i" *ngIf="showCallMgntCmtBtn===i">
+          <div class="card" *ngFor="let cmt of CallMgntcommentsdetailsall.MyComments; index as i;">
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{cmt.COMMENTS}}<br />
+                <span style="color: #FF0000;">{{cmt.USER_SURNAME}}</span> <span
+                  style="color: #FF0000;">{{cmt.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>CNT - Contract <ion-badge item-end class="card_p_badge">{{ '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'COH')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>AMS - Asset Management System <ion-badge item-end class="card_p_badge">{{ '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'COH')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+
+    <ion-card>
+      <ion-item>
+        <!-- <ion-icon name="paper" item-start large></ion-icon> -->
+        <img src="assets/imgs/real-estate.png" class="icon-btn"  style="width: 30px; float: left; padding-right: 4px;"/>
+        <p>Drec <ion-badge item-end class="card_p_badge">{{ CmtData.CmtDREC.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="setDisplaydata(type='My Drec Comments')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+    <h3 [ngStyle]="{'display':Drec_Comments_display}">Drec</h3>
+    <div class="accordion" id="casecommentdiv" [ngStyle]="{'display':Drec_Comments_display}">
+      <div class="card" *ngFor="let item of CmtDrecList.GetAllDrec; index as i;" data-parent="#accordionExample">
+        <div class="card-header" id="headingComment" *ngIf="item.STATUS_NAME != null" style="background-color:white;">
+          <a (click)="showdrecCommentUndoBtn(i,item.LEASE_NUM,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+          </a>
+          <span><button ion-button (click)="openDrecCommentModal(item.LEASE_NUM)" color="primary"><i
+                class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+        <div class="card-header" id="headingComment" *ngIf="item.STATUS_NAME == null" style="background-color:white;">
+          <a (click)="showdrecCommentUndoBtn(i,item.LEASE_NUM,label_type='CMT')" role="button">
+            {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+          </a>
+          <span><button ion-button (click)="openDrecCommentModal(item.LEASE_NUM)" color="primary"><i
+                class="fa fa-comments" aria-hidden="true"></i></button>
+          </span>
+        </div>
+
+        <div [attr.id]="'undoDrecCmtBtn'+i" *ngIf="showDrecCmtBtn===i">
+          <div class="card" *ngFor="let item of Dreccommentsdetailsall.MyComments; index as i;">
+            <div class="card-body card-bodynew">
+              <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                {{1 + i}}. {{ item.COMMENTS}}<br />
+                <span style="color: #FF0000;">{{item.USER_SURNAME}}</span> <span
+                  style="float: right;">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><br>
+    </div>
+
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>SD - Security Deposit <ion-badge item-end class="card_p_badge">{{ '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'COH')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+  </div>
+</ion-content>

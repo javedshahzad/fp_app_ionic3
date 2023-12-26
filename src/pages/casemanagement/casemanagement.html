@@ -1,0 +1,140 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title style="text-align: center;">Case Management</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchrtcaseDetail()">
+        </ion-searchbar>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+    <div class="col-md-12">
+        <div class="accordion" id="casemanagement">
+            <div class="" *ngFor="let item of casesearchdetails; index as i;">
+                <ion-item class="" id="headingOne" style="background-color:white;" style="margin-bottom: 2px;"
+                    class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]="'#' + i"
+                    aria-expanded="true/false" [attr.aria-controls]="i">
+
+                    <h2>{{i+1}}.{{item.CASE_REQUEST_ID}}</h2>
+                    <p>{{ item.FIRST_PARTY }}</p>
+                    <h5 *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS == 1" style="color:red; "> Escalated
+                        {{item.ESCALATED_DAYS}}
+                        day</h5>
+                    <h5 *ngIf="showescalateddays == 1 && item.ESCALATED_DAYS > 1" style="color:red; "> Escalated
+                        {{item.ESCALATED_DAYS}}
+                        days</h5>
+
+                    <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+
+                </ion-item>
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#casemanagement">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="casemanagement">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Case Id.</th>
+                                    <th role="columnheader">Case Requested By</th>
+                                    <th role="columnheader">Case Requested On</th>
+                                    <th role="columnheader">Lease No</th>
+                                    <th role="columnheader">First Party </th>
+                                    <th role="columnheader">Second Party</th>
+                                    <th role="columnheader">Case Description</th>
+                                    <th role="columnheader">Status</th>
+                                    <th role="columnheader">Court</th>
+                                    <th role="columnheader">Case No#</th>
+                                    <th role="columnheader">Initial Claim Amount</th>
+                                    <th role="columnheader">Execution Amt</th>
+                                    <th role="columnheader">Recovered Amount</th>
+                                    <th role="columnheader">Case Exp Amount</th>
+                                    <th role="columnheader">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                    <td role="cell">{{item.REQUESTED_BY}}</td>
+                                    <td role="cell">{{item.REQUESTED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                    <td role="cell">{{item.LEASE_NO }}</td>
+                                    <td role="cell">{{item.FIRST_PARTY}}</td>
+                                    <td role="cell">{{item.CLIENT_NAME || '-'}}</td>
+                                    <td role="cell">{{item.DESCRIPTION}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">{{item.COURT_DESCRIPTION}}</td>
+                                    <td role="cell">{{item.CASE_NO || 'N/A'}}</td>
+                                    <td role="cell">{{item.CLAIM_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.EXECUTIONAMT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.RECOVER_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.BILL_AMOUNT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.CASE_COMMENTS}}<br>{{item.CASE_COMMENTS_CREATED_BY}}
+                                        {{ item.CASE_COMMENTS_CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}
+                                    </td>
+
+                                    <td role="cell">
+
+                                        <span>
+                                            <button ion-button
+                                                (click)="openpaymentDetailModal(item.CASE_REQUEST_ID,item)"
+                                                color="secondary">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button (click)="openModal(item.CASE_REQUEST_ID,item)"
+                                                color="primary">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span *ngIf="item.FILE_COUNT == 0">
+                                            <button ion-button
+                                                (click)="openModalCaseUpload(item.CASE_REQUEST_ID,item.CASE_ID)"
+                                                color="secondary">
+                                                <i class="fa fa-paperclip" style="font-size: 20px;" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+  
+                                        <span *ngIf="item.FILE_COUNT > 0">
+                                            <button ion-button
+                                                (click)="openModalCaseUpload(item.CASE_REQUEST_ID,item.CASE_ID)"
+                                                color="secondary">
+                                                <i class="fa fa-paperclip" style="font-size: 20px; color: black;" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button [color]="(item.FILE_COUNT > 0) ? 'secondary' : 'disableed'"
+                                                (click)="Getallimagelist(item.CASE_REQUEST_ID,item.FILE_COUNT)">
+                                                <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
+                                            </button> 
+                                        </span>
+                                        <!-- <ion-icon name="document"></ion-icon> -->
+
+                                        <!-- <span>
+                                            <button ion-button
+                                                (click)="openModalPaymentDesc(item.CASE_REQUEST_ID,item.CASE_ID)"
+                                                color="secondary">
+                                                <ion-icon name="document"></ion-icon>
+                                            </button>
+                                        </span> -->
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </div>
+</ion-content>

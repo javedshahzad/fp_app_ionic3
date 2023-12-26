@@ -1,0 +1,33 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>{{unitdata[0].TYPE}} Building List </ion-title>
+      <ion-buttons end>
+        <button ion-button (click)="closeModal()">Close</button>
+      </ion-buttons>
+    </ion-navbar>
+  
+  </ion-header>
+<ion-content > 
+    <div *ngIf="service_and_demand_unitcount">
+                    <ion-list>
+                        <ion-item-sliding *ngFor="let item of service_and_demand_unitcount; index as i;">
+                          <button ion-item (click)="openModal(item.PROPERTY_NAME,item.BUILD_CODE,type=unitdata[0].TYPE)">
+                            <ion-avatar item-start>
+                              <img src="assets/imgs/modern_office_buildings_190890.jpg"/>
+                            </ion-avatar>
+                            <h2>Building Name - {{item.BUILD_CODE}}</h2>
+                            <p>Total Unit - {{item.UNIT_COUNT}}</p>
+                            <p>Total Balance Amount <ion-badge style="float: right; margin-top:2px;">{{item.BALAMT | currency:"AED "}}</ion-badge></p>
+                          </button>
+                        </ion-item-sliding>
+                      </ion-list>
+    </div>
+</ion-content>
+      

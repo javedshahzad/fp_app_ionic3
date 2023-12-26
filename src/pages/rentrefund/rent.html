@@ -1,0 +1,78 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+    <ion-header>
+        <ion-navbar style="background-color:#525b6d">
+                <ion-buttons left>
+                    <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'> 
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
+                </ion-buttons>
+            <ion-title style="text-transform: capitalize;text-align: center"> Rent Refund  </ion-title> 
+        </ion-navbar>
+        <ion-toolbar>
+                <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchrentDetail()">
+                </ion-searchbar>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content> 
+    
+        <div class="col-md-12">
+            <div class="accordion" id="cheque">
+                <div  *ngFor="let item of rentdetails; index as i;" >
+                    <ion-item  id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+                    aria-expanded="true/false" [attr.aria-controls]="i">
+                        <h2>{{item.CUSTOMER_NUMBER}}</h2>
+                        <p>{{ item.UNIT}}<ion-badge item-end style="float: right;margin-top: 2px;" >{{item.NET_REFUND | currency:"AED "}}</ion-badge></p>
+                        <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+                        aria-expanded="true/false" [attr.aria-controls]="i"><ion-icon  style="font-size: x-large;" name="arrow-dropdown"></ion-icon></button>         
+                    </ion-item>  
+                    <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#cheque">
+                    <div class="card-body card-bodynew">
+                    <table role="table" class="returncheque">
+                        <thead role="rowgroup">
+                        <tr role="row">
+                            <th role="columnheader">Customer Name.</th>
+                            <th role="columnheader">Unit</th>
+                            <th role="columnheader">Area</th>
+                            <th role="columnheader">Total Amount</th>
+                            <th role="columnheader">PDC</th>
+                            <th role="columnheader">Cleared	</th>
+                            <th role="columnheader">Msic.Dues </th>
+                            <th role="columnheader">Net Refundable Amount</th>
+                            <th role="columnheader">Customer Id</th>
+                            <th role="columnheader">Comments</th>
+                        </tr>
+                        </thead>
+                        <tbody role="rowgroup">                
+                        <tr role="row">
+                            <td role="cell">{{item.CLIENT}}</td>
+                            <td role="cell">{{item.TOTALUNIT}}</td>
+                            <td role="cell">{{item.AREA}}</td>
+                            <td role="cell">{{item.TOTALAMOUNT | currency:"AED "}}</td>
+                            <td role="cell">{{item.PDC | currency:"AED "}}</td>
+                            <td role="cell">{{item.CLEARED | currency:"AED "}}</td>
+                            <td role="cell">{{item.MISCAMOUNT | currency:"AED "}}</td>
+                            <td role="cell">{{item.NET_REFUND | currency:"AED "}}</td>
+                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                            <td role="cell">{{item.RENT_REFUND_COMMENTS}}</td>
+                            <td role="cell">                             
+                                <span>
+                                    <button ion-button (click)="openModal(item.UNIT,item.CLIENT,item)" color="primary">
+                                        <i class="fa fa-comments" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>                
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            </div> <!---->
+        </div>
+    </ion-content>
+          

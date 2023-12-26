@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+    <ion-title text-center>{{today | date: 'dd-MM-yyyy'}} {{modaltype[0]}} Task </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-fab right bottom edge>
+        <button ion-fab mini (click)="createtask()">
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+          <div *ngFor="let item of taskdetails.taskgrouplistcount; index as i;">
+          <ion-col col-4>
+            <ion-card text-center style="padding: 0px; width: 75%;" class="card_btn" >
+              <h2 class="name_btn">
+                  <ion-badge class="badge_task" color="primary" (click)="openTaskModal(item.LABEL_TYPE,item.CREATED_BY)"
+                      style="z-index: 1;position: absolute;top: 0;right: 0;width: fit-content;margin-left: unset !important;">
+                      {{ item.NAME_COUNT  || '0' }}
+                  </ion-badge>
+              </h2> 
+              <h2 class="name_btn">
+                  <ion-fab color="secondary" color="light" top left edge style="top: 75px !important;right: 0;
+                  margin-left: 56px;">
+                  <!-- <span *ngIf="item.STATUS == 'Online'">
+                      <button ion-fab mini style="width: 18px !important;
+                        height: 18px !important;background-color: #3aec3a;margin-left: 5px;">
+                        <ion-icon></ion-icon>
+                      </button>
+                  </span> -->
+                  <span *ngIf="item.STATUS != 'Online'">
+                    <button ion-fab mini style="width: 18px !important;
+                      height: 18px !important;background-color: #ff0000;margin-left: 5px;">
+                      <ion-icon></ion-icon>
+                    </button>
+                </span>
+
+                <span *ngIf="item.STATUS == 'Online'">
+                  <button ion-fab mini (click)="openUserChat(item.CREATED_BY,item.CREATED_BY_NAME)"
+                    style="width: 28px !important;height: 28px !important;margin-top: -4px;margin-left: -4px;background-color: #3aec3a;">
+                    <ion-icon name="chatbubbles"></ion-icon>
+                  </button>
+                </span>
+
+                </ion-fab>
+              </h2>
+              <ion-avatar item-start>
+                  
+                <span *ngIf="item.MYPROFILECOUNT > 0">
+                  <img style="width: 100px; height: 100px;" class="icon-btn"  class="myprofile-picture" src="{{item.FILE_PATH}}">
+                </span>
+                <span *ngIf="item.MYPROFILECOUNT == 0">
+                  <img style="width: 100px; height: 100px;" class="icon-btn"  class="myprofile-picture" src="assets/imgs/no-found-photo.png">
+                </span>
+              </ion-avatar>
+            </ion-card>
+            <div>
+              <h6 style="font-size: 1.3rem !important;margin-left: 10px;">{{ item.CREATED_BY_NAME.length > 15 ? item.CREATED_BY_NAME.substring(0,15)+"..." : item.CREATED_BY_NAME }}</h6>
+            </div>
+          </ion-col>
+        </div>
+        </ion-row>
+      </ion-grid> 
+</ion-content>

@@ -1,0 +1,257 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="navbar_title">My Meetings</ion-title>
+    <ion-buttons end *ngIf="show_profile_image === 0">
+      <button ion-button (click)="goBack()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+      (ionInput)="SearchTaskDetail()">
+    </ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="pending" style="font-size: 13px; color:#fff;">
+        Draft
+      </ion-segment-button>
+      <ion-segment-button value="confirm" style="font-size: 13px; color:#fff;">
+        MOM
+      </ion-segment-button>
+      <ion-segment-button value="archive" style="font-size: 13px; color:#fff;">
+        Archive
+      </ion-segment-button>
+      <ion-segment-button value="Usergroup" style="font-size: 13px; color:#fff;">
+        User Group
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab right bottom edge style="bottom: 50px !important;">
+    <button ion-fab mini (click)="createusergroup()">
+      <ion-icon name="contacts"></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-fab right bottom edge style="bottom: 0px !important;">
+    <button ion-fab mini (click)="createmom()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <div [ngSwitch]="pet">
+
+    <ion-list *ngSwitchCase="'pending'">
+      
+      <div *ngFor="let item of momListAll; index as i;">
+        <ion-list style="margin: 0px 0 0px !important;">
+          <ion-item-sliding>
+            <ion-item
+              (click)="openMyMom(item.ID, item.TITLE, item.MEETING_DATE, item.USER_SURNAME,'pending',item.NEXT_MEETING_DATE,item.ORGANIZER_NAME,item.CREATED_ON,item.USER_EMAIL)">
+              <ion-thumbnail item-start>
+                <img src="assets/imgs/minutes-of-meeting.png" style="width: 50px !important; height: 50px !important;">
+              </ion-thumbnail>
+              <h2 *ngIf="item.TITLE != null">{{item.TITLE.length > 25 ? item.TITLE.substring(0,25)+"..." : item.TITLE }}</h2>
+              <h4>{{item.MEETING_DATE | date:'dd-MM-yyyy'}}</h4>
+              <!-- <h4 style="white-space: normal;">Attendees: {{item.ACTION_BY_NAME}}</h4> -->
+            </ion-item>
+            <ion-item-options side="left">
+              <div>
+                <button ion-button style="font-size: 10px;" (click)="deleteMom(item.ID)">
+                  <img src="assets/imgs/delete.png" class="icon-btn" style="width: 28px;" />Delete</button>
+              </div>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'confirm'">
+      <div *ngFor="let item of momConfirmListAll; index as i;">
+        <ion-list>
+          <ion-item-sliding>
+            <ion-item>
+              <ion-grid>
+                <ion-row>
+                  <ion-col col-2>
+                    <ion-thumbnail item-start style="margin: 2px 2px 2px 2px !important;">
+                      <img src="assets/imgs/minutes-of-meeting.png"
+                        style="width: 50px !important; height: 50px !important;">
+                    </ion-thumbnail>
+                  </ion-col>
+                  <ion-col col-8>
+                    <span
+                      (click)="openMyMom(item.ID, item.TITLE, item.MEETING_DATE, item.USER_SURNAME,'confirm',item.NEXT_MEETING_DATE,item.ORGANIZER_NAME,item.CREATED_ON,item.USER_EMAIL)">
+                      <h2 *ngIf="item.TITLE != null">{{item.TITLE.length > 25 ? item.TITLE.substring(0,25)+"..." : item.TITLE }} </h2>
+                      <h4>{{item.MEETING_DATE | date:'dd-MM-yyyy'}}</h4>
+                      <!-- <h4 style="white-space: normal;">Attendees: {{item.ACTION_BY_NAME}}</h4> -->
+                    </span>
+                    <span>
+                      <button ion-button color="secondary" clear (click)=showUndoBtn(i,item.ID)>Sub
+                        Meetings({{item.MOM_CHILD_COUNT ||'0'}})</button>
+                    </span>
+                  </ion-col>
+                  <ion-col col-2>
+                    <span>
+                      <button ion-fab mini (click)="createmomchild(item.ID,'confirm')"
+                        style="float: right;width: 25px !important;height: 25px !important;top: 0px; margin: 6px !important;">
+                        <ion-icon name="add"></ion-icon>
+                      </button>
+                      <ion-icon name="download"
+                        style="margin-top: 45px;float: right;margin-left: 32px;position: absolute;font-size: 1.6em !important;"
+                        (click)="createPdf(item.ID,item.MEETING_DATE, item.TITLE, item.NEXT_MEETING_DATE,item.ACTION_BY_NAME,item.USER_SURNAME, item.CREATED_ON,item.ORGANIZER_NAME)">
+                      </ion-icon>
+                    </span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item-options side="right">
+              <div *ngIf="item.MOM_CHILD_COUNT > 0">
+                <button ion-button style="font-size: 10px;" (click)="createPdfMomAll(item.ID,item.USER_SURNAME)">
+                  <img src="assets/imgs/download.png" class="icon-btn" style="width: 28px;" />Download All</button>
+              </div>
+            </ion-item-options>
+            <ion-item-options side="left">
+              <div>
+                <button ion-button style="font-size: 10px;" (click)="archiveMom(item.ID)">
+                  <img src="assets/imgs/archivemom.png" class="icon-btn" style="width: 28px;" />Archive</button>
+              </div>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+
+        <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+          <ion-list *ngFor="let item of momSubConfirmListAll; index as i;">
+            <!-- <ion-item-sliding> -->
+            <ion-item>
+              <ion-grid>
+                <ion-row style="height: 65px;">
+                  <ion-col col-2>
+                    <ion-thumbnail item-start style="margin: 2px 2px 2px 2px !important;">
+                      <img src="assets/imgs/submeetings.png" style="width: 40px !important; height: 40px !important;">
+                    </ion-thumbnail>
+                  </ion-col>
+                  <ion-col col-8>
+                    <span
+                      (click)="openMyMom(item.ID, item.TITLE, item.MEETING_DATE, item.USER_SURNAME,'confirm',item.NEXT_MEETING_DATE,item.ORGANIZER_NAME,item.CREATED_ON,item.USER_EMAIL)">
+                      <h2 *ngIf="item.TITLE != null">{{item.TITLE.length > 30 ? item.TITLE.substring(0,30)+"..." : item.TITLE }} </h2>
+                      <h4>{{item.MEETING_DATE | date:'dd-MM-yyyy'}}</h4>
+                    </span>
+                  </ion-col>
+                  <ion-col col-2>
+                    <ion-icon name="download"
+                      style="float: right;margin-left: 32px;position: absolute;font-size: 1.6em !important;"
+                      (click)="createPdf(item.ID,item.MEETING_DATE, item.TITLE, item.NEXT_MEETING_DATE,item.ACTION_BY_NAME,item.USER_SURNAME, item.CREATED_ON,item.ORGANIZER_NAME)">
+                    </ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'archive'">
+      <div *ngFor="let item of momArchiveConfirmListAll; index as i;">
+        <ion-list>
+          <ion-item-sliding>
+            <ion-item>
+              <ion-grid>
+                <ion-row>
+                  <ion-col col-2>
+                    <ion-thumbnail item-start style="margin: 2px 2px 2px 2px !important;">
+                      <img src="assets/imgs/minutes-of-meeting.png"
+                        style="width: 50px !important; height: 50px !important;">
+                    </ion-thumbnail>
+                  </ion-col>
+                  <ion-col col-8>
+                    <span
+                      (click)="openMyMom(item.ID, item.TITLE, item.MEETING_DATE, item.USER_SURNAME,'archive',item.NEXT_MEETING_DATE,item.ORGANIZER_NAME,item.CREATED_ON,item.USER_EMAIL)">
+                      <h2 *ngIf="item.TITLE != null">{{item.TITLE.length > 25 ? item.TITLE.substring(0,25)+"..." : item.TITLE }} </h2>
+                      <h4>{{item.MEETING_DATE | date:'dd-MM-yyyy'}}</h4>
+                    </span>
+                    <span>
+                      <button ion-button color="secondary" clear (click)=showUndoArchiveBtn(i,item.ID)>Sub
+                        Meetings({{item.MOM_CHILD_COUNT || '0'}})</button>
+                    </span>
+                  </ion-col>
+                  <ion-col col-2>
+                    <span>
+                      <ion-icon name="download"
+                        style="margin-top: 45px;float: right;margin-left: 32px;position: absolute;font-size: 1.6em !important;"
+                        (click)="createPdfArchive(item.ID,item.MEETING_DATE, item.TITLE, item.NEXT_MEETING_DATE,item.ACTION_BY_NAME,item.USER_SURNAME, item.CREATED_ON,item.ORGANIZER_NAME)">
+                      </ion-icon>
+                    </span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item-options side="right">
+              <div *ngIf="item.MOM_CHILD_COUNT > 0">
+                <button ion-button style="font-size: 10px;" (click)="createPdfArchiveAll(item.ID, item.USER_SURNAME)">
+                  <img src="assets/imgs/download.png" class="icon-btn" style="width: 28px;" />Download All</button>
+              </div>
+            </ion-item-options>
+            <ion-item-options side="left">
+              <div>
+                <button ion-button style="font-size: 10px;" (click)="undoArchiveMom(item.ID)">
+                  <img src="assets/imgs/archivemom.png" class="icon-btn" style="width: 28px;" />Undo</button>
+              </div>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+
+        <div [attr.id]="'undoarchiveBtn'+i" *ngIf="showarchiveBtn===i">
+          <ion-list *ngFor="let item of momSubConfirmListAll; index as i;">
+            <!-- <ion-item-sliding> -->
+            <ion-item>
+              <ion-grid>
+                <ion-row style="height: 65px;">
+                  <ion-col col-2>
+                    <ion-thumbnail item-start style="margin: 2px 2px 2px 2px !important;">
+                      <img src="assets/imgs/submeetings.png" style="width: 40px !important; height: 40px !important;">
+                    </ion-thumbnail>
+                  </ion-col>
+                  <ion-col col-8>
+                    <span
+                      (click)="openMyMom(item.ID, item.TITLE, item.MEETING_DATE, item.USER_SURNAME,'confirm',item.NEXT_MEETING_DATE,item.ORGANIZER_NAME,item.CREATED_ON,item.USER_EMAIL)">
+                      <h2 *ngIf="item.TITLE != null">{{item.TITLE.length > 30 ? item.TITLE.substring(0,30)+"..." : item.TITLE }} </h2>
+                      <h4>{{item.MEETING_DATE | date:'dd-MM-yyyy'}}</h4>
+                    </span>
+                  </ion-col>
+                  <ion-col col-2>
+                    <ion-icon name="download"
+                      style="float: right;margin-left: 32px;position: absolute;font-size: 1.6em !important;"
+                      (click)="createPdf(item.ID,item.MEETING_DATE, item.TITLE, item.NEXT_MEETING_DATE,item.ACTION_BY_NAME,item.USER_SURNAME, item.CREATED_ON,item.ORGANIZER_NAME)">
+                    </ion-icon>
+
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+
+          </ion-list>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'Usergroup'" style="margin: 4px 0 4px !important;">
+      <div *ngFor="let item of groudetails; index as i;">
+        <ion-list (click)="updateUserGroup(item.ID, item.GROUP_NAME)">
+          <ion-item>          
+            <h2>{{item.GROUP_NAME}}</h2>
+          </ion-item>
+        </ion-list>
+      </div>      
+    </ion-list>
+  </div>
+
+</ion-content>

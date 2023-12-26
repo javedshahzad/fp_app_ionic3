@@ -1,0 +1,835 @@
+<ion-header>
+    <ion-navbar style="background-color:#525b6d">        
+        <ion-title style="text-transform: capitalize;text-align: center"> Escalation List </ion-title>
+        <ion-buttons right>
+            <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="col-md-12">
+
+        <div class="row-fluid">
+            <div class="col-md-12" style="margin-bottom:3%;">
+                <div class="navbar-form" role="search">
+                    <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchdrecDetail()">
+                    </ion-searchbar>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+
+            <div class="card-header" id="headingOne" style="background-color:white;"
+                (click)="openDetailModal(type='CEO')">
+                Escalation to CEO - ({{escalationdetailsall.escalationceoall?.length || '0'}})
+            </div>
+
+            <div class="card-body card-bodynew" [ngStyle]="{'display':ceo_esculation}">
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    TMS - TASK MANAGEMENT SYSTEM (0)
+                </button>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Case List CEO Escalation')" class="btn-label">
+                    CMS - CASE MANAGEMENT SYSTEM ({{escalationdetailsall.CaseEscalationCEOdata?.length ||'0'}})
+                </button>
+
+                <h3 [ngStyle]="{'display':case_ceo_esculation}" style="font-size: 17px;">CASE MANAGEMNT ESCALATION TO CEO</h3>
+
+                <div class="accordion" id="escalation" [ngStyle]="{'display':case_ceo_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.CaseEscalationCEOdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showUndocaseceoBtn(i)>{{1 + i}}. {{item.CASE_REQUEST_ID}}-{{ item.STATUS_NAME }} </h2>
+                            
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+                        </div>
+                        <div [attr.id]="'undocaseceoBtn'+i" *ngIf="showcaseceoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="casemanagement">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Case Id.</th>
+                                            <th role="columnheader">Case Requested By</th>
+                                            <th role="columnheader">Case Requested On</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">First Party </th>
+                                            <th role="columnheader">Second Party</th>
+                                            <th role="columnheader">Case Description</th>
+                                            <th role="columnheader">Status</th>
+                                            <th role="columnheader">Claim Amount</th>
+                                            <th role="columnheader"> Case Exp Amount</th>
+                                            <th role="columnheader"> Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                            <td role="cell">{{item.REQUESTED_BY}}</td>
+                                            <td role="cell">{{item.REQUESTED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.LEASE_NO }}</td>
+                                            <td role="cell">{{item.FIRST_PARTY}}</td>
+                                            <td role="cell">-</td>
+                                            <td role="cell">{{item.DESCRIPTION}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.CLAIM_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">-</td>
+                                            <td role="cell">{{item.CASE_COMMENTS}}</td>
+                                            <td role="cell"><button ion-button
+                                                    (click)="openCaseCMTSModal(item.CASE_REQUEST_ID,item.CASE_ID,item)"
+                                                    color="secondary"><i class="fa fa-comments"
+                                                        aria-hidden="true"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Cheque List CEO Escalation')" class="btn-label">
+                    CS - CHEQUE SYSTEM ({{ escalationdetailsall.ChqListEscalationCEOdata?.length ||'0'}})
+                </button>
+
+                <h3 [ngStyle]="{'display':cheque_ceo_esculation}" style="font-size: 17px;">CHEQUE LIST ESCALTION TO CEO</h3>
+
+                <div class="accordion" id="escalation" [ngStyle]="{'display':cheque_ceo_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.ChqListEscalationCEOdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">                     
+
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showUndochqceoBtn(i)>{{1 + i}}. {{item.CHQNO}} -{{ item.CUSTOMER }}</h2>
+                            <p style="font-size: 14px; line-height: 3px;" (click)=showUndochqceoBtn(i)>{{item.UNIT}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div [attr.id]="'undochqceoBtn'+i" *ngIf="showchqceoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="chequelist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Operating Unit</th>
+                                            <th role="columnheader">Cheque No.</th>
+                                            <th role="columnheader">Cheque Date</th>
+                                            <th role="columnheader">Receipt No </th>
+                                            <th role="columnheader">Receipt Date</th>
+                                            <th role="columnheader">Customer </th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Amount </th>
+                                            <th role="columnheader">Comments</th>
+                                            <th role="columnheader"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.NAME}}</td>
+                                            <td role="cell">{{item.CHQNO}}</td>
+                                            <td role="cell">{{item.CHQDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.RCPTNO}}</td>
+                                            <td role="cell">{{item.RCPTDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.CUSTOMER}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.CHEQUE_COMMENTS}}</td>
+                                            <td class="action">
+                                                <span><button ion-button (click)="openChequeModal(item.ID,item)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Payment Request CEO Escalation')" class="btn-label">
+                    CPR - CASE PAYMENT REQUEST ({{escalationdetailsall.PymtEscalationCEOdata?.length ||'0'}})
+                </button>
+
+                <h3 [ngStyle]="{'display':payment_ceo_esculation}">PAYMNET REQUEST ESCALATION TO CEO</h3>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':payment_ceo_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.PymtEscalationCEOdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">                           
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showUndopymtceoBtn(i)>{{1 + i}}. {{item.CASE_REQUEST_ID}} - {{item.CLIENT_DESCRIPTION}}</h2>
+                            
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div [attr.id]="'undopymtceoBtn'+i" *ngIf="showpymtceoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="paymentrequest">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Case Request Id.</th>
+                                            <th role="columnheader">Description</th>
+                                            <th role="columnheader">Client Description</th>
+                                            <th role="columnheader">Issued Amount</th>
+                                            <th role="columnheader">Bill Amount</th>
+                                            <th role="columnheader">Cash Amount </th>
+                                            <th role="columnheader">Bal Amount</th>
+                                            <th role="columnheader">Type</th>
+                                            <th role="columnheader">Date</th>
+                                            <th role="columnheader">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                            <td role="cell">{{item.CASE_REQUEST_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.CLIENT_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.ISSUED_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.BILL_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.CASH_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">
+                                                {{item.ISSUED_AMOUNT*1 - item.BILL_AMOUNT*1 + item.CASH_AMOUNT*1 | currency:"AED "}}
+                                            </td>
+                                            <td role="cell">{{item.REQUEST_TYPE_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy'}}</td>
+                                            <td role="cell"><button ion-button (click)="openModal(item.CASE_REQUEST_ID)"
+                                                    color="secondary"><i class="fa fa-plus-circle"
+                                                        aria-hidden="true"></i></button>
+                                                <button ion-button
+                                                    (click)="openDetailModal_pay_req(item.CASE_REQUEST_ID)"
+                                                    color="secondary"><i class="fa fa-eye"
+                                                        aria-hidden="true"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Return Cheque CEO Escalation')" class="btn-label">
+                    RCS - RETURN CHEQUE SYSTEM ({{escalationdetailsall.rtnChqEsculationCEOdata?.length ||'0'}})
+                </button>
+                
+                <h6 [ngStyle]="{'display':return_ceo_esculation}">RETURN CHEQUE ESCALATION TO CEO</h6>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':return_ceo_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.rtnChqEsculationCEOdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">                            
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showUndortnceoBtn(i)>{{1 + i}}. {{item.CHQNO}} -{{ item.CUSTOMER}}</h2>
+                            <p style="font-size: 14px; line-height: 3px;" (click)=showUndortnceoBtn(i)>{{item.UNIT}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div [attr.id]="'undortnceoBtn'+i" *ngIf="showrtnceoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="returncheque">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Cheque No.</th>
+                                            <th role="columnheader">Cheque Date</th>
+                                            <th role="columnheader">Return Date</th>
+                                            <th role="columnheader">Customer</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Amount </th>
+                                            <th role="columnheader">Recovered </th>
+                                            <th role="columnheader">Status</th>
+                                            <th role="columnheader">Mobile</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CHQNO}}</td>
+                                            <td role="cell">{{item.CHQDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.RETURN_DT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.CUSTOMER}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.RECOVERED}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.MOB}}</td>
+                                            <td role="cell">{{item.COMMENTS}}<br>{{item.CMT_CREATED_BY}}
+                                                {{item.CMT_CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button
+                                                        (click)="openReturnModal(item.ID,item.ESCLATED_COUNT,item)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button></span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Call Management CEO Escalation')" class="btn-label">
+                    CM - CALL MANAGEMENT ({{escalationdetailsall.callMgntEsculationCEOdata?.length || '0' }})
+                </button>
+
+                <h6 [ngStyle]="{'display':callmanagement_ceo_esculation}">CALL MANAGEMENT ESCALATION TO CEO</h6>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':callmanagement_ceo_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.callMgntEsculationCEOdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <!-- <a (click)=showUndocallceoBtn(i) role="button">
+                                {{1 + i}}. {{item.CALL_LOG_ID}} -{{ item.REQUESTOR_NAME}}
+                            </a> -->
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showUndocallceoBtn(i)>{{1 + i}}. {{item.CALL_LOG_ID}} -{{ item.REQUESTOR_NAME}}</h2>
+                            <p style="font-size: 14px; line-height: 3px;" (click)=showUndocallceoBtn(i)>{{item.UNIT}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div [attr.id]="'undocallceoBtn'+i" *ngIf="showcallceoBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="callmanagement">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Call Log Id.</th>
+                                            <th role="columnheader">Call Logged By</th>
+                                            <th role="columnheader">Call Logged Date</th>
+                                            <th role="columnheader">Complaint Duration</th>
+                                            <th role="columnheader">Requestor Name</th>
+                                            <th role="columnheader">Location </th>
+                                            <th role="columnheader">Building </th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Current Status</th>
+                                            <th role="columnheader">Next Action</th>
+                                            <th role="columnheader">Aging From Last Action</th>
+                                            <th role="columnheader">Site Supervisor</th>
+                                            <th role="columnheader">Requestor Mobile No</th>
+                                            <th role="columnheader">Complaint Name</th>
+                                            <th role="columnheader">Recent Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CALL_LOG_ID}}</td>
+                                            <td role="cell">{{item.CREATED_BY_NAME}}</td>
+                                            <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.REQUESTOR_NAME}}</td>
+                                            <td role="cell">{{item.LOCATIONCODE}}</td>
+                                            <td role="cell">{{item.BUILDING_NAME}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.INTERM_STATUS}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.ASSIGNEDTO}}</td>
+                                            <td role="cell">{{item.MOBILE_NO}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.COMMENTS}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button
+                                                        (click)="openCallManagementModal(item.CALL_LOG_ID,item.STATUS_NAME)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    CNT - CONTRACT (0)
+                </button>
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    AMS - ASSET MANAGEMENT SYSTEM (0)
+                </button>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='DREC CEO Escalation')" class="btn-label">
+                    DREC ({{escalationdetailsall.drecEscCEOList?.length || '0'}})
+                </button>
+
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_ceo_esculation}">
+
+                    <h6 style="margin-top:6px;">DREC ESCALATION TO CEO</h6>
+
+                    <div class="card" *ngFor="let item of escalationdetailsall.drecEscCEOList; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showCeoDrec(i)>{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}}</h2>
+                            <p style="font-size: 14px; line-height: 15px;" (click)=showCeoDrec(i)>{{ item.STATUS_NAME }} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">                            
+
+                            <h2 style="font-size: 16px; line-height: 20px;" (click)=showCeoDrec(i)>{{1 + i}}. {{item.PROPERTY_NAME}} - {{item.UNIT_NO}}</h2>
+                            <p style="font-size: 14px; line-height: 3px;" (click)=showCeoDrec(i)>{{ item.BUILD_CODE }} - {{item.LEASE_NUM}}</p>
+                            <p *ngIf="item.ESCALATED_DAYS == 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="item.ESCALATED_DAYS > 1" style="color:red; float: left;"> Escalated {{item.ESCALATED_DAYS}}
+                                days</p>
+
+                        </div>
+                        <div [attr.id]="'undoCeoDrecBtn'+i" *ngIf="showCeoDrecBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} -
+                                                {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openDrecModal(item.LEASE_NUM,item)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    SD - SECURITY DEPOSIT (0)
+                </button>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingOne" style="background-color:white;"
+                (click)="openDetailModalMgr(type='MGR')">
+                Escalation to MGR - ({{escalationdetailsall.escalationmgrall?.length || '0'}})
+            </div>
+            <div class="card-body card-bodynew" [ngStyle]="{'display':mgr_esculation}">
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    TMS - TASK MANAGEMENT SYSTEM (0)
+                </button>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Case List MGR Escalation')" class="btn-label">
+                    CMS - CASE MANAGEMENT SYSTEM ({{escalationdetailsall.caseescalationmgrdata?.length ||'0'}})
+                </button>
+                <h3 [ngStyle]="{'display':case_mgr_esculation}">CASE MANAGEMENT ESCALATION TO MGR</h3>
+
+                <div class="accordion" id="escalation" [ngStyle]="{'display':case_mgr_esculation}">
+
+                    <div class="card" *ngFor="let item of escalationdetailsall.caseescalationmgrdata; index as i;">
+
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <a (click)=showUndocasemgrBtn(i) role="button">
+                                {{1 + i}}.
+                                {{item.CASE_REQUEST_ID}} - {{item.STATUS_NAME}}
+                            </a>
+                        </div>
+
+                        <div [attr.id]="'undocasemgrBtn'+i" *ngIf="showcasemgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="casemanagement">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Case Id.</th>
+                                            <th role="columnheader">Case Requested By</th>
+                                            <th role="columnheader">Case Requested On</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">First Party </th>
+                                            <th role="columnheader">Second Party</th>
+                                            <th role="columnheader">Case Description</th>
+                                            <th role="columnheader">Status</th>
+                                            <th role="columnheader">Claim Amount</th>
+                                            <th role="columnheader"> Case Exp Amount</th>
+                                            <th role="columnheader"> Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                            <td role="cell">{{item.REQUESTED_BY}}</td>
+                                            <td role="cell">{{item.REQUESTED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.LEASE_NO }}</td>
+                                            <td role="cell">{{item.FIRST_PARTY}}</td>
+                                            <td role="cell">-</td>
+                                            <td role="cell">{{item.DESCRIPTION}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.CLAIM_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">-</td>
+                                            <td role="cell">{{item.CASE_COMMENTS}}</td>
+                                            <td role="cell"><button ion-button
+                                                    (click)="openCaseCMTSModal(item.CASE_REQUEST_ID,item.CASE_ID,item)"
+                                                    color="secondary">Comments</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Cheque List MGR Escalation')" class="btn-label">
+                    CS - CHEQUE SYSTEM ({{escalationdetailsall.chequeescalationmgrdata?.length ||'0'}})
+                </button>
+                <h3 [ngStyle]="{'display':cheque_mgr_esculation}">CHEQUE LIST ESCALATION TO MGR</h3>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':cheque_mgr_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.chequeescalationmgrdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <a (click)=showUndochqmgrBtn(i) role="button">
+                                {{1 + i}}. {{item.CHQNO}} -{{ item.CUSTOMER }}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undochqmgrBtn'+i" *ngIf="showchqmgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="chequelist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Operating Unit</th>
+                                            <th role="columnheader">Cheque No.</th>
+                                            <th role="columnheader">Cheque Date</th>
+                                            <th role="columnheader">Receipt No </th>
+                                            <th role="columnheader">Receipt Date</th>
+                                            <th role="columnheader">Customer </th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Amount </th>
+                                            <th role="columnheader">Comments</th>
+                                            <th role="columnheader"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.NAME}}</td>
+                                            <td role="cell">{{item.CHQNO}}</td>
+                                            <td role="cell">{{item.CHQDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.RCPTNO}}</td>
+                                            <td role="cell">{{item.RCPTDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.CUSTOMER}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.CHEQUE_COMMENTS}}</td>
+                                            <td class="action">
+                                                <span><button ion-button (click)="openChequeModal(item.ID,item)"
+                                                        color="secondary">ADD
+                                                        Comments</button></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Payment Request MGR Escalation')" class="btn-label">
+                    CPR - CASE PAYMENT REQUEST ({{escalationdetailsall.PymtEscalationMGRdata?.length ||'0'}})
+                </button>
+                <h3 [ngStyle]="{'display':payment_mgr_esculation}">PAYMENT REQUEST ESCALATION TO MGR</h3>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':payment_mgr_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.PymtEscalationMGRdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <a (click)=showUndopymtmgrBtn(i) role="button">
+                                {{1 + i}}. {{item.CASE_REQUEST_ID}}-{{item.CLIENT_DESCRIPTION}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undopymtmgrBtn'+i" *ngIf="showpymtmgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="paymentrequest">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Case Request Id.</th>
+                                            <th role="columnheader">Description</th>
+                                            <th role="columnheader">Client Description</th>
+                                            <th role="columnheader">Issued Amount</th>
+                                            <th role="columnheader">Bill Amount</th>
+                                            <th role="columnheader">Cash Amount </th>
+                                            <th role="columnheader">Bal Amount</th>
+                                            <th role="columnheader">Type</th>
+                                            <th role="columnheader">Date</th>
+                                            <th role="columnheader">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CASE_REQUEST_ID}}</td>
+                                            <td role="cell">{{item.CASE_REQUEST_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.CLIENT_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.ISSUED_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.BILL_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.CASH_AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">
+                                                {{item.ISSUED_AMOUNT*1 - item.BILL_AMOUNT*1 + item.CASH_AMOUNT*1 | currency:"AED "}}
+                                            </td>
+                                            <td role="cell">{{item.REQUEST_TYPE_DESCRIPTION}}</td>
+                                            <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy'}}</td>
+                                            <td role="cell"><button ion-button (click)="openModal(item.CASE_REQUEST_ID)"
+                                                    color="secondary"><i class="fa fa-plus-circle"
+                                                        aria-hidden="true"></i></button>
+                                                <button ion-button
+                                                    (click)="openDetailModal_pay_req(item.CASE_REQUEST_ID)"
+                                                    color="secondary"><i class="fa fa-eye"
+                                                        aria-hidden="true"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Return Cheque MGR Escalation')" class="btn-label">
+                    RCS - RETURN CHEQUE SYSTEM ({{escalationdetailsall.rtnesculationtomgrdata?.length ||'0'}})
+                </button>
+                <h3 [ngStyle]="{'display':return_mgr_esculation}">RETURN CHEQUE ESCALATION TO MGR</h3>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':return_mgr_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.rtnesculationtomgrdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <a (click)=showUndortnmgrBtn(i) role="button">
+                                {{1 + i}}. {{item.CHQNO}} -{{ item.CUSTOMER}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undortnmgrBtn'+i" *ngIf="showrtnmgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="returncheque">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Cheque No.</th>
+                                            <th role="columnheader">Cheque Date</th>
+                                            <th role="columnheader">Return Date</th>
+                                            <th role="columnheader">Customer</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Amount </th>
+                                            <th role="columnheader">Recovered </th>
+                                            <th role="columnheader">Status</th>
+                                            <th role="columnheader">Mobile</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CHQNO}}</td>
+                                            <td role="cell">{{item.CHQDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.RETURN_DT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">{{item.CUSTOMER}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.AMOUNT | currency:"AED "}}</td>
+                                            <td role="cell">{{item.RECOVERED}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.MOB}}</td>
+                                            <td role="cell">{{item.COMMENTS}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button
+                                                        (click)="openReturnModal(item.ID,item.ESCLATED_COUNT,item)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button></span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    HOTO - HANDOVER AND TAKEOVER (0)
+                </button>
+
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='Call Management MGR Escalation')" class="btn-label">
+                    CM - CALL MANAGEMENT ({{escalationdetailsall.callMgntEsculationMGRdata?.length || '0' }})
+                </button>
+                <h3 [ngStyle]="{'display':callmanagement_mgr_esculation}">CALL MANAGEMENT ESCALATION TO MGR</h3>
+                <div class="accordion" id="escalation" [ngStyle]="{'display':callmanagement_mgr_esculation}">
+                    <div class="card" *ngFor="let item of escalationdetailsall.callMgntEsculationMGRdata; index as i;">
+                        <div class="card-header" id="headingOne" style="background-color:white;">
+                            <a (click)=showUndocallmgrBtn(i) role="button">
+                                {{1 + i}}. {{item.CALL_LOG_ID}} -{{ item.REQUESTOR_NAME}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undocallmgrBtn'+i" *ngIf="showcallmgrBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="callmanagement">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Call Log Id.</th>
+                                            <th role="columnheader">Call Logged By</th>
+                                            <th role="columnheader">Call Logged Date</th>
+                                            <th role="columnheader">Complaint Duration</th>
+                                            <th role="columnheader">Requestor Name</th>
+                                            <th role="columnheader">Location </th>
+                                            <th role="columnheader">Building </th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Current Status</th>
+                                            <th role="columnheader">Next Action</th>
+                                            <th role="columnheader">Aging From Last Action</th>
+                                            <th role="columnheader">Site Supervisor</th>
+                                            <th role="columnheader">Requestor Mobile No</th>
+                                            <th role="columnheader">Complaint Name</th>
+                                            <th role="columnheader">Recent Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.CALL_LOG_ID}}</td>
+                                            <td role="cell">{{item.CREATED_BY_NAME}}</td>
+                                            <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.REQUESTOR_NAME}}</td>
+                                            <td role="cell">{{item.LOCATIONCODE}}</td>
+                                            <td role="cell">{{item.BUILDING_NAME}}</td>
+                                            <td role="cell">{{item.UNIT}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.INTERM_STATUS}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.ASSIGNEDTO}}</td>
+                                            <td role="cell">{{item.MOBILE_NO}}</td>
+                                            <td role="cell"></td>
+                                            <td role="cell">{{item.COMMENTS}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button
+                                                        (click)="openCallManagementModal(item.CALL_LOG_ID,item.STATUS_NAME)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    CNT - CONTRACT (0)
+                </button>
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    AMS - ASSET MANAGEMENT SYSTEM (0)
+                </button>
+
+                <button type="button" ion-button color="secondary"
+                    (click)="setescalationdata(type='DREC MGR Escalation')" class="btn-label">
+                    DREC ({{ escalationdetailsall.drecEscMgrList?.length || '0' }})
+                </button>
+                <div class="accordion" id="drec" [ngStyle]="{'display':drec_mgr_esculation}">
+
+                    <h6 style="margin-top:6px;">DREC ESCALATION TO MGR</h6>
+
+                    <div class="card" *ngFor="let item of escalationdetailsall.drecEscMgrList; index as i;">
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME != null"
+                            style="background-color:white;">
+                            <a (click)=showMgrDrec(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.STATUS_NAME }} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div class="card-header" id="headingOne" *ngIf="item.STATUS_NAME == null"
+                            style="background-color:white;">
+                            <a (click)=showMgrDrec(i) role="button">
+                                {{1 + i}}. {{item.PROPERTY_NAME}} - {{ item.BUILD_CODE}} - {{item.LEASE_NUM}}
+                            </a>
+                        </div>
+                        <div [attr.id]="'undoMgrDrecBtn'+i" *ngIf="showMgrDrecBtn===i">
+                            <div class="card-body card-bodynew">
+                                <table role="table" class="dreclist">
+                                    <thead role="rowgroup">
+                                        <tr role="row">
+                                            <th role="columnheader">Property Name.</th>
+                                            <th role="columnheader">BuildCode</th>
+                                            <th role="columnheader">Unit</th>
+                                            <th role="columnheader">Lease No</th>
+                                            <th role="columnheader">Commencement Date</th>
+                                            <th role="columnheader">Termination Date </th>
+                                            <th role="columnheader">Tenant Name</th>
+                                            <th role="columnheader">Customer Number </th>
+                                            <th role="columnheader">STATUS</th>
+                                            <th role="columnheader">COMMENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <tr role="row">
+                                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                            <td role="cell">{{item.BUILD_CODE}}</td>
+                                            <td role="cell">{{item.UNIT_NO}}</td>
+                                            <td role="cell">{{item.LEASE_NUM}}</td>
+                                            <td role="cell">{{item.LEASE_COMMENCEMENT_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.LEASE_TERMINATION_DATE| date : 'dd-MMM-yyyy'}}
+                                            </td>
+                                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                                            <td role="cell">{{item.CUSTOMER_NUMBER}}</td>
+                                            <td role="cell">{{item.STATUS_NAME}}</td>
+                                            <td role="cell">{{item.DREC_COMMENTS}}<br>{{item.DREC_CMT_USERNAME}} -
+                                                {{item.DREC_CMT_CREATED_ON |  date : 'dd-MMM-yyyy,HH:mm a'}}</td>
+                                            <td role="cell">
+                                                <span><button ion-button (click)="openDrecModal(item.LEASE_NUM,item)"
+                                                        color="secondary"><i class="fa fa-comments"
+                                                            aria-hidden="true"></i></button>
+                                                </span>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" ion-button color="secondary" class="btn-label">
+                    SD - SECURITY DEPOSIT (0)
+                </button>
+            </div>
+        </div>
+
+    </div>
+</ion-content>

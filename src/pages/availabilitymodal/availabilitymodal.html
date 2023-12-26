@@ -1,0 +1,169 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{modaltype[1]}} List </ion-title>
+        <ion-buttons end>
+        <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content> 
+    
+    <div class="col-md-12" *ngIf = "availabilitydetails">
+        <div class="accordion" id="availabilitymodal">
+        <div  *ngFor="let item of availabilitydetails[0]; index as i;" >
+            <ion-item  id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+            aria-expanded="true/false" [attr.aria-controls]="i">
+                  <h2>{{item.UNIT}}</h2>
+                  <p>{{ item.UNITTYPE}}</p>
+                  <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+            aria-expanded="true/false" [attr.aria-controls]="i"><ion-icon  style="font-size: x-large;" name="arrow-dropdown"></ion-icon></button>            
+            </ion-item>  
+            <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#availabilitymodal">
+            <div class="card-body card-bodynew">
+                <table role="table" class="availabilitymodal">
+                    <thead role="rowgroup">
+                    <tr role="row">
+                        <th role="columnheader">Property Name</th>
+                        <th role="columnheader">Building</th>
+                        <th role="columnheader">Building Code</th>
+                        <th role="columnheader">Area</th>
+                        <th role="columnheader">Floor</th>
+                        <th role="columnheader">Unit </th>
+                        <th role="columnheader">Unit Type</th>
+                    </tr>
+                    </thead>
+                    <tbody role="rowgroup">                
+                    <tr role="row">
+                        <td role="cell">{{item.PROPERTY_NAME}}</td>
+                        <td role="cell">{{item.BUILDING}}</td>
+                        <td role="cell">{{item.BUILDING_CODE }}</td>
+                        <td role="cell">{{item.GROSS_AREA }}</td>
+                        <td role="cell">{{item.FLOOR }}</td>
+                        <td role="cell">{{item.UNIT}}</td>
+                        <td role="cell">{{item.UNITTYPE}}</td>
+                    </tr>                
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        </div> <!---->
+    </div>
+ 
+
+    <div class="col-md-12" *ngIf = "overduedetails">
+            <div class="accordion" id="overduemodal">
+            <div *ngFor="let item of overduedetails[0]; index as i;" >
+                <ion-item  id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+                aria-expanded="true/false" [attr.aria-controls]="i">
+                <h2>{{item.UNIT}}</h2>
+                <p>{{item.OVERDUEAMT | currency:"AED "}}</p>
+                    <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+            aria-expanded="true/false" [attr.aria-controls]="i"><ion-icon  style="font-size: x-large;" name="arrow-dropdown"></ion-icon></button>          
+            </ion-item>  
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#overduemodal">
+                <div class="card-body card-bodynew">
+                    <table role="table" id="overduemodaldata">
+                        <thead role="rowgroup">
+                        <tr role="row">
+                            <th role="columnheader">Property Name</th>
+                            <th role="columnheader">Building</th>
+                            <th role="columnheader">Building Code</th>
+                            <th role="columnheader">Customer Name</th>
+                            <th role="columnheader">Unit </th>
+                            <th role="columnheader">Entered By</th>
+                            <th role="columnheader">Early Terminated</th>
+                            <th role="columnheader">Start Date</th>
+                            <th role="columnheader">End Date</th>
+                            <th role="columnheader">Lease Duration</th>
+                            <th role="columnheader">Lease Type</th>
+                            <th role="columnheader">Lease Status</th>
+                            <th role="columnheader">Rent Amount</th>
+                            <th role="columnheader">Overdue Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody role="rowgroup">                
+                        <tr role="row">
+                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                            <td role="cell">{{item.BUILDING}}</td>
+                            <td role="cell">{{item.BUILD_CODE }}</td>
+                            <td role="cell">{{item.CUSTOMER_NAME }}</td>
+                            <td role="cell">{{item.UNIT}}</td>
+                            <td role="cell">{{item.ENTERED_BY}}</td>
+                            <td role="cell">{{item.EARLY_TERMINATED}}</td>
+                            <td role="cell">{{item.STARTDATE |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                            <td role="cell">{{item.ENDDATE |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                            <td role="cell">{{item.LEASE_DURATION}}</td>
+                            <td role="cell">{{item.LEASE_TYPE}}</td>
+                            <td role="cell">{{item.LEASESTATUS}}</td>
+                            <td role="cell">{{item.RENT | currency:"AED "}}</td>
+                            <td role="cell">{{item.OVERDUEAMT | currency:"AED "}}</td>
+                            <td role="cell">
+                                <span> 
+                                    <button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                        color="primary">
+                                        <i class="fa fa-comments" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>                
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            </div> <!---->
+        </div>
+
+        <div class="col-md-12" *ngIf = "rentaldetails">
+            <div class="accordion" id="rentalmodal">
+            <div  *ngFor="let item of rentaldetails[0]; index as i;" >
+                <ion-item  id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed" data-toggle="collapse" [attr.data-target]= "'#' + i"
+                aria-expanded="true/false" [attr.aria-controls]="i">
+                <h2>{{item.UNIT}}</h2>
+                <p>{{item.PAYMENT_PURPOSE_CODE}}</p>    
+                <p><ion-badge style="float: right">{{ item.AMOUNT_DUE_REMAINING | currency:"AED "}}</ion-badge></p>
+                </ion-item>  
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#rentalmodal">
+                <div class="card-body card-bodynew">
+                    <table role="table" id="rentalmodaldata">
+                        <thead role="rowgroup">
+                        <tr role="row">
+                            <th role="columnheader">Lease No</th>
+                            <th role="columnheader">Customer Name</th>
+                            <th role="columnheader">Property Name</th>
+                            <th role="columnheader">Building Code</th>
+                            <th role="columnheader">Transaction No</th>
+                            <th role="columnheader">Unit </th>
+                            <th role="columnheader">Amount Due Original</th>
+                            <th role="columnheader">Amount Due Remaining</th>
+                        </tr>
+                        </thead>
+                        <tbody role="rowgroup">                
+                        <tr role="row">
+                            <td role="cell">{{item.LEASE_NUM}}</td>
+                            <td role="cell">{{item.CUSTOMER_NAME}}</td>
+                            <td role="cell">{{item.PROPERTY_NAME}}</td>
+                            <td role="cell">{{item.BUILD_CODE }}</td>
+                            <td role="cell">{{item.TRX_NUMBER }}</td>
+                            <td role="cell">{{item.UNIT}}</td>
+                            <td role="cell">{{item.AMOUNT_DUE_ORIGINAL | currency:"AED "}}</td>
+                            <td role="cell">{{item.AMOUNT_DUE_REMAINING | currency:"AED "}}</td>
+                            <td role="cell">
+                                <span>
+                                    <button ion-button (click)="openModalRentalBalance(item.LEASE_NUM,item)"
+                                        color="primary">
+                                        <i class="fa fa-comments" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>                
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            </div> <!---->
+        </div>
+</ion-content>
+      

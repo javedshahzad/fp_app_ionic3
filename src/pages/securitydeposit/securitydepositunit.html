@@ -1,0 +1,24 @@
+<ion-header>
+        <ion-navbar style="background-color:#525b6d">
+            <ion-buttons left>
+                <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+                    <ion-icon name="menu"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title style="text-transform: capitalize;"> Security Deposit Properties </ion-title>
+        </ion-navbar>
+  </ion-header>
+    <ion-content>
+        <ion-list>
+                <ion-item-sliding *ngFor="let item of securitybuild; index as i;">
+                  <button ion-item (click)="openModal(item.PROPERTY_NAME)">
+                    <ion-avatar item-start>
+                      <img src="assets/imgs/dom_7-320.png"/>
+                    </ion-avatar>
+                    <h2>{{item.PROPERTY_NAME}}</h2>
+                    <p>Total Unit - <span>{{item.UNIT_COUNT}}</span></p>
+                  </button>
+            
+                </ion-item-sliding>
+              </ion-list>
+    </ion-content>

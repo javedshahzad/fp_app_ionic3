@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only class="my-style-for-modal" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <span>
+      <ion-title style="margin-top: 12px;">
+        {{ header_name }}
+      </ion-title>
+    </span>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <!-- <mbsc-eventcalendar [data]="events" [options]="eventSettings"></mbsc-eventcalendar> -->
+  <ion-calendar #calendar [events]="events" (onDaySelect)="onDaySelect($event)"
+    (onMonthSelect)="onMonthSelect($event)" lang="en"></ion-calendar>
+  <div class="agile-login">
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form">
+        <ion-list>
+          <ion-list-header>
+            <span>
+                <h2>ROI</h2>
+                <ion-icon ios="ios-create" *ngIf="show_edit_objective == 1" md="md-create"  (click)="openModalcomments()" style="
+                    top: 0.5rem;
+                    right: 55px;
+                    position: absolute;
+                    font-size: 27px;">
+                </ion-icon> 
+                <ion-icon ios="ios-add" *ngIf="show_insert_objective == 1" md="md-add" (click)="createNewObjective()" style="
+                    top: 0.5rem;
+                    right: 11px;
+                    position: absolute;
+                    font-size: 27px;">
+                </ion-icon>
+            </span>
+            
+          </ion-list-header>
+          <div *ngFor="let item of roidetails; index as i;">
+            <ion-item *ngIf="item.TYPE=='R'" style="background-color: #19d545;">
+              <h2>{{item.USER_SURNAME}}</h2>
+              <p style="white-space: pre-line;">{{item.COMMENTS}}</p>
+              <p style="color: red;">{{item.MODIFIED_ON | date:'hh:mm a'}}</p>
+            </ion-item>
+            <ion-item *ngIf="item.TYPE=='O'" style="background-color: #f9a917;">
+              <h2>{{item.USER_SURNAME}}</h2>
+              <p style="white-space: pre-line;">{{item.COMMENTS}}</p>
+              <p style="color: red;">{{item.MODIFIED_ON | date:'hh:mm a'}}</p>
+            </ion-item>
+          </div>
+
+        </ion-list>
+      </div>
+    </div>
+  </div>
+</ion-content>

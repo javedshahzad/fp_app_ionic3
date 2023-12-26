@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only class="my-style-for-modal" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <span>
+         <ion-buttons class="header_img" >
+          <button ion-button icon-only class="my-style-for-modal">
+        <img class="image" alt="logo" height="40" src="assets/imgs/group.png">
+      </button>
+      </ion-buttons>
+      <ion-title style="margin-top: 12px;">
+        {{header_name.length > 12 ? header_name.substring(0,12)+"..." : header_name }}<br>
+        <h6 class="user_status">{{user_status}}</h6>
+      </ion-title>
+    </span>
+    
+      <ion-buttons end *ngIf="show_group_member_add === 1">
+        <button ion-button icon-only color="secondary" (click)="addGroupUsersave()">
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </ion-buttons>
+    
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <!-- <ul>
+    <li *ngFor="let item of items | async">
+      <input type="text" #updatetext [value]="item.text" />
+      <button (click)="updateItem(item.key, updatetext.value)">Update</button>
+      <button (click)="deleteItem(item.key)">Delete</button>
+    </li>
+  </ul> -->
+
+  <div *ngIf="show_group_details === 0">
+    <ion-fab right bottom edge>
+      <button ion-fab mini (click)="addgroupmembers()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+
+
+    <ion-list *ngFor="let item of items| async" style="margin:0px !important" >      
+      <div *ngIf="item.group_name === header_name">
+      <ion-item >
+        <ion-avatar item-start>
+          <img *ngIf="item.profile_img_id === 0 || item.profile_img_id ==''" src="assets/imgs/chat_image.png">
+          <img  *ngIf="item.profile_img_id > 0" src="{{item.file_path}}">
+        </ion-avatar>
+        <h2>{{item.user_name}}</h2>
+        <button ion-button color="danger" (click)="DeleteDbUser(item.key)"
+        item-end><i class="fa fa-trash" aria-hidden="true"></i></button>
+      </ion-item>
+    </div>
+  </ion-list>
+
+  </div>
+
+  <div *ngIf="show_group_member_add === 1">
+    <ion-searchbar (ionChange)="getGroupMember($event)"></ion-searchbar>
+  </div>
+
+  <div class="wrapper" style="margin-left: 11px;" *ngIf="show_group_member_add === 1">
+
+    <ion-avatar item-start *ngFor="let item of userarry; index as i;" data-parent="#accordionExample"
+      (click)="deleteUser(item)"
+      style="border: unset !important; padding: 0px; padding-top: 10px; padding-bottom: 10px; padding-right: 4px;">
+      <span>
+        <button ion-fab mini style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;" [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <img *ngIf="item.USER_PROFILE_IMG_ID === 0 || item.USER_PROFILE_IMG_ID ==''" style="width: 55px; height: 55px; border-radius: 100px;" src="assets/imgs/chat_image.png"
+          alt="assets/imgs/chat_image.png">
+          <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px; border-radius: 100px;" src="{{item.FILE_PATH}}"
+          alt="assets/imgs/chat_image.png">
+      </span>
+     
+      <ion-label>
+        <h2 style="font-size: 11px;">
+          {{ item.USER_SURNAME.length > 7 ? item.USER_SURNAME.substring(0,7)+"..." : item.USER_SURNAME}}</h2>
+      </ion-label>
+
+    </ion-avatar>
+
+  </div>
+
+  <div *ngIf="show_group_member_add === 1">
+    <ion-list *ngFor="let item of userdetails" (click)="selectgroupmember(item)" style="margin:0px !important">
+      <ion-item *ngIf="item.user_id != login_user">
+        <ion-avatar item-start>
+            <button ion-fab mini style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;" [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'">
+              <ion-icon></ion-icon>
+            </button>
+          <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px;" src="{{item.FILE_PATH}}" alt="assets/imgs/chat_image.png">
+          <img *ngIf="item.USER_PROFILE_IMG_ID === 0" style="width: 55px; height: 55px;" src="assets/imgs/chat_image.png">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{item.USER_SURNAME}}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+
+</ion-content>

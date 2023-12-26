@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>+ Add Rental Balance Comments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="agile-login">
+    <div class="wrapper">
+      <form [formGroup]="rentcommentsForm" (submit)="insertrentComments()">
+        <div>
+          <div class="w3ls-form">
+            <ion-label position="floating" style="color: black;">Add Comments :</ion-label>
+            <ion-item>
+              <ion-textarea name="COMMENTS" placeholder="Enter any Comments here..."
+                [formControl]="rentcommentsForm.controls['COMMENTS']">
+              </ion-textarea>
+              <p *ngIf="rentcommentsForm.controls.COMMENTS.errors && rentcommentsForm.controls.COMMENTS.dirty"
+                class='error'>Enter Your Comments.</p>
+            </ion-item>
+            <button ion-button type="submit" style="float: right;" color="secondary"
+              [disabled]="!rentcommentsForm.valid">Submit</button>
+              <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+              (click)="uploadAudioNewComment()">
+              <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+            </span>
+          </div>
+          <ion-input [(ngModel)]="LEASE_NUM" *ngFor="let rent of rentdata;" type="hidden" value="{{rent.LEASE_NUM}}"
+            [formControl]="rentcommentsForm.controls['LEASE_NUM']"></ion-input>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ion-list class="agile-login">
+    <ion-list-header>
+      <h2>Comments List</h2>
+    </ion-list-header>
+    <div class="wrapper">
+      <div class="col-md-12 w3ls-form" style="padding-right: 0px; padding-left: 0px;">
+        <div class="accordion" id="accordionExample">
+          <ion-item *ngFor="let item of rentcommentsdetails; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;background-color: transparent;">
+            <div id="headingComment">
+              <a role="button" style="font-size: 14px;white-space: normal;">
+                {{1 + i}}. {{item.COMMENTS}}
+              </a><br>
+              <span class="danger-clr" style="text-align:right;font-size: 1.2rem;">by {{item.USER_SURNAME}} on
+                {{item.MODIFIED_ON |date:'dd-MMM-yyyy,HH:mm a'}}</span>
+            </div>
+            <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+              (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT == 0">
+              <ion-icon name="mic" style="font-size: 30px; color: #1968f3;"></ion-icon>
+            </span>
+
+            <span float-right ion-button icon-left clear class="font-size-12" style="width: 60px; height: 50px;"
+              (click)="uploadAudio(i,item)" *ngIf="item.AUDIO_COUNT > 0">
+              <ion-icon name="mic" style="font-size: 30px; color: red;"></ion-icon>
+            </span>
+          </ion-item><br>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+
+</ion-content>

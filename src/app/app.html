@@ -1,0 +1,20 @@
+<ion-menu [content]="content" side="right">
+  <ion-header class="bar-profile">
+    <div class="profile">
+        <h3 class="name">FP APP</h3>
+        <img class="profile-picture" src="assets/imgs/logo_new.png" />
+        <h5 class="name" style='color:#e4e4e4'>{{userSurname}}</h5>
+    </div>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item  menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+          <ion-icon item-start [class]="p.icon" [ngStyle]="{'color':'#083a81'}"></ion-icon>
+          {{p.title}}
+    </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

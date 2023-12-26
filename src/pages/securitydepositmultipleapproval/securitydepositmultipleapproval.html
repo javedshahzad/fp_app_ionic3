@@ -1,0 +1,272 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Security Deposit List </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="col-md-12">
+        <div class="accordion" id="securitydepositmodal">
+            <div *ngFor="let item of securitydepositdetails; index as i;">
+
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{item.PROPERTY_NAME}}</h2>
+                                    <p style="float: left;">{{item.BUILD_CODE}} - {{item.TENANT}}</p>
+                                </ion-label>
+                                <ion-checkbox color="dark" (ionChange)="CheckboxClicked(item.LEASE_NUMBER, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed"
+                                data-toggle="collapse" [attr.data-target]="'#' + i" aria-expanded="true/false"
+                                [attr.aria-controls]="i">
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    data-toggle="collapse" [attr.data-target]="'#' + i" aria-expanded="true/false"
+                                    [attr.aria-controls]="i">
+                                    <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#securitydepositmodal">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="securitydepositmodal">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Property Name</th>
+                                    <th role="columnheader">Building Code</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">No Of Rooms</th>
+                                    <th role="columnheader">Lease Number</th>
+                                    <th role="columnheader">Mobile No </th>
+                                    <th role="columnheader">Lease Commencement Date</th>
+                                    <th role="columnheader">Lease Termination Date</th>
+                                    <th role="columnheader">Tenant</th>
+                                    <th role="columnheader">Completed On</th>
+                                    <th role="columnheader">Complete Comments</th>
+                                    <th role="columnheader">Paid</th>
+                                    <th role="columnheader">Comments</th>
+                                    <th role="columnheader">Reject</th>
+                                    <th role="columnheader">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.UNITNO }}</td>
+                                    <td role="cell">{{item.NOOFRMS }}</td>
+                                    <td role="cell">{{item.LEASE_NUMBER }}</td>
+                                    <td role="cell">{{item.MOB}}</td>
+                                    <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |date:'dd-MMM-yyyy' }}</td>
+                                    <td role="cell">{{item.LEASE_TERMINATION_DATE |date:'dd-MMM-yyyy' }}</td>
+                                    <td role="cell">{{item.TENANT }}</td>
+                                    <td role="cell">{{item.COMPLETED_ON }}</td>
+                                    <td role="cell">{{item.COMPLETE_COMMENTS }}</td>
+                                    <td role="cell">{{item.PAID }}</td>
+                                    <td role="cell">{{item.SECURITY_COMMENTS }}<br>{{item.COMMENTS_CREATED_BY}}
+                                        {{item.COMMENTS_CREATED_ON | date:'dd-MMM-yyyy,HH:mm a'}}
+                                    </td>
+                                    <td role="cell">
+                                        <button ion-button color="secondary"
+                                            [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                            (click)="Rejectbtn(item.LEASE_NUMBER)">Reject</button>
+                                    </td>
+                                    <td role="cell">
+                                        <button ion-button color="secondary"
+                                            [ngStyle]="{'display':rejectbtn_approvebtn_show}"
+                                            (click)="Approvebtn(item.LEASE_NUMBER)">Approve</button>
+                                    </td>
+                                    <td role="cell">
+                                        <span>
+                                            <button ion-button (click)="openModal(item.LEASE_NUMBER)" color="secondary">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button color="secondary"
+                                                (click)="openAttachment(item.LEASE_NUMBER)">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="backdrop" [ngStyle]="{'display':approve_cmt}"></div>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':approve_cmt}" style="margin-top: 50%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Security Deposit Status Update</h4>
+                            <button type="button" class="close" aria-label="Close"
+                                (click)="onCloseHand('approve')"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="ApproveForm" (submit)="Approve_con()">
+                            <div class="modal-body">
+                                <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                                    [formControl]="ApproveForm.controls['LEASE_NO']"></ion-input>
+
+                                <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                                    <ion-textarea name="comments" placeholder="Comments "
+                                        [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                                </ion-row>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    (click)="onCloseHand('approve')">Close</button>
+                                <span
+                                    *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                                    <button type="button" type="submit" class="btn btn-primary"
+                                        [disabled]="!ApproveForm.valid">{{btnTxt}}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="backdrop" [ngStyle]="{'display':reject_cmt}"></div>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':reject_cmt}" style="margin-top: 50%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Security Deposit Status Update</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="RejectForm" (submit)="Reject_con()">
+                            <div class="modal-body">
+                                <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                                    [formControl]="RejectForm.controls['LEASE_NO']"></ion-input>
+
+                                <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                                    <ion-textarea name="comments" placeholder="Comments "
+                                        [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                                </ion-row>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    (click)="onCloseHand('reject')">Close</button>
+                                <span
+                                    *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                                    <button type="button" type="submit" class="btn btn-primary"
+                                        [disabled]="!RejectForm.valid">{{btnTxt}}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- multiple approve comment modal -->
+
+            <div class="backdrop" [ngStyle]="{'display':multiple_approve_cmt}"></div>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_approve_cmt}"
+                style="margin-top: 50%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Security Deposit Status Update</h4>
+                            <button type="button" class="close" aria-label="Close"
+                                (click)="onCloseHand('approve')"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="ApproveForm" (submit)="multiple_approve_con()">
+                            <div class="modal-body">
+                                <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                                    [formControl]="ApproveForm.controls['LEASE_NO']"></ion-input>
+
+                                <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                                    <ion-textarea name="comments" placeholder="Comments "
+                                        [formControl]="ApproveForm.controls['comments']"></ion-textarea>
+                                </ion-row>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    (click)="onCloseHand('approve')">Close</button>
+                                <span
+                                    *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                                    <button type="button" type="submit" class="btn btn-primary">{{btnTxt}}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="backdrop" [ngStyle]="{'display':multiple_reject_cmt}"></div>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_reject_cmt}" style="margin-top: 50%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Security Deposit Status Update</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="onCloseHand('reject')"><span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="RejectForm" (submit)="multiple_reject_con()">
+                            <div class="modal-body">
+                                <ion-input type="hidden" name="LEASE_NO" value="{{LEASE_NO}}"
+                                    [formControl]="RejectForm.controls['LEASE_NO']"></ion-input>
+
+                                <ion-row style="border-bottom:#e6e3e3 1px solid; margin: 5px;">
+                                    <ion-textarea name="comments" placeholder="Comments "
+                                        [formControl]="RejectForm.controls['comments']"></ion-textarea>
+                                </ion-row>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger"
+                                    (click)="onCloseHand('reject')">Close</button>
+                                <span
+                                    *ngIf="this.ResourseList.TYPE_USER == 'CEO' || this.ResourseList.TYPE_USER == 'COO'">
+                                    <button type="button" type="submit" class="btn btn-primary"
+                                        [disabled]="!RejectForm.valid">{{btnTxt}}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <ion-grid>
+        <ion-row>
+            <ion-col col-6 style="border: solid 0px #7f8eb5 !important;">
+                <button ion-button color="secondary" (click)="multipleLpoApprovebtn()"
+                    [ngStyle]="{'display':rejectbtn_approvebtn_show}">Approve</button>
+            </ion-col>
+            <ion-col col-6 style="border: solid 0px #7f8eb5 !important;">
+                <button ion-button color="danger" (click)="multipleLpoRejectbtn()"
+                    [ngStyle]="{'display':rejectbtn_approvebtn_show}">Reject</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+</ion-content>

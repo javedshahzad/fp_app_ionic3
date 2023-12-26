@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="text-transform: capitalize;"> + Create Task </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <form [formGroup]="createtaskForm" (submit)="inserttask()">
+      <ion-item *ngIf="parant_or_not === 1">
+          <span>Add Sub Task (Parent Task : {{taskmodal[0].TITLE}})</span>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Title</ion-label>
+        <ion-input type="text" name="title" [formControl]="createtaskForm.controls['title']"></ion-input>
+        <p *ngIf="createtaskForm.controls.title.errors && createtaskForm.controls.title.dirty" class='error'>Enter the
+          Title.</p>
+      </ion-item>
+
+      <!-- <ion-item>
+        <span>Expected Completion Date</span><br><br>
+        <span><ion-datepicker  name="due_date" (ionChanged)="datepickerchange($event)" ngDefaultControl [(ngModel)]="due_date"
+         [formControl]="createtaskForm.controls['due_date']"><ion-icon name="clipboard" style="float: right;font-size: 30px;margin-right: 12px;"></ion-icon>{{localDate}}
+        <p *ngIf="createtaskForm.controls.due_date.errors && createtaskForm.controls.due_date.dirty" class='error'>
+          Enter the Completion date.</p>
+        </ion-datepicker></span> 
+      </ion-item> -->
+      <ion-item>
+          <span>Expected Completion Date</span><br><br>
+          <span><span (click)="opencalendar()" >{{localDate}}</span><span><ion-icon name="clipboard" (click)="opencalendar()"  style="float: right;font-size: 31px;margin-right: 10px;"></ion-icon></span></span><br>
+          <span *ngIf="calendarshow === 1"><ion-calendar name="due_date" (onChange)="onChange($event)"  [options]="options" [type]="string" [format]="'YYYY-MM-DD'">
+          </ion-calendar></span>
+      </ion-item>
+
+      <ion-item>
+        <ion-label id="profile_image" color="primary" stacked>Select file</ion-label>
+        <ion-input type="file" multiple (change)="onSelectFile($event)"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Created By</ion-label>
+        <select-searchable item-content [formControl]="createtaskForm.controls['created_by']" [items]="user_create_by"
+          itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true" [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+
+      <ion-item [ngStyle]="{'background-color':online_offline}">
+        <ion-label style="color: black;">Assigned To</ion-label>
+        <select-searchable [(ngModel)]="selected_userid" item-content 
+          [formControl]="createtaskForm.controls['assigned_user']" 
+          [items]="userdetails"
+          itemValueField="USER_INFO_ID" 
+          itemTextField="USER_SURNAME" 
+          [canSearch]="true"
+          (onChange)="userAssignedTo($event)" 
+          [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Add referal user</ion-label>
+        <select-searchable item-content [formControl]="createtaskForm.controls['add_user_access']"
+          [items]="user_access_list" itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true"
+          (onChange)="addUserAccess($event)" [isMultiple]="true" [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+
+      <ion-list class="agile-login">
+        <ion-item>
+          <ion-label>User access list</ion-label>
+          <button ion-button icon-start clear item-end class="dash_image" type="button" (click)="showusercontrol()">
+            <ion-icon name="arrow-down"></ion-icon>
+            View
+          </button>
+        </ion-item>
+
+        <div class="wrapper" [ngStyle]="{'display':showuseraccess}">
+          <ion-item *ngFor="let item of userarry; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;">
+            <div>
+              <div class="card-body card-bodynew" style="margin-top: 5px;">
+                <table role="table" class="casemanagement">
+                  <thead>
+                    <tr role="row">
+                      <th role="columnheader">User Name</th>
+                      <th role="columnheader">Access</th>
+                      <th role="columnheader">Action</th>
+                    </tr>
+                  </thead>
+                  <ion-card>
+                    <tbody>
+                      <tr role="row">
+                        <td role="cell">{{item.USER_SURNAME}}</td>
+                        <td role="cell">
+                          <ion-item>
+                            <!-- <ion-label>Access</ion-label> -->
+                            <ion-select style="padding-left: unset;" name="user_access" multiple="false"
+                              placeholder="Select access" (ionChange)="changeAccessControl($event, item.USER_INFO_ID)">
+                              <ion-option value="F">Full Control</ion-option>
+                              <ion-option value="V" selected>View Only</ion-option>
+                            </ion-select>
+                          </ion-item>
+                        </td>
+                        <td role="cell">
+                          <span>
+                            <button ion-button type="button" (click)="DeleteUser(i,item.USER_INFO_ID)" color="danger">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ion-card>
+                </table>
+              </div>
+            </div>
+          </ion-item>
+        </div>
+      </ion-list>
+
+      <div class="example-center">
+        <button ion-button type="submit" color="Primary">Confirm</button>
+        <button ion-button color="dark" (click)=clearvalues();>Clear</button>
+      </div>
+
+    </form>
+  </ion-list>
+</ion-content>

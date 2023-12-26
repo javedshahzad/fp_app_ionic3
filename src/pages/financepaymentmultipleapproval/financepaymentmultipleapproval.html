@@ -1,0 +1,720 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Payment Request Details </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchrtcaseDetail()">
+        </ion-searchbar>
+    </ion-toolbar>
+    <ion-toolbar no-border-top>
+        <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="fp" style="font-size: 13px; color:#fff;">
+                FP
+            </ion-segment-button>
+            <ion-segment-button value="uganda" style="font-size: 13px; color:#fff;">
+                UGANDA
+            </ion-segment-button>
+            <ion-segment-button value="uk" style="font-size: 13px; color:#fff;">
+                UK
+            </ion-segment-button>
+            <ion-segment-button value="treppan" style="font-size: 13px; color:#fff;">
+                TREP
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div [ngSwitch]="pet">
+        <ion-list *ngSwitchCase="'fp'">
+
+            <div *ngFor="let item of searchpaymentdetails_fp; index as i;">
+
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{1 + i}}. {{item.FINANCE_PAY_REQ_ID}}</h2>
+
+                                    <p style="float: left;">
+                                        Suppler Name: {{item.SUPPLIER_NAME }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Created By: {{item.CREATEDBYNAME }}
+                                    </p><br>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'AED'">
+                                        Total: {{item.TOTAL | currency:"AED " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'USD'">
+                                        Total: {{item.TOTAL | currency:"USD " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'GBP'">
+                                        Total: {{item.TOTAL | currency:"GBP " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'UGX'">
+                                        Total: {{item.TOTAL | currency:"UGX " }}
+                                    </p>
+                                    <br>
+                                    <p style="float: left;">
+                                        Status: {{item.STATUS_NAME}}
+                                    </p><br>
+                                </ion-label>
+                                <ion-checkbox color="dark"
+                                    (ionChange)="CheckboxClicked(item.STATUS,item.FINANCE_PAY_REQ_ID, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" (click)=showUndoBtn(i)>
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    (click)=showUndoBtn(i)>
+                                    <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i) name="arrow-dropdown">
+                                    </ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">PR#</th>
+                                    <th role="columnheader">PR Date</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Payee Name</th>
+                                    <th role="columnheader">Invoice#</th>
+                                    <th role="columnheader">Invoice Date</th>
+                                    <th role="columnheader">Operating Unit</th>
+                                    <th role="columnheader">Amount </th>
+                                    <th role="columnheader">Mode</th>
+                                    <th role="columnheader">Source</th>
+                                    <th role="columnheader">Status</th>
+                                    <th role="columnheader">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.FINANCE_PAY_REQ_ID}}</td>
+                                    <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a' }}</td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME }}</td>
+                                    <td role="cell">{{item.PAYEE_NAME}}</td>
+                                    <td role="cell">{{item.INVOICE_NUMBER}}</td>
+                                    <td role="cell">{{item.INVOICE_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY == 'AED'">{{item.TOTAL | currency:"AED "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'USD'">{{item.TOTAL | currency:"USD "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'GBP'">{{item.TOTAL | currency:"GBP "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'UGX'">{{item.TOTAL | currency:"UGX "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.MODE_OF_PAYMENT_NAME}}</td>
+                                    <td role="cell">{{item.SOURCE_NAME}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">
+                                        <p>{{item.SPECIAL_REMARKS}}</p>
+                                    </td>
+                                    <td role="cell" role="cell" style="padding-left: 0% !important;">
+
+                                        <span *ngIf="item.IS_APPROVED == 1">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.IS_APPROVED == 0">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                (click)="updatefinancepaymentstatus(item.FINANCE_PAY_REQ_ID,item.ENABLE_STATUS, item.TOOL_TIP, item)"
+                                                color="secondary"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button (click)="openModal(item.FINANCE_PAY_REQ_ID,item)"
+                                                color="secondary"><i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button color="secondary"
+                                                (click)="openAttachment(item.FINANCE_PAY_REQ_ID)">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <ion-grid *ngIf="fp_length > 0">
+                <ion-row>
+                    <ion-col col-12 style="border: solid 0px #7f8eb5 !important; text-align: center;">
+                        <button ion-button color="secondary" (click)="multiplePaymentApprovebtn(7)">Confirm</button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'uganda'">
+            <div *ngFor="let item of searchpaymentdetails_ug; index as i;">
+
+
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{1 + i}}. {{item.FINANCE_PAY_REQ_ID}}</h2>
+
+                                    <p style="float: left;">
+                                        Suppler Name: {{item.SUPPLIER_NAME }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Created By: {{item.CREATEDBYNAME }}
+                                    </p><br>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'AED'">
+                                        Total: {{item.TOTAL | currency:"AED " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'USD'">
+                                        Total: {{item.TOTAL | currency:"USD " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'GBP'">
+                                        Total: {{item.TOTAL | currency:"GBP " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'UGX'">
+                                        Total: {{item.TOTAL | currency:"UGX " }}
+                                    </p>
+                                    <br>
+                                    <p style="float: left;">
+                                        Status: {{item.STATUS_NAME}}
+                                    </p><br>
+                                </ion-label>
+                                <ion-checkbox color="dark"
+                                    (ionChange)="CheckboxClicked(item.STATUS,item.FINANCE_PAY_REQ_ID, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" (click)=showUndoBtn(i)>
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    (click)=showUndoBtn(i)>
+                                    <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i) name="arrow-dropdown">
+                                    </ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">PR#</th>
+                                    <th role="columnheader">PR Date</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Payee Name</th>
+                                    <th role="columnheader">Invoice#</th>
+                                    <th role="columnheader">Invoice Date</th>
+                                    <th role="columnheader">Operating Unit</th>
+                                    <th role="columnheader">Amount </th>
+                                    <th role="columnheader">Mode</th>
+                                    <th role="columnheader">Source</th>
+                                    <th role="columnheader">Status</th>
+                                    <th role="columnheader">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.FINANCE_PAY_REQ_ID}}</td>
+                                    <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a' }}</td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME }}</td>
+                                    <td role="cell">{{item.PAYEE_NAME}}</td>
+                                    <td role="cell">{{item.INVOICE_NUMBER}}</td>
+                                    <td role="cell">{{item.INVOICE_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY == 'AED'">{{item.TOTAL | currency:"AED "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'USD'">{{item.TOTAL | currency:"USD "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'GBP'">{{item.TOTAL | currency:"GBP "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'UGX'">{{item.TOTAL | currency:"UGX "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.MODE_OF_PAYMENT_NAME}}</td>
+                                    <td role="cell">{{item.SOURCE_NAME}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">
+                                        <p>{{item.SPECIAL_REMARKS}}</p>
+                                    </td>
+                                    <td role="cell" role="cell" style="padding-left: 0% !important;">
+
+                                        <span *ngIf="item.IS_APPROVED == 1">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.IS_APPROVED == 0">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                (click)="updatefinancepaymentstatus(item.FINANCE_PAY_REQ_ID,item.ENABLE_STATUS, item.TOOL_TIP, item)"
+                                                color="secondary"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button (click)="openModal(item.FINANCE_PAY_REQ_ID,item)"
+                                                color="secondary"><i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button color="secondary"
+                                                (click)="openAttachment(item.FINANCE_PAY_REQ_ID)">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="padding: 11px;">View Budget <ion-icon name="eye" style="float: right;"
+                            (click)='showAddSourceUndoBtn(i,item.FINANCE_PAY_REQ_ID)'></ion-icon>
+                    </h3>
+                    <div class="accordion" id="paymentrequestbill" [attr.id]="'undoAddSourceBtn'+i"
+                        *ngIf="showAddSourceBtn===i">
+                        <div class="row header" style="margin-right: 2px; margin-left: 1px;">
+                            <div class="col" style="max-width: 60px;">SL.NO</div>
+                            <div class="col" style="max-width: 60px;">Link</div>
+                            <div class="col" style="max-width: 80px;">Source Amount</div>
+                            <div class="col" style="max-width: 80px;">Amount</div>
+                            <div class="col" style="max-width: 112px;">Action</div>
+                        </div>
+                        <div class="card" *ngFor="let bill of paymentbilldetailsall; index as j;"
+                            data-parent="#accordionExample">
+                            <div *ngIf="bill.FINANCE_PAY_REQ_ID == item.FINANCE_PAY_REQ_ID">
+
+                                <div class="row" style="margin-right: 2px; margin-left: 1px;">
+                                    <div class="col" style="max-width: 60px;"><a
+                                            (click)=showUndoBtnbill(j,item.FINANCE_PAY_REQ_ID,bill.LINK_ID)
+                                            role="button">
+                                            <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col" style="max-width: 60px;">{{bill.LINK_NAME}}</div>
+                                    <div class="col" style="max-width: 80px;">{{bill.SOURCE_AMOUNT | currency:"AED " }}
+                                    </div>
+                                    <div class="col" style="max-width: 80px;">{{bill.AMOUNT | currency:"AED " }}</div>
+                                    <div class="col" style="max-width: 112px;" *ngIf="bill.LINK_TYPE == 7">Budget Amount
+                                        :{{bill.BUDGET_AMOUNT | currency:"AED "}}, Available : {{bill.AVAILABLE_AMOUNT |
+                                        currency:"AED "}}<br>
+                                        <span (click)=showUndoBtnbill(j,item.FINANCE_PAY_REQ_ID,bill.LINK_ID)
+                                            style="color:rgb(73, 132, 243)">Utilized :{{bill.UTILIZED_AMOUNT |
+                                            currency:"AED "}} View Details</span>
+                                    </div>
+                                    <div class="col" style="max-width: 112px;" *ngIf="bill.LINK_TYPE != 7">NA</div>
+                                </div>
+                                <div [attr.id]="'undoBtnbill'+j" *ngIf="showBtnbill===j">
+                                    <div class="card-body card-bodynew">
+                                        <div *ngFor="let bill of paymentBudgetHistory; index as j;"
+                                            data-parent="#accordionExample">
+                                            <table role="table" class="bill_details">
+                                                <thead role="rowgroup">
+                                                    <tr role="row">
+                                                        <th role="columnheader">FPR ID</th>
+                                                        <th role="columnheader">Amount</th>
+                                                        <th role="columnheader">Mode Of Payment</th>
+                                                        <th role="columnheader">Payee</th>
+                                                        <th role="columnheader">Invoice</th>
+                                                        <th role="columnheader">Remarks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody role="rowgroup">
+                                                    <tr role="row">
+                                                        <td role="cell">{{bill.FINANCE_PAY_REQ_ID}}</td>
+                                                        <td role="cell">{{bill.AMOUNT | currency:"AED " }}</td>
+                                                        <td role="cell">{{bill.MODE_OF_PAYMENT_NAME}}</td>
+                                                        <td role="cell">{{bill.PAYEE_NAME}}</td>
+                                                        <td role="cell">{{bill.INVOICE_NUMBER}}</td>
+                                                        <td role="cell">{{bill.SPECIAL_REMARKS}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <ion-grid *ngIf="ug_length > 0">
+                <ion-row>
+                    <ion-col col-12 style="border: solid 0px #7f8eb5 !important; text-align: center;">
+                        <button ion-button color="secondary" (click)="multiplePaymentApprovebtn(7)">Confirm</button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'uk'">
+            <div *ngFor="let item of searchpaymentdetails_uk; index as i;">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{1 + i}}. {{item.FINANCE_PAY_REQ_ID}}</h2>
+
+                                    <p style="float: left;">
+                                        Suppler Name: {{item.SUPPLIER_NAME }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Created By: {{item.CREATEDBYNAME }}
+                                    </p><br>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'AED'">
+                                        Total: {{item.TOTAL | currency:"AED " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'USD'">
+                                        Total: {{item.TOTAL | currency:"USD " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'GBP'">
+                                        Total: {{item.TOTAL | currency:"GBP " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'UGX'">
+                                        Total: {{item.TOTAL | currency:"UGX " }}
+                                    </p>
+                                    <br>
+                                    <p style="float: left;">
+                                        Status: {{item.STATUS_NAME}}
+                                    </p><br>
+                                </ion-label>
+                                <ion-checkbox color="dark"
+                                    (ionChange)="CheckboxClicked(item.STATUS,item.FINANCE_PAY_REQ_ID, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" (click)=showUndoBtn(i)>
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    (click)=showUndoBtn(i)>
+                                    <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i) name="arrow-dropdown">
+                                    </ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">PR#</th>
+                                    <th role="columnheader">PR Date</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Payee Name</th>
+                                    <th role="columnheader">Invoice#</th>
+                                    <th role="columnheader">Invoice Date</th>
+                                    <th role="columnheader">Operating Unit</th>
+                                    <th role="columnheader">Amount </th>
+                                    <th role="columnheader">Mode</th>
+                                    <th role="columnheader">Source</th>
+                                    <th role="columnheader">Status</th>
+                                    <th role="columnheader">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.FINANCE_PAY_REQ_ID}}</td>
+                                    <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a' }}</td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME }}</td>
+                                    <td role="cell">{{item.PAYEE_NAME}}</td>
+                                    <td role="cell">{{item.INVOICE_NUMBER}}</td>
+                                    <td role="cell">{{item.INVOICE_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY == 'AED'">{{item.TOTAL | currency:"AED "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'USD'">{{item.TOTAL | currency:"USD "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'GBP'">{{item.TOTAL | currency:"GBP "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'UGX'">{{item.TOTAL | currency:"UGX "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.MODE_OF_PAYMENT_NAME}}</td>
+                                    <td role="cell">{{item.SOURCE_NAME}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">
+                                        <p>{{item.SPECIAL_REMARKS}}</p>
+                                    </td>
+                                    <td role="cell" role="cell" style="padding-left: 0% !important;">
+
+                                        <span *ngIf="item.IS_APPROVED == 1">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.IS_APPROVED == 0">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                (click)="updatefinancepaymentstatus(item.FINANCE_PAY_REQ_ID,item.ENABLE_STATUS, item.TOOL_TIP, item)"
+                                                color="secondary"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button (click)="openModal(item.FINANCE_PAY_REQ_ID,item)"
+                                                color="secondary"><i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button color="secondary"
+                                                (click)="openAttachment(item.FINANCE_PAY_REQ_ID)">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <ion-grid *ngIf="uk_length > 0">
+                <ion-row>
+                    <ion-col col-12 style="border: solid 0px #7f8eb5 !important; text-align: center;">
+                        <button ion-button color="secondary" (click)="multiplePaymentApprovebtn(7)">Confirm</button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'treppan'">
+            <div *ngFor="let item of searchpaymentdetails_treppan; index as i;">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-10 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item>
+                                <ion-label>
+                                    <h2>{{1 + i}}. {{item.FINANCE_PAY_REQ_ID}}</h2>
+
+                                    <p style="float: left;">
+                                        Suppler Name: {{item.SUPPLIER_NAME }}
+                                    </p><br>
+                                    <p style="float: left;">
+                                        Created By: {{item.CREATEDBYNAME }}
+                                    </p><br>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'AED'">
+                                        Total: {{item.TOTAL | currency:"AED " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'USD'">
+                                        Total: {{item.TOTAL | currency:"USD " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'GBP'">
+                                        Total: {{item.TOTAL | currency:"GBP " }}
+                                    </p>
+                                    <p style="float: left;" *ngIf="item.CURRENCY == 'UGX'">
+                                        Total: {{item.TOTAL | currency:"UGX " }}
+                                    </p>
+                                    <br>
+                                    <p style="float: left;">
+                                        Status: {{item.STATUS_NAME}}
+                                    </p><br>
+                                </ion-label>
+                                <ion-checkbox color="dark"
+                                    (ionChange)="CheckboxClicked(item.STATUS,item.FINANCE_PAY_REQ_ID, $event)">
+                                </ion-checkbox>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col col-2 style="border: solid 0px #7f8eb5 !important;">
+                            <ion-item id="headingOne" (click)=showUndoBtn(i)>
+                                <button ion-button clear item-end class="btn btn-link blc collapsed"
+                                    (click)=showUndoBtn(i)>
+                                    <ion-icon style="font-size: x-large;" (click)=showUndoBtn(i) name="arrow-dropdown">
+                                    </ion-icon>
+                                </button>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">PR#</th>
+                                    <th role="columnheader">PR Date</th>
+                                    <th role="columnheader">Created By</th>
+                                    <th role="columnheader">Supplier Name</th>
+                                    <th role="columnheader">Payee Name</th>
+                                    <th role="columnheader">Invoice#</th>
+                                    <th role="columnheader">Invoice Date</th>
+                                    <th role="columnheader">Operating Unit</th>
+                                    <th role="columnheader">Amount </th>
+                                    <th role="columnheader">Mode</th>
+                                    <th role="columnheader">Source</th>
+                                    <th role="columnheader">Status</th>
+                                    <th role="columnheader">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.FINANCE_PAY_REQ_ID}}</td>
+                                    <td role="cell">{{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a' }}</td>
+                                    <td role="cell">{{item.CREATEDBYNAME}}</td>
+                                    <td role="cell">{{item.SUPPLIER_NAME }}</td>
+                                    <td role="cell">{{item.PAYEE_NAME}}</td>
+                                    <td role="cell">{{item.INVOICE_NUMBER}}</td>
+                                    <td role="cell">{{item.INVOICE_DATE |date:'dd-MMM-yyyy'}}</td>
+                                    <td role="cell">{{item.OPERATIONAL_UNIT_NAME}}</td>
+                                    <td role="cell">
+                                        <span *ngIf="item.CURRENCY == 'AED'">{{item.TOTAL | currency:"AED "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'USD'">{{item.TOTAL | currency:"USD "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'GBP'">{{item.TOTAL | currency:"GBP "}}</span>
+                                        <span *ngIf="item.CURRENCY == 'UGX'">{{item.TOTAL | currency:"UGX "}}</span>
+                                    </td>
+                                    <td role="cell">{{item.MODE_OF_PAYMENT_NAME}}</td>
+                                    <td role="cell">{{item.SOURCE_NAME}}</td>
+                                    <td role="cell">{{item.STATUS_NAME}}</td>
+                                    <td role="cell">
+                                        <p>{{item.SPECIAL_REMARKS}}</p>
+                                    </td>
+                                    <td role="cell" role="cell" style="padding-left: 0% !important;">
+
+                                        <span *ngIf="item.IS_APPROVED == 1">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                        <span *ngIf="item.IS_APPROVED == 0">
+                                            <button ion-button color="secondary">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button
+                                                (click)="updatefinancepaymentstatus(item.FINANCE_PAY_REQ_ID,item.ENABLE_STATUS, item.TOOL_TIP, item)"
+                                                color="secondary"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button (click)="openModal(item.FINANCE_PAY_REQ_ID,item)"
+                                                color="secondary"><i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+
+                                        <span>
+                                            <button ion-button color="secondary"
+                                                (click)="openAttachment(item.FINANCE_PAY_REQ_ID)">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <ion-grid *ngIf="treppan_length > 0">
+                <ion-row>
+                    <ion-col col-12 style="border: solid 0px #7f8eb5 !important; text-align: center;">
+                        <button ion-button color="secondary" (click)="multiplePaymentApprovebtn(7)">Confirm</button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
+
+        <div class="backdrop" [ngStyle]="{'display':multiple_approval_comment_modal}"></div>
+
+        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':multiple_approval_comment_modal}">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Payment Request Status Update</h4>
+                            <button type="button" class="close" aria-label="Close"
+                                (click)="onClosecomment_modal()"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Comments:</label>
+                            <ion-textarea name="COMMENTS" [(ngModel)]="COMMENTS" [ngModelOptions]="{standalone: true}">
+                            </ion-textarea>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger"
+                                style="background-color: #373737;color: #fcfcfc;"
+                                (click)="onClosecomment_modal()">Cancel</button>
+                            <span
+                                *ngIf="this.resourcedetails.TYPE_USER == 'CEO' || this.resourcedetails.TYPE_USER == 'COO' ">
+                                <button type="button" type="button" (click)="updatepaymentstatus('Approve')"
+                                    class="btn btn-primary" color="primary">{{btnTxtApprove}}</button></span>
+                            <span
+                                *ngIf="this.resourcedetails.TYPE_USER == 'CEO' || this.resourcedetails.TYPE_USER == 'COO' ">
+
+                                <button type="button" (click)="updatepaymentstatus('Reject')" color="danger"
+                                    class="btn btn-danger"> {{btnTxtReject}} </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>

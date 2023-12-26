@@ -1,0 +1,88 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-transform: capitalize;text-align: center"> Rental Overdue List </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>    
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchrentDetail()">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="col-md-12">
+        <div class="accordion" id="cheque">
+            <div *ngFor="let item of rentdetails; index as i;">
+                <ion-item id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed"
+                    data-toggle="collapse" [attr.data-target]="'#' + i" aria-expanded="true/false"
+                    [attr.aria-controls]="i">
+                    <h2>{{item.LEASE_NUM}}</h2>
+                    <p>{{item.CUSTOMER_NAME}}</p>
+                    <p>{{item.UNIT}}</p>
+                    <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse"
+                        [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+                </ion-item>
+                <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#cheque">
+                    <div class="card-body card-bodynew">
+                        <table role="table" class="returncheque">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Build Code</th>
+                                    <th role="columnheader">Property</th>
+                                    <th role="columnheader">Unit</th>
+                                    <th role="columnheader">Lease#</th>
+                                    <th role="columnheader">Customer</th>
+                                    <th role="columnheader">Contact</th>
+                                    <th role="columnheader">Start Date </th>
+                                    <th role="columnheader">End Date </th>
+                                    <th role="columnheader">Rent</th>
+                                    <th role="columnheader">Days</th>
+                                    <th role="columnheader">Case#</th>
+                                    <th role="columnheader">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.BUILD_CODE}}</td>
+                                    <td role="cell">{{item.PROPERTY_NAME}}</td>
+                                    <td role="cell">{{item.UNIT}}</td>
+                                    <td role="cell">{{item.LEASE_NUM}}</td>
+                                    <td role="cell">{{item.CUSTOMER_NAME}}</td>
+                                    <td role="cell">{{item.CUSTOMER_CONTACT}}</td>
+                                    <td role="cell">{{item.LEASE_COMMENCEMENT_DATE |  date:'dd-MMM-yy'}}</td>
+                                    <td role="cell">{{item.LEASE_TERMINATION_DATE | date:'dd-MMM-yy'}}</td>
+                                    <td role="cell">{{item.RENT | currency:"AED "}}</td>
+                                    <td role="cell">{{item.DUE_DAYS}}</td>
+                                    <td role="cell">{{item.CASE_NO}}</td>
+                                    <td role="cell">
+                                        <span>
+                                            <span [innerHTML]="item.COMMENTS"
+                                                style='white-space: pre-line;'>
+                                            </span><br>
+                                            <span style="float: right; color: red">{{item.CMT_MODIFIED_BY}}
+                                                {{item.CMT_MODIFIED_DATE | date:'dd-MMM-yyyy,HH:mm a'}} 
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td role="cell">
+                                        <span>
+                                            <button ion-button (click)="openModal(item.LEASE_NUM,item)"
+                                                color="primary">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

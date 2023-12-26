@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only  class="my-style-for-modal" (click)="closeModal()">
+          <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <span>
+      <ion-buttons class="header_img" *ngIf="profile_img_id === 0">
+        <img class="image" alt="logo" height="40" src="assets/imgs/chat_image.png">
+      </ion-buttons>
+      <ion-buttons class="header_img" *ngIf="profile_img_id > 0">
+        <img class="image" alt="logo" height="40" src="{{profile_img_path}}">
+      </ion-buttons>
+      <ion-title style="margin-top: 12px;">
+        {{header_name.length > 12 ? header_name.substring(0,12)+"..." : header_name }}<br>
+        <h6 class="user_status">{{user_status}}</h6>
+      </ion-title>  
+    </span>
+    <ion-buttons right>
+      <button ion-button icon-only (click)=" presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="message-wrap" *ngIf="show_signle_chat === 1">
+
+    <div *ngFor="let message of singlemessages" class="message" [class.left]="message.sender_id !== login_user"
+      [class.right]="message.sender_id === login_user " >
+
+      <div class="msg-detail">
+        <div class="msg-info">
+          <p>
+            {{ message.user_name}}</p>
+        </div>
+        <div class="msg-content">
+          <span class="triangle"></span>
+          <p class="line-breaker ">{{ message.message}}</p>
+          <div class="msg-info">
+            <p>{{ message.date | date:'dd-MM-yyyy'}} {{ message.msg_time}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="message-wrap" *ngIf="show_group_chat_message === 1">
+    <div *ngFor="let message of groupmessages" class="message" [class.left]=" message.user_name !== users "
+      [class.right]=" message.user_name === users ">
+
+      <div class="msg-detail">
+        <div class="msg-info">
+
+        </div>
+        <div class="msg-content">
+          <span class="triangle"></span>
+          <div class="msg-info">
+            <p>{{ message.user_name}}</p>
+          </div>
+          <p class="line-breaker ">{{ message.message}}</p>
+          <div class="msg-info">
+            <p>{{ message.date | date:'dd-MM-yyyy'}} {{ message.msg_time}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '55px'" *ngIf="show_signle_chat === 1">
+  <div class="input-wrap">
+    <button ion-button clear icon-only item-right>
+      <ion-icon name="md-happy"></ion-icon>
+    </button>
+    <textarea #chat_input spellcheck="true" autocorrect="on" autocomplete="true" placeholder="Type a message"
+      [(ngModel)]="message" (keyup.enter)="userSendMessage(login_user,received_user_id)" (focusin)="onFocus()">
+    </textarea>
+    <button ion-button clear icon-only item-right (click)="userSendMessage(login_user,received_user_id)">
+      <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+    </button>
+  </div>
+  <ion-fab right bottom>
+    <button ion-fab color="darkroyal" (click)="scrollToBottom()">
+      <ion-icon name="ios-arrow-down"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-footer>
+
+<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '55px'" *ngIf="show_group_chat_box === 1">
+  <div class="input-wrap">
+    <button ion-button clear icon-only item-right>
+      <ion-icon name="md-happy"></ion-icon>
+    </button>
+    <textarea #chat_input placeholder="Type a message" [(ngModel)]="message"
+      (keyup.enter)="sendGroupMessage(login_user,received_user_id)" (focusin)="onFocus()">
+    </textarea>
+    <button ion-button clear icon-only item-right (click)="sendGroupMessage(login_user,received_user_id)">
+      <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+    </button>
+  </div>
+  <ion-fab right bottom>
+    <button ion-fab color="darkroyal" (click)="scrollToBottom()">
+      <ion-icon name="ios-arrow-down"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-footer>

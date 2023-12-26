@@ -1,0 +1,109 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons left>
+            <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+        </ion-buttons>
+        <ion-title style="text-transform: capitalize;text-align: center">Payment Details</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+    <div class="col-md-12">
+
+        <div class="accordion" id="accordionExample1">
+
+            <ion-card>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-12 style="border-bottom: none !important; border-top: none !important;">
+                            <ion-item (click)="openModal(item.GROUP_ID,item.OPERATIONAL_UNIT_NAME,item.PAY_MODE)">
+                                <div>
+                                    <h2>PAYMENT ID: {{paymentid}}</h2>
+                                    <p style="white-space: pre-wrap;">MODE: {{paymode}} </p>
+                                    <p>UNIT: {{unitname}}</p>
+                                    <p style="white-space: normal;">PAYEE: {{payee}}</p>
+                                    <p style="color: red;">TOTAL: {{TotalAmount}}</p>
+                                </div>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+
+            <div class="card" *ngFor="let item of utilityPaymentDetails; index as i;" data-parent="#accordionExample">
+                <ion-item class="card-header" id="headingComment" style="background-color:white;" (click)=showUndoBtn(i)
+                    role="button">
+                    <h2>{{1 + i}}. {{item.ACCOUNT_NAME}} </h2>
+                    <p style="float: left;">{{item.ACCOUNT_NUMBER}}</p><br>
+                    <p style="float: left;">{{item.BUILDING_NAME}}</p><br>
+                    <button ion-button clear item-end>
+                        <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                    </button>
+                </ion-item>
+
+                <div [attr.id]="'undoBtn'+i" *ngIf="showBtn===i">
+                    <div class="card-body card-bodynew">
+                        <table role="table">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Account Number</th>
+                                    <th role="columnheader">Account</th>
+                                    <th role="columnheader">Building</th>
+                                    <th role="columnheader">Unit Name</th>
+                                    <th role="columnheader">Type</th>
+                                    <th role="columnheader">Month</th>
+                                    <th role="columnheader">Prv Year Amount</th>
+                                    <th role="columnheader">Prv Month Amount</th>                                    
+                                    <th role="columnheader">Amount</th>
+                                    <th role="columnheader">Other</th>
+                                    <th role="columnheader">Total</th>
+                                    <th role="columnheader">To Be Paid</th>
+                                    <th role="columnheader">Bill</th>
+                                    <th role="columnheader">Old Bills</th>
+                                </tr>
+                            </thead>
+                            <tbody role="rowgroup">
+                                <tr role="row">
+                                    <td role="cell">{{item.ACCOUNT_NUMBER}}</td>
+                                    <td role="cell">{{item.ACCOUNT_NAME}}</td>
+                                    <td role="cell">{{item.BUILDING_NAME}}</td>
+                                    <td role="cell">{{unitname}}</td>
+                                    <td role="cell">{{item.UTILITY_TYPE}}</td>
+                                    <td role="cell">{{item.MONTH}}</td>
+                                    <td role="cell">{{item.PRVYEARAMOUNT}}</td>
+                                    <td role="cell">{{item.PRVAMOUNT}}</td>
+                                    <td role="cell">{{item.AMOUNT}}</td>
+                                    <td role="cell">{{item.OTHER_AMT}}</td>
+                                    <td role="cell">{{item.TOTAL}}</td>
+                                    <td role="cell">{{item.PAID}}</td>
+                                    <td role="cell"></td>
+                                    <td role="cell"></td>
+                                    <td role="cell" style="padding-left: 0% !important;">
+                                        <span>
+                                            <button ion-button (click)="openModal(paymentid)"
+                                                color="secondary"><i class="fa fa-comments" aria-hidden="true"
+                                                    style="font-size: 20px;">
+                                                    </i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button ion-button (click)="openModalUpload(paymentid)"
+                                                color="secondary">
+                                                <i class="fa fa-paperclip" aria-hidden="true"
+                                                    style="font-size: 20px;">
+                                                    </i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ion-content>

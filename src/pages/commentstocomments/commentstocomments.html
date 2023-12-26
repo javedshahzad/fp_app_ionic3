@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar style="background-color:#525b6d">
+    <ion-buttons left>
+      <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title style="text-transform: capitalize;text-align: center">Comments </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="col-md-12" >
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>My Comments<ion-badge item-end class="card_p_badge">{{ CmtData.MyCmt.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'CMT')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>My Comments to Comments<ion-badge item-end class="card_p_badge">{{ CmtData.MyCmttoCmt.LABEL_COUNT || '0' }}
+          </ion-badge>
+        </p>
+      </ion-item>
+
+      <ion-item>
+        <!-- <span item-start>
+          <ion-badge>{{ 0|currency:"AED " }}</ion-badge>
+        </span> -->
+        <button ion-button icon-start clear item-end class="dash_image" text-center
+          (click)="openDetailModal(type = 'CMTTOCMT')">
+          <ion-icon name="navigate"></ion-icon>
+          View
+        </button>
+      </ion-item>
+    </ion-card>
+  </div>
+</ion-content>

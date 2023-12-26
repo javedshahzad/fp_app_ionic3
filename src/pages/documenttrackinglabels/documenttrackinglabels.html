@@ -1,0 +1,312 @@
+<ion-header>
+    <ion-navbar>
+        <ion-buttons left>
+            <button ion-button menuToggle class="navbar_leftbtn">
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title class="navbar_title">Document Tracking</ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value"
+            (ionInput)="SearchcallManagement()">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div>
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for sent to client sign</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pending_for_sent_to_client_sign_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('STCS')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending to Receive from client</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pending_to_receive_from_client_count || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('RCVFC')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending to sent for Mgmt Sign</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pending_to_sent_for_mgmt_sign_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('SFMGMTS')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending to Receive From Landlord Sign</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ pending_to_receive_from_landlord_sign_count || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('RCVFLANDLORD')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;"> Sent for Mgmt Sign, To Be Receive</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Sent_for_Mgmt_Sign_To_be_Received_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('SMGMTSTOBERCVD')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending to Receive from mgmt sign and Review</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_to_Receive_from_mgmt_sign_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('RCVDFMGMTS')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for CEO/COO Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_ceo_coo_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('PCEOCOOAPPROVAL')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for to be filed</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_to_be_filed_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('FILED')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for to be filed - Ajman</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_to_be_filed_Ajman_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('FILEDAJMAN')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Requested for Ejari Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Requested_for_Ejari_Approval_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('EJARIAPPROVAL')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending For COO/CEO Ejari Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_For_COO_CEO_Ejari_Approval_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="openModal('CEOCOOEJARIAPPROVAL')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for Ejari No. Update & Upload</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_Ejari_No_Update_Upload_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('EJARINOUPD')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pre-Lease Entries</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pre_Lease_Entries_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openModal('PRE-LEASE')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Contract Not Yet Printed</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Contract_Not_Yet_Printed_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="openModal('CONTRACTNOTYETPRINTED')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Pending for COO/CEO Approval For Quick Close</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_COO_CEO_Approval_For_Quick_Close_count || '0' }}
+                    </ion-badge>
+                </p>
+            </ion-item>
+
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image"
+                    (click)="openModal('CEOCOOAPPROVALQUICKCLOSE')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+        <ion-card>
+            <ion-item>
+                <img class="icon-btn" src="assets/imgs/google-docs.png"
+                    style="width: 30px; float: left; padding-right: 4px;" />
+                <h2 style="white-space: pre-line;">Multiple Approval</h2>
+                <p>
+                    <ion-badge style="float: right;">{{ Pending_for_ceo_coo_count || '0' }}</ion-badge>
+                </p>
+            </ion-item>
+            <ion-item>
+                <button ion-button icon-start clear item-end class="dash_image" (click)="openMultipleApproval('PCEOCOOAPPROVAL')">
+                    <ion-icon name="navigate"></ion-icon>
+                    View
+                </button>
+            </ion-item>
+        </ion-card>
+
+    </div>
+</ion-content>

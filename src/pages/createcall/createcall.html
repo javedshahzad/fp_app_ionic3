@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-navbar style="background-color:#525b6d">
+    <ion-title>+ Create Call </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <form [formGroup]="createcallForm" (submit)="insertCallData()">
+
+      <ion-item>
+        <ion-label stacked>Requestor Name</ion-label>
+        <ion-input type="text" name="requestor_name" [formControl]="createcallForm.controls['requestor_name']">
+        </ion-input>
+        <p *ngIf="createcallForm.controls.requestor_name.errors && createcallForm.controls.requestor_name.dirty"
+          class='error'>Enter the Requestor Name.</p>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Code</ion-label>
+        <ion-input type="number" name="code" [readonly]="isReadonly()" [(ngModel)]="code" [formControl]="createcallForm.controls['code']">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Mobile No</ion-label>
+        <ion-input type="number" (change)="moblie_no_Change($event)" name="mobile" [(ngModel)]="mobile"
+          [formControl]="createcallForm.controls['mobile']"></ion-input>
+        <p *ngIf="createcallForm.controls.mobile.errors && createcallForm.controls.mobile.dirty && moblie_no_error"
+          class='error'>Please Enter the correct number</p>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Email</ion-label>
+        <ion-input type="text" (change)="email_Change($event)" name="email" [(ngModel)]="email"
+          [formControl]="createcallForm.controls['email']"></ion-input>
+        <p *ngIf="createcallForm.controls.email.errors && createcallForm.controls.email.dirty && email_validation"
+          class='error'>Enter the email</p>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Location</ion-label>
+        <ionic-selectable item-content [formControl]="createcallForm.controls['location']" itemValueField="LOCATION_ID"
+          itemTextField="DESCRIPTION" [items]="locationList" [canSearch]="true" (onChange)="LocationChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item *ngIf="selectedBuilding">
+        <ion-label>Building</ion-label>
+        <ionic-selectable item-content [formControl]="createcallForm.controls['building']" itemValueField="BUILDING_ID"
+          itemTextField="BUILDING_NAME" [items]="selectedBuilding" [canSearch]="true"
+          (onChange)="BuildingChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item *ngIf="selectedUnit">
+        <ion-label>Unit</ion-label>
+        <ionic-selectable item-content [formControl]="createcallForm.controls['unit']" itemValueField="UNIT_ID"
+          itemTextField="UNIT" [items]="selectedUnit" [canSearch]="true" (onChange)="unitChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Complaint</ion-label>
+        <ionic-selectable item-content [formControl]="createcallForm.controls['complaint']"
+          itemValueField="COMPLAINT_ID" itemTextField="COMPLAINT_DESCRIPTION" [items]="complaintList" [canSearch]="true"
+          [isMultiple]="true" (onChange)="complaintChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item *ngIf="selecteduser">
+        <ion-label>Assigned to</ion-label>
+        <ionic-selectable item-content [formControl]="createcallForm.controls['Assigned_to']"
+          itemValueField="RESORCE_ID" itemTextField="RESOURCE_NAME" [items]="selecteduser" [canSearch]="true"
+          (onChange)="userChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item>
+          <ion-label id="profile_image" color="primary" stacked>Select file</ion-label>
+          <ion-input type="file" multiple (change)="onSelectFile($event)" [formControl]="createcallForm.controls['file']"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Comments</ion-label>
+        <ion-textarea name="comments" rows="4" cols="50" [(ngModel)]="comments"
+          [formControl]="createcallForm.controls['comments']"></ion-textarea>
+        <p *ngIf="createcallForm.controls.comments.errors && createcallForm.controls.comments.dirty" class='error'>Enter
+          the Comments</p>
+      </ion-item>
+
+
+      <div style="margin-top:3%;color: #fff !important;">
+        <button style="float: left; color: #fff;" shape="round" class="bst2" (click)=resetForm();>Clear</button>
+        <button type="submit" style="float: right; color: #fff !important;" shape="round"
+          [disabled]="!createcallForm.valid" class="bst1">Submit</button>
+      </div>
+    </form>
+  </ion-list>
+</ion-content>

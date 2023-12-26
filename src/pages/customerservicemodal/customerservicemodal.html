@@ -1,0 +1,59 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+    <ion-navbar style="background-color:#525b6d">
+        <ion-title>{{modaltype[1]}} List </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-toolbar>
+        <ion-segment [(ngModel)]="PaidTab" color="light" background='primary_1'>
+            <ion-segment-button value="Paid">
+                Paid Units
+            </ion-segment-button>
+            <ion-segment-button value="UnPaid">
+                UnPaid Units
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+    <div [ngSwitch]="PaidTab">
+        <div *ngSwitchCase="'Paid'">
+                            <h3 class="text-center"> Paid Units List</h3>
+                            <ion-list>
+                            <ion-item-sliding *ngFor="let item of paidlist; index as i;">
+                                <button ion-item (click)="openModal(item.PROPERTY_NAME,item.BUILD_CODE,item.UNIT,type=''+ modaltype[1] + ' PAID')">
+                                        <ion-avatar item-start>
+                                                <img src="assets/imgs/Attached-Granny-Flat-8-of-10.jpg"/>
+                                              </ion-avatar>
+                                              <h2>{{item.PROPERTY_NAME}}</h2>
+                                              <p>Unit - {{item.UNIT}}</p>
+                                              <p>Total Balance Amount<ion-badge item-end style="float: right; margin-top: 2px;" >{{item.AMOUNT | currency:"AED "}}</ion-badge></p>
+                                </button>
+                            </ion-item-sliding>
+                        </ion-list>
+        </div>
+        <div *ngSwitchCase="'UnPaid'">
+                            <h3 class="text-center"> UnPaid Units List</h3>
+                            <ion-list>
+                            <ion-item-sliding *ngFor="let item of unpaidlist; index as i;">
+                                <button ion-item (click)="openModal(item.PROPERTY_NAME,item.BUILD_CODE,item.UNIT,type=''+ modaltype[1] + ' UNPAID')">
+                                        <ion-avatar item-start>
+                                                <img src="assets/imgs/Attached-Granny-Flat-8-of-10.jpg"/>
+                                              </ion-avatar>
+                                              <h2>{{item.PROPERTY_NAME}}</h2>
+                                              <p>Unit - {{item.UNIT}}</p>
+                                              <p>Total Balance Amount<ion-badge item-end style="float: right; margin-top: 2px;" >{{item.AMOUNT | currency:"AED "}}</ion-badge></p>
+                                </button>
+                            </ion-item-sliding>
+                        </ion-list>
+        </div>
+    </div>
+</ion-content>

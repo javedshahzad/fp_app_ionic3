@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Attachments </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="pet" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="All" style="font-size: 13px; color: #fff;">
+        All
+      </ion-segment-button>
+      <ion-segment-button value="User" style="font-size: 13px; color: #fff;">
+        User
+      </ion-segment-button>
+      <ion-segment-button value="System" style="font-size: 13px; color: #fff;">
+        System
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content fullscreen>
+
+  <ion-fab right bottom edge vertical="bottom" horizontal="end" slot="fixed" style="bottom: 10px !important;">
+    <button ion-fab mini (click)="openAttachment()">
+      <ion-icon name="add"> </ion-icon>
+    </button>
+  </ion-fab>
+
+  <div [ngSwitch]="pet">
+    <ion-list *ngSwitchCase="'All'">
+      <div class="agile-login" style="margin-top: inherit;">
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form">
+            <div class="accordion" id="accordionExample">
+              <div class="card" *ngFor="let item of allattachment; index as i;" data-parent="#accordionExample">
+                <div class="card-header" id="headingComment" style="background-color:white;">
+                  <a (click)=showUndoBtn(i) role="button">
+                    {{1 + i}}. {{item.FILE_NAME}}
+                  </a>
+                  <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                    Type: {{item.CASE_TYPE_DESCRIPTION}}
+                  </p>
+                  <span style="float: right; padding-left: 20px;">
+                    <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                      md="md-download" (click)="downloadFileData(item.ID, item.ATTACHMENT_TYPE)">
+                    </ion-icon>
+                  </span>
+                  <p class="danger-clr"> {{item.CREATED_ON | date:'dd-MMM-yyyy,HH:mm a'}} by {{item.CREATED_BY}}</p>
+                </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'User'">
+
+      <div class="agile-login" style="margin-top: inherit;">
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form">
+            <div class="accordion" id="accordionExample">
+              <div class="card" *ngFor="let item of userattachment; index as i;" data-parent="#accordionExample">
+                <div class="card-header" id="headingComment" style="background-color:white;">
+                  <a (click)=showUndoBtn(i) role="button">
+                    {{1 + i}}. {{item.FILE_NAME}}
+                  </a>
+                  <p role="row" style="text-align: left;background-color: #fdfdfd;">
+                    Type: {{item.CASE_TYPE_DESCRIPTION}}
+                  </p>
+                  <span style="float: right; padding-left: 20px;">
+                    <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                      md="md-download" (click)="downloadFileData(item.ID, item.ATTACHMENT_TYPE)">
+                    </ion-icon>
+                  </span>
+                  <p class="danger-clr"> {{item.CREATED_ON |date:'dd-MMM-yyyy,HH:mm a'}} by {{item.CREATED_BY}}</p>
+                </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'System'">
+
+      <div class="agile-login" style="margin-top: inherit;">
+        <div class="wrapper">
+          <div class="col-md-12 w3ls-form">
+            <div class="accordion" id="accordionExample">
+              <div class="card" *ngFor="let item of systemattachment; index as i;" data-parent="#accordionExample">
+                <div class="card-header" id="headingComment" style="background-color:white;">
+                  <a (click)=showUndoBtn(i) role="button">
+                    {{1 + i}}. {{ item.FILE_NAME }}
+                  </a>
+                  <p role="row" style="text-align: left; background-color: #fdfdfd;">
+                    Type: {{item.CASE_TYPE_DESCRIPTION}}
+                  </p>
+                  <span style="float: right; padding-left: 20px;">
+                    <ion-icon color="secondary" style="display: inline-block;font-size: 2.5em;" ios="ios-download"
+                      md="md-download" (click)="downloadFileData(item.ID, item.ATTACHMENT_TYPE)">
+                    </ion-icon>
+                  </span>
+                  <p class="danger-clr"> {{item.CREATED_ON | date:'dd-MMM-yyyy,HH:mm a' }} by {{ item.CREATED_BY }} {{item.ATTACHMENT_TYPE}}</p>
+                </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ion-list>
+
+  </div>
+
+</ion-content>

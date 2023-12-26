@@ -1,0 +1,307 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle style='width: 100%;margin: 0em;height: 4em'>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title text-center>{{today | date: 'dd-MM-yyyy'}} Task Management</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <form (submit)="SearchTaskDetail()">
+      <ion-searchbar placeholder="Search value" name="search_txt" [(ngModel)]="searchData.search_value">
+      </ion-searchbar>
+    </form>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
+    <ion-slide>
+      <ion-fab right bottom edge>
+        <button ion-fab mini (click)="createtask()">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-fab>
+      <!--Activity task-->
+      <ion-grid style="padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+          <ion-col col-6>
+            <ion-card style="padding: unset !important;" text-center padding class="card_btn"
+              (click)="openModalcomments(type = 'Current')">
+              <ion-item>
+                <ion-thumbnail slot="start">
+                  <img class="icon-btn" src="assets/imgs/chat.png" />
+                </ion-thumbnail>
+                <h6>Current Week</h6>
+                <p>{{taskdetails.current_week.start_date }} - {{taskdetails.current_week.end_date }}</p>
+                <ion-badge class="badge_task"
+                  style="top: 10px;right: 15px;position: absolute;background-color: #10dc60; font-size: 13px;">
+                  {{weekcomments_count.currentweek_count.length || '0'}}</ion-badge>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-6>
+            <ion-card style="padding: unset !important;" text-center padding class="card_btn"
+              (click)="openModalcomments(type = 'Next')">
+              <ion-item>
+                <ion-thumbnail slot="start">
+                  <img class="icon-btn" src="assets/imgs/chat.png" />
+                </ion-thumbnail>
+                <h6>Next Week</h6>
+                <p>{{taskdetails.next_week.start_date }} - {{taskdetails.next_week.end_date }}</p>
+                <ion-badge class="badge_task"
+                  style="top: 10px;right: 15px;position: absolute;background-color: #10dc60;font-size: 13px;">
+                  {{weekcomments_count.nexttweek_count.length || '0'}}</ion-badge>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card text-center padding class="card_btn" (click)="openModal(type = 'Activity')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task  task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.ACTIVITY_TASK_COUNT || '0' }}</ion-badge>
+              </h2>
+              <img class="icon-btn" src="assets/imgs/activity.png" />
+            </ion-card>
+            <div>
+              <h6>Activity</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="openModal(type = 'Important')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.IMPORTANT_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/important.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>Imp</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="openModal(type = 'Personal')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task  task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.PERSONAL_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/self.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>Self</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding>
+              <h2 class="name_btn">
+                <ion-badge class="badge_task success-bg-color"
+                  style="float: left;z-index: 1;position: absolute;top: 0;left: 0; font-size: 13px; margin-left: unset !important;"
+                  (click)="openModal(type = 'ActiveAll')">
+                  {{ userCreatedTaskCount || '0' }}</ion-badge>
+                <ion-badge class="badge_task  task-badge-rt success-bg-color" (click)="openModal(type = 'Active')">
+                  {{ taskdetails.tasklistcount.ACTIVE_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/active.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>Active</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding>
+              <h2 class="name_btn">
+                <ion-badge class="badge_task warning-bg-color"
+                  style="float: left;z-index: 1;position: absolute;top: 0;left: 0; font-size: 13px; margin-left: unset !important;"
+                  (click)="openModal(type = 'ActiveOverdue')">
+                  {{ userCreatedTaskOverdueCount || '0' }}</ion-badge>
+                <ion-badge class="badge_task task-badge-rt success-bg-color" (click)="openModal(type = 'Overdue')">
+                  {{ taskdetails.tasklistcount.OVERDUE_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/overdue.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>OverDue</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="openModal(type = 'Referal')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.REFERAL_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/referral.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>Referal</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="openModal(type = 'Completed')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.COMPLETED_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/completed.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>Completed</h6>
+            </div>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding (click)="openModal(type = 'All')">
+              <h2 class="name_btn">
+                <ion-badge class="badge_task task-badge-rt success-bg-color">
+                  {{ taskdetails.tasklistcount.ALL_TASK || '0' }}</ion-badge>
+              </h2>
+              <img src="assets/imgs/all_tasks.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>All Task</h6>
+            </div>
+          </ion-col>
+          <ion-col col-4>
+            <ion-card class="card_btn" text-center padding>
+              <h2 class="name_btn">
+                <ion-badge class="badge_task warning-bg-color" (click)="openModalcomments(type = 'Week')"
+                  style="float: left;z-index: 1;position: absolute;top: 0;left: 0; font-size: 13px; margin-left: unset !important;">
+                  {{ roiPointsCount || '0' }}</ion-badge>
+                <ion-badge class="badge_task task-badge-rt success-bg-color" (click)="openModalcomments(type = 'Week')">
+                  {{ weekcomments_count.priviousweek_count.length || '0' }}</ion-badge>
+                <ion-icon name="document" (click)="openCompleteRoi()"
+                  style="float: left; z-index: 1; position: absolute; bottom: 0; left: 0; font-size: 30px; color: #32db64;">
+                </ion-icon>
+                <ion-icon ios="ios-calendar" md="md-calendar" (click)="openCalendarView1()"
+                  style="float: left; z-index: 1; position: absolute; bottom: 0; right: 0; font-size: 30px; color: #32db64;">
+                </ion-icon>
+              </h2>
+              <img src="assets/imgs/chat.png" class="icon-btn" />
+            </ion-card>
+            <div>
+              <h6>ROI</h6>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide style="display: block !important;overflow: auto !important;">
+
+      <ion-fab right bottom edge vertical="bottom" horizontal="end" activated="true" slot="fixed">
+        <button class="fixed_fab" ion-fab mini (click)="createtask()" style="position: fixed;
+        z-index: 1;
+        margin-left: -41px;
+        margin-top: -50px;">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-fab>
+
+      <ion-grid style="width: fit-content; padding-left: 10px; padding-right: 10px;">
+        <ion-row>
+          <div *ngFor="let item of taskdetails.assignedtaskList; index as i;">
+            <ion-col col-4>
+              <ion-card text-center padding class="card_btn" style="padding: 0px;width: 80%;">
+                <h2 class="name_btn">
+                  <ion-badge class="badge_task" color="primary"
+                    style="float: left;z-index: 1;position: absolute;top: 0;left: 0; font-size: 13px; width: fit-content; margin-left: unset !important;"
+                    (click)="openUserTaskModal(type = 'USER',item.ASSIGNED_USER_INFO_ID,item.TASK_COUNT,item.ASSIGNED_TO)">
+                    {{ item.TASK_COUNT  || '0' }}</ion-badge>
+                </h2>
+                <h2 class="name_btn">
+                  <ion-badge class="badge_task task-badge-rt warning-bg-color"
+                    (click)="openUserTaskModal(type = 'USEROVERDUE',item.ASSIGNED_USER_INFO_ID,item.TASK_COUNT,item.ASSIGNED_TO)">
+                    {{ item.OVERDUE_TASK  || '0' }}</ion-badge>
+                </h2>
+                <ion-avatar item-start>
+                  <ion-fab color="secondary" color="light" top left edge
+                    style="top: 70px !important; margin-left: 55px;">
+
+                    <span *ngIf="item.STATUS != 'Online'">
+                      <button ion-fab mini style="width: 18px !important;
+                        height: 18px !important;background-color: #ff0000;">
+                        <ion-icon></ion-icon>
+                      </button>
+                    </span>
+
+                    <span *ngIf="item.STATUS == 'Online'">
+                      <button ion-fab mini (click)="openUserChat(item.ASSIGNED_USER_INFO_ID,item.ASSIGNED_TO)"
+                        style="width: 28px !important;height: 28px !important;margin-top: 5px;margin-left: 2px;background-color: #3aec3a;">
+                        <ion-icon name="chatbubbles"></ion-icon>
+                      </button>
+                    </span>
+                  </ion-fab>
+
+                  <span *ngIf="item.MYPROFILECOUNT > 0">
+                    <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture"
+                      src="{{item.FILE_PATH}}">
+                  </span>
+
+                  <span *ngIf="item.MYPROFILECOUNT == 0">
+                    <img style="width: 100px;height: 100px;" class="icon-btn myprofile-picture"
+                      src="assets/imgs/no-found-photo.png">
+                  </span>
+
+                </ion-avatar>
+              </ion-card>
+              <div>
+                <h6 style="font-size: 1.3rem !important;">
+                  {{ item.ASSIGNED_TO.length > 12 ? item.ASSIGNED_TO.substring(0,12)+"..." : item.ASSIGNED_TO }}</h6>
+              </div>
+            </ion-col>
+          </div>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <!-- Third slide -->
+
+    <ion-slide style="display: block !important;overflow: auto !important;" *ngIf="thirdslide === 1">
+      <ion-row>
+        <ion-col style="padding: 0px !important;">
+          <h2 style="margin-top: 0.8rem !important;">ROI</h2>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="padding: 0px !important;">
+          <button ion-button clear (click)="generateReport()">
+            <ion-icon name="document"></ion-icon><span style="padding-left: 4px;">Report</span>
+          </button>
+          <button ion-button clear (click)="generateIdeaReport('Idea')">
+            <ion-icon name="document"></ion-icon><span style="padding-left: 4px;">ROI</span>
+          </button>
+          <button ion-button clear (click)="generatePointsReport()">
+            <ion-icon name="document"></ion-icon><span style="padding-left: 4px;">Pending Points</span>
+          </button>
+          <button ion-button clear (click)="generateObjectiveReport()">
+            <ion-icon name="document"></ion-icon><span style="padding-left: 4px;">Assigned Objective</span>
+          </button>
+        </ion-col>
+      </ion-row> 
+      <div class="card" *ngFor="let item of taskdetails.dailytasklist; index as i;" data-parent="#accordionExample">
+        <ion-card class="dash_image" text-center style="border-radius: 11px !important;">
+          <ion-card-content>
+            <ion-item style="padding-left: 0px !important;" (click)="getReportingUserList(item.ORG)">
+              <ion-avatar item-start item-left class="list-time purple-border">
+                <img src="assets/imgs/chat.png">
+              </ion-avatar>
+              <h2 style="font-size: 13px; font-weight: 500;">{{item.ORG}}</h2>
+              <ion-badge class="badge_task"
+                style="top: 15px;right: 0px;position: absolute;background-color: #10dc60; font-size: 13px;">
+                {{item.USER_COUNT || '0'}}
+              </ion-badge>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div> 
+    </ion-slide>
+  </ion-slides>
+</ion-content>

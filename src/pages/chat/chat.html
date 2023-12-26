@@ -1,0 +1,410 @@
+<ion-header>
+  <ion-navbar>
+    <!-- <ion-buttons left>
+        <button ion-button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+    </ion-buttons> -->
+    <ion-buttons left>
+      <button ion-button menuToggle class="navbar_leftbtn">
+          <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title *ngIf="show_group_members === 0">
+      <p style="font-size: 15px; margin-top: 13px !important; margin-bottom: 0rem !important;">
+        {{header_name.length > 15 ? header_name.substring(0,15)+"..." : header_name }}</p>
+      <h6 class="user_status" style="font-size: 13px;">{{user_status}}</h6>
+    </ion-title>
+
+    <ion-title *ngIf="show_group_members === 1" (click)="showGroupMembers(header_name)">
+      <p style="font-size: 13px; margin-top: 13px !important; margin-bottom: 0rem !important;">
+        {{header_name.length > 45 ? header_name.substring(0,45)+"..." : header_name }}</p>
+      <h6 class="user_status" style="font-size: 13px; color: #343434;">
+        {{group_user_names.length > 40 ? group_user_names.substring(0,40)+"..." : group_user_names }}</h6>
+    </ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)=" messageDelete()" *ngIf="message_select_ids.length> 0">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)=" messageForward()" *ngIf="message_select_ids.length> 0">
+        <ion-icon style="transform: rotate(340deg);" name="redo"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)=" chatUserDelete()" *ngIf="user_select_ids.length> 0">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)=" chatUserArchive()"
+        *ngIf="show_archive_chat_user === 0 && user_select_ids.length> 0">
+        <ion-icon name="archive"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)=" chatUserArchiveRemove()" color="warning"
+        *ngIf="show_archive_chat_user === 1 && user_select_ids.length> 0">
+        <ion-icon style="transform: rotate(180deg);" name="archive"></ion-icon>
+      </button>
+      <!-- <button ion-button icon-only (click)=" presentPopover($event)" *ngIf="show_profile_image != 0">
+        <ion-icon name="more"></ion-icon>
+      </button> -->
+    </ion-buttons>
+    
+  </ion-navbar>
+  
+  <ion-toolbar no-border-top *ngIf="show_chat_tap === 0">
+    <ion-segment [(ngModel)]="preventiveMaintanceTab" >
+      <ion-segment-button value="Single" style="font-size: 13px;" (click)="singlechatnav()">
+        <ion-icon name="contact"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="group" style="font-size: 13px;" (click)="gruopchatnav()">
+        <ion-icon name="contacts"></ion-icon>
+      </ion-segment-button>      
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+ 
+  <ion-fab right bottom edge *ngIf="show_create_btn === 1" style="bottom: 0px !important;">
+    <button ion-fab mini (click)="createnewgroup()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <div *ngIf="show_user_list === 0">
+    <ion-searchbar (focusin)="itemSelected()" (ionChange)="getItems($event)" placeholder="Search user"
+      style="padding: 0px;"></ion-searchbar>    
+  </div>
+
+  <div *ngIf="show_user_list_all === 1">
+    <ion-list *ngFor="let item of userdetails" (click)="edituserchat(item)" style="margin:0px !important">
+      <ion-item *ngIf="item.user_id != login_user">
+        <ion-avatar item-start>
+          <span>
+            <button ion-fab mini [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'"
+              style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;">
+              <ion-icon></ion-icon>
+            </button>
+          </span>
+          <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px;" src="{{item.FILE_PATH}}"
+            alt="assets/imgs/chat_image.png">
+          <img *ngIf="item.USER_PROFILE_IMG_ID === 0" style="width: 55px; height: 55px;"
+            src="assets/imgs/chat_image.png">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{item.USER_SURNAME}}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div id="chatUserList" *ngIf="show_signle_chat === 0">
+    <ion-list class="dash_image" *ngFor="let item of ChatUserAll" style="margin:0px !important">
+      <div *ngIf="item.user_id != login_user ">
+
+        <ion-item [class.highlight]="user_select_ids.indexOf(item.user_id) > -1 " (press)="selectChatUserItem(item)"
+          tappable (click)="(user_select_ids.length > 0) ? selectChatUserItem(item):edituserchat1(item)">
+          <ion-avatar item-start>
+            <img *ngIf="item.profile_img_id == 0 || item.profile_img_id ==''" src="assets/imgs/chat_image.png">
+            <img *ngIf="item.profile_img_id > 0" src="{{item.file_path}}">
+          </ion-avatar>
+          <h2>{{item.user_name}}</h2>
+          <ion-badge *ngIf="item.new_message_count > 0" color="danger"
+            style="font-size: 85%;z-index: 1;position: absolute;margin-right:10px;top: 10px;">
+            {{item.new_message_count || '0'}}</ion-badge>
+        </ion-item>
+      </div>
+    </ion-list>
+    <ion-list class="dash_image" *ngIf="ChatArchiveUser.length >0" style="margin:0px !important">
+      <ion-item (click)="showArchiveUserChat(1)">
+        <h2>Archive Users</h2>
+        <ion-badge *ngIf="ChatArchiveUser.length > 0" color="danger"
+          style="font-size: 85%;z-index: 1;position: absolute;right:0px; top: 10px; margin-right: 10px;">
+          {{ChatArchiveUser.length || '0'}}</ion-badge>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div id="chatArchiveUserList" *ngIf="show_archive_chat_user === 1 && ChatArchiveUser.length >0">
+    <ion-list class="dash_image" *ngFor="let item of ChatArchiveUser" style="margin:0px !important">
+      <div *ngIf="item.user_id != login_user ">
+        <ion-item [class.highlight]="user_select_ids.indexOf(item.user_id) > -1 " (press)="selectChatUserItem(item)"
+          tappable (click)="(user_select_ids.length > 0) ? selectChatUserItem(item):edituserchat1(item)">
+          <ion-avatar item-start>
+            <img *ngIf="item.profile_img_id == 0 || item.profile_img_id ==''" src="assets/imgs/chat_image.png">
+            <img *ngIf="item.profile_img_id > 0" src="{{item.file_path}}">
+          </ion-avatar>
+          <h2>{{item.user_name}}</h2>
+          <ion-badge *ngIf="item.new_message_count > 0" color="danger"
+            style="font-size: 85%;z-index: 1;position: absolute;right:0px; top: 10px; margin-right: 10px;">
+            {{item.new_message_count || '0'}}</ion-badge>
+        </ion-item>
+      </div>
+    </ion-list>
+    <ion-list class="dash_image" style="margin:0px !important">
+      <ion-item (click)="showArchiveUserChat(0)">
+        <h2>Back to user list</h2>
+
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div id="groupchatList" style="margin-top: 36px; padding: 8px;" *ngIf="show_group_chat === 1">
+    <ion-list class="dash_image" text-center *ngFor="let item of groupNames" style="margin:0px !important">
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="assets/imgs/group_icon.png">
+        </ion-avatar>
+        <h2 (click)="editGroupchat(item)">
+          {{item.group_name.length > 25 ? item.group_name.substring(0,25)+"..." : item.group_name}} </h2>
+        <ion-badge *ngIf="item.new_groupmessage_count > 0"
+          style="font-size: 85%;z-index: 1;position: absolute;right: 56px;top: 15px;background-color: #e74c3c !important;">
+          {{item.new_groupmessage_count || '0'}}</ion-badge>
+        <button ion-button color="secondary" clear *ngIf="item.seq_text !=''" (click)="goToTaskDetail(item.seq_text)"
+          item-end>Go</button>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div class="message-wrap" style="padding: 12px; margin-top: 0px; margin-bottom: 0px;" *ngIf="show_signle_chat === 1">
+
+    <div *ngFor="let message of singlemessages" class="message" [class.left]="message.sender_id !== login_user"
+      [class.right]=" message.sender_id === login_user "
+      [class.highlight]="message_select_ids.indexOf(message.key) > -1 " (press)="selectMessageItem(message.key)"
+      tappable (click)="(message_select_ids.length > 0) ? selectMessageItem(message.key): empty()">
+
+      <div class="msg-detail">
+        <div class="msg-info">
+          <p>
+            {{ message.user_name}}</p>
+        </div>
+        <div class="msg-content">
+          <span class="triangle"></span>
+          <div *ngIf="message.is_file">
+            <ion-thumbnail item-start>
+              <img [src]="getChatFile(message)" style="width: 120px;height: 120px;;">
+            </ion-thumbnail>
+            <button ion-button icon-only color="light" (click)="downloadChatFile(message)"
+              style="float: right;margin-top:-40px;margin-right: 20px">
+              <ion-icon name="download" color="dark1"></ion-icon>
+            </button>
+          </div>
+          <p>{{ message.message}}</p>
+          <div class="msg-info">
+            <p>
+              <ion-icon color='primary' *ngIf="message.read_status == 1 && message.receiver_id !== login_user"
+                name="done-all" style="zoom:0.8;"></ion-icon> {{ message.date | date:'dd-MM-yyyy'}} {{
+              message.msg_time}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="message-wrap" style="padding: 12px; margin-top: 0px; margin-bottom: 0px;" *ngIf="show_group_chat_message === 1">
+    <div *ngFor="let message of groupmessages" class="message" [class.left]=" message.user_name !== users "
+      [class.right]=" message.user_name === users ">
+
+      <div class="msg-detail">
+        <div class="msg-info">
+
+        </div>
+        <div class="msg-content">
+          <span class="triangle"></span>
+          <div class="msg-info">
+            <p>{{ message.user_name}}</p>
+          </div>
+          <div *ngIf="message.is_file">
+            <ion-thumbnail item-start>
+              <img [src]="getChatFile(message)" style="width: 120px;height: 120px;;">
+            </ion-thumbnail>
+            <button ion-button icon-only color="light" (click)="downloadChatFile(message)"
+              style="float: right;margin-top:-40px;margin-right: 2px">
+              <ion-icon name="download" color="dark1"></ion-icon>
+            </button>
+          </div>
+          <p class="line-breaker ">{{ message.message}}</p>
+          <div class="msg-info">
+            <p>{{ message.date | date:'dd-MM-yyyy'}} {{ message.msg_time}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="add_new_group === 1">
+    <ion-list>
+      <ion-item>
+        <span>Add New Group</span>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Title</ion-label>
+        <ion-input [(ngModel)]="title" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Add user</ion-label>
+        <select-searchable item-content [items]="userdetails" itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME"
+          [canSearch]="true" (onChange)="addUserAccess($event)" [isMultiple]="true" [shouldStoreItemValue]="true">
+        </select-searchable>
+      </ion-item>
+
+      <ion-list class="agile-login">
+        <ion-item>
+          <ion-label>User list</ion-label>
+          <button ion-button icon-start clear item-end class="dash_image" type="button" (click)="showusercontrol()">
+            <ion-icon name="arrow-down"></ion-icon>
+            View
+          </button>
+        </ion-item>
+
+        <div class="wrapper" [ngStyle]="{'display':showuseraccess}">
+          <ion-item *ngFor="let item of userarry; index as i;" data-parent="#accordionExample"
+            style="border: unset !important;">
+            <ion-avatar item-start>
+              <span>
+                <button ion-fab mini [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'"
+                  style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;">
+                  <ion-icon></ion-icon>
+                </button>
+              </span>
+              <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px;" src="{{item.FILE_PATH}}"
+                alt="assets/imgs/chat_image.png">
+              <img *ngIf="item.USER_PROFILE_IMG_ID === 0" style="width: 55px; height: 55px;"
+                src="assets/imgs/chat_image.png">
+            </ion-avatar>
+
+            <div style="white-space: normal;">
+              <span [innerHTML]="item.USER_SURNAME" style='white-space: pre-line;font-size: 1.3rem;'></span>
+
+              <!-- <div class="card-body card-bodynew" style="margin-top: 5px;">
+                <table role="table" class="casemanagement">
+                  <thead>
+                    <tr role="row">
+                      <th role="columnheader">User Name</th>
+                      <th role="columnheader">Action</th>
+                    </tr>
+                  </thead>
+                  <ion-card>
+                    <tbody>
+                      <tr role="row">
+                        <td role="cell">{{item.USER_SURNAME}}</td>
+                        <td role="cell">
+                          <span>
+                            <button ion-button type="button" (click)="DeleteUser(i,item.USER_INFO_ID)" color="danger">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ion-card>
+                </table>
+              </div> -->
+            </div>
+
+            <button item-end ion-button type="button" (click)="DeleteUser(i,item.USER_INFO_ID)" color="danger">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </ion-item>
+        </div>
+      </ion-list>
+
+      <div class="example-center">
+        <button ion-button type="button" color="Primary" (click)="insertchatgroup()">Confirm</button>
+        <button ion-button color="dark" (click)=clearvalues();>Cancel</button>
+      </div>
+    </ion-list>
+  </div>
+
+  <div *ngIf="show_forword_user === 1">
+
+    <ion-list class="dash_image" style="margin:0px !important" *ngIf="message_select_ids.length> 0">
+      <ion-item (click)="SendForwordMessage(0)" color="warning">
+        Send Message ({{userarry.length || '0'}})
+      </ion-item>
+    </ion-list>
+    <div class="wrapper" style="margin-left: 10px;">
+      <ion-avatar item-start *ngFor="let item of userarry; index as i;" data-parent="#accordionExample"
+        (click)="deleteForwordUser(item)"
+        style="border: unset !important; padding: 0px; padding-top: 10px; padding-bottom: 10px; padding-right: 4px;">
+        <span>
+          <button ion-fab mini style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;"
+            [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'">
+            <ion-icon name="close"></ion-icon>
+          </button>
+          <img *ngIf="item.USER_PROFILE_IMG_ID === 0 || item.USER_PROFILE_IMG_ID ==''"
+            style="width: 55px; height: 55px; border-radius: 100px;" src="assets/imgs/chat_image.png"
+            alt="assets/imgs/chat_image.png">
+          <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px; border-radius: 100px;"
+            src="{{item.FILE_PATH}}" alt="assets/imgs/chat_image.png">
+        </span>
+
+        <ion-label>
+          <h2 style="font-size: 11px;">
+            {{ item.USER_SURNAME.length > 7 ? item.USER_SURNAME.substring(0,7)+"..." : item.USER_SURNAME}}</h2>
+        </ion-label>
+
+      </ion-avatar>
+    </div>
+    <ion-searchbar (ionChange)="getForwordUser($event)"></ion-searchbar>
+
+    <div>
+      <ion-list *ngFor="let item of ForwordUserList" (click)="selectForwordUser(item)" style="margin:0px !important">
+        <ion-item *ngIf="item.user_id != login_user">
+          <ion-avatar item-start>
+            <button ion-fab mini style="position: absolute;margin: 35px;width: 18px !important;height: 18px !important;"
+              [color]="(item.STATUS == 'Online') ? 'secondary' : 'danger'">
+              <ion-icon></ion-icon>
+            </button>
+            <img *ngIf="item.USER_PROFILE_IMG_ID > 0" style="width: 55px; height: 55px;" src="{{item.FILE_PATH}}"
+              alt="assets/imgs/chat_image.png">
+            <img *ngIf="item.USER_PROFILE_IMG_ID === 0" style="width: 55px; height: 55px;"
+              src="assets/imgs/chat_image.png">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{item.USER_SURNAME}}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+
+</ion-content>
+
+<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '70px'" *ngIf="show_signle_chat === 1">
+  <div class="input-wrap">
+    <button ion-button clear icon-only item-right (click)="openAttach()">
+      <ion-icon name="attach"></ion-icon>
+    </button>
+    <textarea #chat_input spellcheck="true" autocorrect="on" autocomplete="true" placeholder="Type a message"
+      [(ngModel)]="message" (keyup.enter)="userSendMessage(login_user,received_user_id)" (focusin)="onFocusTxtArea()">
+    </textarea>
+    <button ion-button clear icon-only item-right (click)="userSendMessage(login_user,received_user_id,0)">
+      <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+    </button>
+  </div>
+  <ion-fab right bottom>
+    <button ion-fab color="darkroyal" (click)="scrollToBottom()">
+      <ion-icon name="ios-arrow-down"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-footer>
+
+<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '70px'" *ngIf="show_group_chat_box === 1">
+  <div class="input-wrap">
+    <button ion-button clear icon-only item-right (click)="openAttach()">
+      <ion-icon name="attach"></ion-icon>
+    </button>
+    <textarea #chat_input placeholder="Type a message" [(ngModel)]="message"
+      (keyup.enter)="sendGroupMessage(login_user,received_user_id,roi_comment_id,0)" (focusin)="onFocus()">
+    </textarea>
+    <button ion-button clear icon-only item-right
+      (click)="sendGroupMessage(login_user,received_user_id,roi_comment_id)">
+      <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+    </button>
+  </div>
+  <ion-fab right bottom>
+    <button ion-fab color="darkroyal" (click)="scrollToBottom()">
+      <ion-icon name="ios-arrow-down"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-footer>

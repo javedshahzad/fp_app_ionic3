@@ -1,0 +1,126 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-transform: capitalize;text-align: center">Cheque List </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchData.search_value" (ionInput)="SearchchequeDetail()">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="col-md-12">
+
+        <div class="accordion" id="cheque">
+            <div *ngFor="let item of chequedetails; index as i;">
+                <div>
+                    <ion-item id="headingOne" style="background-color:white;" class="btn btn-link blc collapsed"
+                        data-toggle="collapse" [attr.data-target]="'#' + i" aria-expanded="true/false"
+                        [attr.aria-controls]="i">
+                        <span *ngIf="(item.ESCALATION_COUNT == 2 || item.ESCALATION_COUNT > 2)">
+                            <h2>{{item.CHQNO}} - {{item.UNIT}} </h2>
+                            <p>{{ item.CUSTOMER.length > 30 ? item.CUSTOMER.substring(0,30)+"..." : item.CUSTOMER }}</p>
+                            <p *ngIf="showescalateddays ==1 && item.ESCALATED_DAYS == 1" style="color:red"> Escalated
+                                {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="showescalateddays ==1 && item.ESCALATED_DAYS > 1" style="color:red"> Escalated
+                                {{item.ESCALATED_DAYS}}
+                                days</p>
+                        </span>
+                        <span *ngIf="(item.ESCALATION_COUNT < 2)">
+                            <h2>{{item.CHQNO}} - {{item.UNIT}}</h2>
+                            <p>{{ item.CUSTOMER.length > 30 ? item.CUSTOMER.substring(0,30)+"..." : item.CUSTOMER }}</p>
+                            <p *ngIf="showescalateddays ==1 && item.ESCALATED_DAYS == 1" style="color:red"> Escalated
+                                {{item.ESCALATED_DAYS}}
+                                day</p>
+                            <p *ngIf="showescalateddays ==1 && item.ESCALATED_DAYS > 1" style="color:red"> Escalated
+                                {{item.ESCALATED_DAYS}}
+                                days</p>
+                        </span>
+                        <button ion-button clear item-end class="btn btn-link blc collapsed" data-toggle="collapse"
+                            [attr.data-target]="'#' + i" aria-expanded="true/false" [attr.aria-controls]="i">
+                            <ion-icon style="font-size: x-large;" name="arrow-dropdown"></ion-icon>
+                        </button>
+                    </ion-item>
+                    <div [attr.id]="i" class="collapse" aria-labelledby="headingOne" data-parent="#cheque">
+                        <div class="card-body card-bodynew">
+                            <table role="table" class="returncheque">
+                                <thead role="rowgroup">
+                                    <tr role="row">
+                                        <th role="columnheader">Operating Unit</th>
+                                        <th role="columnheader">Cheque No.</th>
+                                        <th role="columnheader">Cheque Date</th>
+                                        <th role="columnheader">Receipt No </th>
+                                        <th role="columnheader">Receipt Date</th>
+                                        <th role="columnheader">Customer </th>
+                                        <th role="columnheader">Unit</th>
+                                        <th role="columnheader">Amount </th>
+                                        <th role="columnheader">Comments</th>
+                                        <th role="columnheader"></th>
+                                    </tr>
+                                </thead>
+                                <tbody role="rowgroup">
+                                    <tr role="row">
+                                        <td role="cell">{{item.NAME}}</td>
+                                        <td role="cell">{{item.CHQNO}}</td>
+                                        <td role="cell">{{item.CHQDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                        <td role="cell">{{item.RCPTNO}}</td>
+                                        <td role="cell">{{item.RCPTDT |date:'dd-MMM-yyyy,HH:mm a'}}</td>
+                                        <td role="cell">{{item.CUSTOMER}}</td>
+                                        <td role="cell">{{item.UNIT}}</td>
+                                        <td role="cell">{{item.AMOUNT | currency:"AED "}}</td>
+                                        <td role="cell">{{item.CHEQUE_COMMENTS}}</td>
+                                        <td class="action"><span
+                                                *ngIf="(item.HOLD_APPROVED == 0) && (item.HOLD_REQUESTED ==0)"><button
+                                                    ion-button (click)="returncheque(item.ID)" color="secondary"><i
+                                                        class="fa fa-flag"></i></button></span>
+                                            <span *ngIf="(item.HOLD_APPROVED == 0) && (item.HOLD_REQUESTED ==0)"><button
+                                                    ion-button
+                                                    (click)="cheque_hold(item.ID,type='Create',item.maxdate,item.mindate)"
+                                                    color="secondary"><i class="fa fa-pause"
+                                                        aria-hidden="true"></i></button></span>
+                                            <span *ngIf="(item.HOLD_APPROVED == 1) && (item.HOLD_REQUESTED !=0)">
+                                                <button ion-button
+                                                    (click)="cheque_hold(item.ID,type='View',item.maxdate,item.mindate)"
+                                                    color="secondary"><i class="fa fa-pause"
+                                                        aria-hidden="true"></i></button></span>
+                                            <span *ngIf="resourcedetails.length > 0">
+                                                <button ion-button
+                                                    *ngIf="(item.HOLD_APPROVED == 0) && (item.HOLD_REQUESTED !=0) &&(item.RE_DEPOSITE_BY ==0)&&(item.RT_DATE ==null)&&(item.ESCALATION_COUNT ==0)&&(resourcedetails[0].TYPE_USER=='Admin')"
+                                                    (click)="cheque_hold(item.ID,type='Update',item.maxdate,item.mindate)"
+                                                    color="secondary"><i class="fa fa-pause"
+                                                        aria-hidden="true"></i></button>
+                                                <button ion-button
+                                                    *ngIf="(item.HOLD_APPROVED == 0) && (item.HOLD_REQUESTED !=0) &&(item.RE_DEPOSITE_BY ==0)&&(item.RT_DATE ==null)&&(item.ESCALATION_COUNT ==0)&&(resourcedetails[0].TYPE_USER!='Admin')"
+                                                    (click)="cheque_hold(item.ID,type='View',item.maxdate,item.mindate)"
+                                                    color="secondary"><i class="fa fa-pause"
+                                                        aria-hidden="true"></i></button></span>
+                                            <span *ngIf="resourcedetails.length==0">
+                                                <button ion-button
+                                                    *ngIf="(item.HOLD_APPROVED == 0) && (item.HOLD_REQUESTED !=0) &&(item.RE_DEPOSITE_BY ==0)&&(item.RT_DATE ==null)&&(item.ESCALATION_COUNT ==0)"
+                                                    (click)="cheque_hold(item.ID,type='View',item.maxdate,item.mindate)"
+                                                    color="secondary"><i class="fa fa-pause"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </span>
+                                            <span>
+                                                <button ion-button (click)="openModal(item.ID,item)" color="primary">
+                                                    <!-- <ion-icon ios="ios-chatboxes" md="md-chatboxes"></ion-icon> -->
+                                                    <i class="fa fa-comments" aria-hidden="true"></i>
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,44 @@
+page-inventory {
+    .toolbar-background-md{
+        border:none;
+        background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+    }
+    .toolbar-background-ios{
+        background-image: linear-gradient(to right, #2eeb12, #00bb83, #0083a1, #004b7f, #051937) !important;
+    }
+  
+    .sbut{      
+        background-color: #73bd43 !important;
+        color: #fff !important;
+        border-radius: 0px !important;      
+        height: 3.6rem;
+        font-size: 15px;
+    }
+    .txt-search{
+        height: 3.6rem;
+        font-size: 15px;
+    }
+    .list-item-container {
+        width: 100%;
+        overflow: hidden;
+        display: table;
+    }   
+    div{
+        vertical-align: middle;        
+    }
+    .mediaimg{
+        width:28%;
+        padding: 0;
+        margin-right: 10px
+    }
+    .img-thumbnail{
+        border: none;
+    }
+}
+@media only screen and (max-width: 420px){
+    page-inventory{
+  h6{
+      font-size: 1.4rem !important;
+  }
+}
+}

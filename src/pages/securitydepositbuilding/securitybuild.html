@@ -1,0 +1,29 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+      <ion-title>Security Deposite Building List </ion-title>
+      <ion-buttons end>
+        <button ion-button (click)="closeModal()">Close</button>
+      </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content> 
+    <ion-list>
+        <ion-item-sliding *ngFor="let item of securitybuildcount; index as i;">
+          <button ion-item (click)="openModal(item.PROPERTY_NAME,item.BUILD_CODE)">
+            <ion-avatar item-start>
+              <img src="assets/imgs/modern_office_buildings_190890.jpg"/>
+            </ion-avatar>
+            <h2>Building Name - {{item.BUILD_CODE}}</h2>
+            <p>Total Unit - <span>{{item.UNIT_COUNT}}</span></p>
+          </button>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>
+      

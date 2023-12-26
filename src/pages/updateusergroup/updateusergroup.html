@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title> Update User Group</ion-title>
+    <ion-buttons end *ngIf="insertActionPointShow == 0" style="width: 100px; height: 30px;">
+      <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <div *ngIf="insertActionPointShow == 0">
+
+        <ion-item>
+          <ion-label stacked>Group Name</ion-label>
+          <ion-input type="text" name="group_name" [(ngModel)]="group_name"></ion-input>          
+        </ion-item>                 
+        <ion-item>
+          <ion-label floating>Select User</ion-label>
+          <select-searchable [(ngModel)]="selected_userid" item-content [items]="userdetails"
+            itemValueField="USER_INFO_ID" itemTextField="USER_SURNAME" [canSearch]="true" [isMultiple]="true"
+            (onChange)="addUserAccess($event)" [shouldStoreItemValue]="true">
+          </select-searchable>
+        </ion-item>
+
+        <div class="example-center" style="text-align: center;">
+          <button ion-button type="submit" color="Primary" (click)="insertUpdateUserGroup()"
+            style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;">Save</button>
+          <button ion-button color="dark" style="width: 70px; text-transform: initial !important; margin: 1.4rem 1.2rem 0 0 !important;"
+            (click)=closeModal();>Cancel</button>
+        </div>
+      <!-- </form> -->
+    </div>
+    
+  </ion-list>
+
+</ion-content>
